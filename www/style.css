@@ -10,8 +10,8 @@ html, body
 {
     margin: 0;
     padding: 0;
-    width: 100%;
-    height: 100%;
+    width: 100dvw;
+    height: 100dvh;
     overflow: hidden;
     background-color: black;
 }
@@ -22,9 +22,9 @@ body
     color: white;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    justify-content: safe center;
+    align-items: safe center;
+    min-height: 100dvh;
     overflow: hidden;
 
 }
@@ -33,13 +33,13 @@ body
 {
     position: relative;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     background-color: black;
 
     /** Background Image if already present, just uncomment this
     background-image: url('assets/bg/mainMenuBG.png');
     background-size: cover;
-    background-position: center;
+    background-position: safe center;
     **/
 
     border: 4px solid black;
@@ -68,8 +68,8 @@ body
     pointer-events: none;
 
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: safe center;
+    align-items: safe center;
 }
 
 .uiScreen
@@ -77,20 +77,20 @@ body
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100dvw;
+    height: 100dvh;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(4px);
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: safe center;
+    align-items: safe center;
     pointer-events: auto;
     transition: opacity 0.2s ease-in-out;
     z-index: 10;
 
     padding: 2rem 1rem;
-    max-height: 100vh;
+    max-height: 100dvh;
     overflow-y: auto;
 }
 
@@ -173,7 +173,7 @@ button:active
 .saveSlotContainer
 {
     width: min(90vw, 550px);
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
 }
 
 .saveSlot
@@ -184,7 +184,7 @@ button:active
     padding: 1rem 1.5rem;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: safe center;
 }
 
 .saveSlotInfo h3
@@ -192,6 +192,17 @@ button:active
     color: lightblue;
     font-size: 1.2rem;
 }
+
+
+.saveSlotWrapper
+{
+    display: flex;
+    flex-direction: column;
+    align-items: safe center;
+    width: 100%;
+}
+
+
 
 .slotDetails
 {
@@ -216,11 +227,11 @@ button:active
 {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: safe center;
     justify-content: center;
     width: min(90vw, 500px);
-    max-height: 85vh;
-    text-align: center;
+    max-height: 85dvh;
+    text-align: safe center;
 
 }
 
@@ -248,7 +259,7 @@ button:active
     border-radius: 0;
     padding: 0.5rem;
     color: lightgray;
-    text-align: center;
+    text-align: safe center;
     white-space: nowrap;
 }
 
@@ -279,14 +290,14 @@ button:active
 {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: safe center;
     width: 100%;
     gap: 1rem;
 }
 
 .settingRowCenterOverride
 {
-    justify-content: center;
+    justify-content: safe center;
 }
 
 #settingsScreen > button:last-child
@@ -328,14 +339,94 @@ input[type="range"]
 
 .creditsContent
 {
-    text-align: center;
+    width: min(90vw, 500px);
+    margin: 0 auto;
     line-height: 2rem;
     margin-bottom: 1rem;
-    color: lightgray;
-    width: min(90vw, 500px);
+}
+
+.creditsContent p
+{
+    display: flex;
+    justify-content: space-between;
 }
 
 .creditsContent strong
 {
     color: skyblue;
+}
+
+.creditsContent span
+{
+    color: lightgray;
+}
+
+@media(max-height: 500px)
+{
+    .saveSlotWrapper
+    {
+        flex-direction: row;
+        gap: 1rem;
+        width: min(95vw, 900px);
+        justify-content: safe center;
+    }
+
+    .saveSlotContainer
+    {
+        flex: 1 1 0;
+        min-width: 0;
+        width: auto;
+        margin-bottom: 0;
+    }
+
+    .saveSlot
+    {
+        flex-direction: column;
+        align-items: safe center;
+        text-align: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+    }
+
+    .slotActions
+    {
+        width: 100%;
+    }
+
+    .slotActions button
+    {
+        flex: 1;
+        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    #saveScreen h2
+    {
+        margin-bottom: 1rem;
+    }
+}
+
+@media(max-height: 500px), (max-width: 900px)
+{
+    button
+    {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        border-width: 1px;
+    }
+
+    .menuButtons
+    {
+        gap: 0.5rem;
+    }
+
+    h1
+    {
+        margin-bottom: 1rem;
+    }
+
+    h2
+    {
+        margin-bottom: 0.75rem;
+    }
 }

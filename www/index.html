@@ -43,49 +43,51 @@
                 <div id="saveScreen" class="uiScreen hidden">
                     <h2 data-i18n="selectSave">Select Save Slot</h2>
 
-                    <!-- save slot 1 -->
-                    <div class="saveSlotCotainer">
-                        <div class="saveSlot">
-                            <div class="saveSlotInfo">
-                                <h3><span data-i18n="slot">Slot</span> 1 </h3>
-                                <p id="infoSlot1" class="slotDetails">Empty</p>
+                    <div class="saveSlotWrapper">
+                        <!-- save slot 1 -->
+                        <div class="saveSlotContainer">
+                            <div class="saveSlot">
+                                <div class="saveSlotInfo">
+                                    <h3><span data-i18n="slot">Slot</span> 1 </h3>
+                                    <p id="infoSlot1" class="slotDetails">Empty</p>
+                                </div>
+                                <div class="slotActions">
+                                    <button onclick="loadSave(1)" data-i18n="load">Load</button>
+                                    <button class="btnWarn" onclick="deleteSave(1)" data-i18n="delete">Delete</button>
+                                </div>
                             </div>
-                            <div class="slotActions">
-                                <button onclick="loadSave(1)" data-i18n="load">Load</button>
-                                <button class="btnWarn" onclick="deleteSave(1)" data-i18n="delete">Delete</button>
+                        </div>
+
+                        <!-- save slot 2 -->
+                        <div class="saveSlotContainer">
+                            <div class="saveSlot">
+                                <div class="saveSlotInfo">
+                                    <h3><span data-i18n="slot">Slot</span> 2 </h3>
+                                    <p id="infoSlot2" class="slotDetails">Empty</p>
+                                </div>
+                                <div class="slotActions">
+                                    <button onclick="loadSave(2)" data-i18n="load">Load</button>
+                                    <button class="btnWarn" onclick="deleteSave(2)" data-i18n="delete">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- save slot 3 -->
+                        <div class="saveSlotContainer">
+                            <div class="saveSlot">
+                                <div class="saveSlotInfo">
+                                    <h3><span data-i18n="slot">Slot</span> 3 </h3>
+                                    <p id="infoSlot3" class="slotDetails">Empty</p>
+                                </div>
+                                <div class="slotActions">
+                                    <button onclick="loadSave(3)" data-i18n="load">Load</button>
+                                    <button class="btnWarn" onclick="deleteSave(3)" data-i18n="delete">Delete</button>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- save slot 2 -->
-                    <div class="saveSlotCotainer">
-                        <div class="saveSlot">
-                            <div class="saveSlotInfo">
-                                <h3><span data-i18n="slot">Slot</span> 2 </h3>
-                                <p id="infoSlot2" class="slotDetails">Empty</p>
-                            </div>
-                            <div class="slotActions">
-                                <button onclick="loadSave(2)" data-i18n="load">Load</button>
-                                <button class="btnWarn" onclick="deleteSave(2)" data-i18n="delete">Delete</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- save slot 3 -->
-                    <div class="saveSlotCotainer">
-                        <div class="saveSlot">
-                            <div class="saveSlotInfo">
-                                <h3><span data-i18n="slot">Slot</span> 3 </h3>
-                                <p id="infoSlot3" class="slotDetails">Empty</p>
-                            </div>
-                            <div class="slotActions">
-                                <button onclick="loadSave(3)" data-i18n="load">Load</button>
-                                <button class="btnWarn" onclick="deleteSave(3)" data-i18n="delete">Delete</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button onclick="backToMainMenu()" data-i18n="back">Back</button>
+                    <button id="btnSaveBack" onclick="backToMainMenu()" data-i18n="back">Back</button>
                 </div>
 
                 <!-- Settings Screen -->
@@ -130,7 +132,7 @@
                             </div>
                         </div>
 
-                        <button onclick="closeSettings()" data-i18n="back">Back</button>
+                        <button id="btnSettingsBack" onclick="closeSettings()" data-i18n="back">Back</button>
                     </div>
                     
                     
@@ -142,15 +144,15 @@
                     <h2 data-i18n="credits">Credits</h2>
 
                     <div class="creditsContent">
-                        <p><strong data-i18n="roleProgrammers">Programmers:</strong> [Programmer Names]</p>
-                        <p><strong data-i18n="roleArtist">Artist:</strong> [Artist Names]</p>
-                        <p><strong data-i18n="roleSoundDesigner">Sound Designer:</strong> [Sound Designer Name]</p>
-                        <p><strong data-i18n="roleWriter">Writer:</strong> [Writer Names]</p>
-                        <p><strong data-i18n="specialThanks">Special Thanks:</strong> [Contributor Names]</p>
+                        <p><strong data-i18n="roleProgrammers">Programmers:</strong> <span>[Programmer Names]</span></p>
+                        <p><strong data-i18n="roleArtist">Artist:</strong> <span>[Artist Names]</span></p>
+                        <p><strong data-i18n="roleSoundDesigner">Sound Designer:</strong> <span>[Sound Designer Name]</span></p>
+                        <p><strong data-i18n="roleWriter">Writer:</strong> <span>[Writer Names]</span></p>
+                        <p><strong data-i18n="specialThanks">Special Thanks:</strong><span>[Contributor Names]</span></p>
 
                     </div>
 
-                    <button onclick="backToMainMenu()" data-i18n="back">Back</button>
+                    <button id="btnCreditsBack" onclick="backToMainMenu()" data-i18n="back">Back</button>
             
                 </div>
 
