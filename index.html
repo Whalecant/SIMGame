@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <title> [Pending Title] </title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+        <div class="gameContainer">
+            
+            <!--1280 by 720 px is the most scalable resolution since we will need both android and desktop support-->
+            <canvas id="gameCanvas" width="1280" height="720"></canvas>
+
+            <div id="uiOverlay">
+                <div id="mainMenu" class="uiScreen">
+                    <h1 data-i18n="title">[Pending Title]</h1>
+
+                    <div class="menuButtons">
+                        <button onclick="openMenu('saveScreen')" data-i18n="play">Play</button>
+                        <button onclick="openMenu('settingsScreen')" data-i18n="settings">Settings</button>
+                        <button onclick="openMenu('creditsScreen')" data-i18n="credits">Credits</button>
+                    </div>
+                </div>
+
+                <!-- Play Choose Screen-->
+                <div id="saveScreen" class="uiScreen hidden">
+                    <h2 data-i18n="selectSave">Select Save Slot</h2>
+
+                    <!-- save slot 1 -->
+                    <div class="saveSlotCotainer">
+                        <div class="saveSlot">
+                            <div class="saveSlotInfo">
+                                <h3><span data-i18n="slot">Slot</span> 1 </h3>
+                                <p id="infoSlot1" class="slotDetails">Empty</p>
+                            </div>
+                            <div class="slotActions">
+                                <button onclick="loadSave(1)" data-i18n="load">Load</button>
+                                <button class="btnWarn" onclick="deleteSave(1)" data-i18n="delete">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- save slot 2 -->
+                    <div class="saveSlotCotainer">
+                        <div class="saveSlot">
+                            <div class="saveSlotInfo">
+                                <h3><span data-i18n="slot">Slot</span> 2 </h3>
+                                <p id="infoSlot2" class="slotDetails">Empty</p>
+                            </div>
+                            <div class="slotActions">
+                                <button onclick="loadSave(2)" data-i18n="load">Load</button>
+                                <button class="btnWarn" onclick="deleteSave(2)" data-i18n="delete">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- save slot 3 -->
+                    <div class="saveSlotCotainer">
+                        <div class="saveSlot">
+                            <div class="saveSlotInfo">
+                                <h3><span data-i18n="slot">Slot</span> 3 </h3>
+                                <p id="infoSlot3" class="slotDetails">Empty</p>
+                            </div>
+                            <div class="slotActions">
+                                <button onclick="loadSave(3)" data-i18n="load">Load</button>
+                                <button class="btnWarn" onclick="deleteSave(3)" data-i18n="delete">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="backToMainMenu()" data-i18n="back">Back</button>
+                </div>
+
+                <!-- Settings Screen -->
+                <div id="settingsScreen" class="uiScreen hidden">
+                    <h2 data-i18n="settings">Settings</h2>
+
+                    <div class="settingTabs">
+                        <button class="tabBtn active" onclick="switchTabSettings('audioTab', this)" data-i18n="audioTab">Audio</button>
+                        <button class="tabBtn" onclick="switchTabSettings('controlsTab', this)" data-i18n="controlsTab">Controls</button>   
+                        <button class="tabBtn" onclick="switchTabSettings('languageTab', this)" data-i18n="languageTab">Language</button>
+                    </div>
+
+                    <div class="settingContent">
+
+                        <!-- audio Settings-->
+                        <div id="audioTab" class="tabPanel">
+                            <div class="settingRow">
+                                <label data-i18n="Volume">Volume</label>
+                                <input type="range" id="audioSlider" min="0" max="100" value="50" oninput="updateAudioVolume(this.value)">
+                            </div>
+                        </div>
+
+                        <!-- controls overview (idk how the fuck to do remapping since this might need to be portable to android)-->
+                        <div id="controlsTab" class="tabPanel hidden">
+                            <div class="settingRow">
+                                <label data-i18n="controls">Controls</label>
+                                <div class="controlsOverview">
+                                    <p> <strong data-i18n="garageControls">Garage Controls:</strong> WASD</p>
+                                    <p> <strong data-i18n="interact">Interact:</strong> E </p>
+                                    <p> <strong data-i18n="pause">Pause:</strong> ESC </p>
+                                    <p> <strong data-i18n="map">Map:</strong> M </p>
+                                    <p> <strong data-i18n="minigameControls">Minigame Jump:</strong> Spacebar </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- language setting -->
+                        <div id="languageTab" class="tabPanel hidden">
+                            <div class="settingRow">
+                                <label data-i18n="language">Language</label>
+                                <button id="languageButton" onclick="toggleLanguage()" data-i18n="language">English</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="closeSettings()" data-i18n="back">Back</button>
+
+                    
+                    
+                    
+                </div>
+
+                <!-- Credits Screen -->
+                <div id="creditsScreen" class="uiScreen hidden">
+                    <h2 data-i18n="credits">Credits</h2>
+
+                    <div class="creditsContent">
+                        <p><strong data-i18n="roleProgrammers">Programmers:</strong> [Programmer Names]</p>
+                        <p><strong data-i18n="roleArtist">Artist:</strong> [Artist Names]</p>
+                        <p><strong data-i18n="roleSoundDesigner">Sound Designer:</strong> [Sound Designer Name]</p>
+                        <p><strong data-i18n="roleWriter">Writer:</strong> [Writer Names]</p>
+                        <p><strong data-i18n="specialThanks">Special Thanks:</strong> [Contributor Names]</p>
+
+                    </div>
+
+                    <button onclick="backToMainMenu()" data-i18n="back">Back</button>
+            
+                </div>
+
+                <!-- pause screen -->
+                <div id="pauseScreen" class="uiScreen hidden">
+                    <h2 data-i18n="paused">Paused</h2>
+
+                    <div class="menuButtons">
+                        <button onclick="togglePause()" data-i18n="resume">Resume</button>
+                        <button onclick="openMenu('settingsScreen')" data-i18n="settings">Settings</button>
+                        <button onclick="quitToMainMenu()" data-i18n="mainMenu">Main Menu</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <script src="lang.js"></script>
+        <script src="main.js"></script>
+    </body>
+</html>
