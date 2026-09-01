@@ -50,7 +50,7 @@ const Game =
         {
             this.isLoopRunning = true;
             // requestAnimationFrame is an inbuilt function that does what it says, it litearlly requests an animation from the browser and tells it to update... no shit sherlock wtf why am writing this
-            requestAnimationFrame((timeStamp) => this.gameLoop(timeStamp)) //timestamp is the JS version of time.deltaTime
+            requestAnimationFrame((timeStamp) => this.gameLoop(timeStamp)) //timestamp is the JS version of time.deltaTime... NOT THE FUCK WAS THIS COMMENT ME HELLO???, deltaTime still exists here, timeStamp is to show how long the webpage has been loaded
         }
 
         
