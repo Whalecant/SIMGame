@@ -1,0 +1,219 @@
+// the first set of code below is to set the overall game engine and defaul state and shit
+
+const Game = 
+{
+    canvas: null,
+    ctx: null, // above are just to get the canvas thingies from the page
+    currentState: 'MAIN_MENU', // to inidicate where the player is (i.e. main menu, playing, paused, etc.)
+    previousState: null, //this is to make sure for pauses (will use later duh)
+    isLoopRunning: false, //to make sure it doesn't duplicate animation frame loops
+
+    // basic settings for the game
+    settings:
+    {
+        volume: 50,
+        currLang: 'en'
+    },
+
+    init()
+    {
+        // grabs canvas element from the game
+        this.canvas = document.getElementById('gameCanvas');
+        // to make sure its in 2d
+        if(this.canvas)
+        {
+            this.ctx = this.canvas.getContext('2d');
+        }
+    },
+
+    showScreen(screenId)
+    {
+        const screens = document.querySelectorAll('.uiScreen'); //grabs all screens that have the class uiScreen
+        screens.forEach(screen => screen.classList.add('hidden')); //ensures everything is hidden
+
+
+        //show the current screen
+        if(screenId)
+        {
+            const targetScreen = document.getElementById(screenId);
+            if(targetScreen)
+            {
+                targetScreen.classList.remove('hidden');
+            }
+        }
+
+    },
+
+    startGameLoop()
+    {
+        if(!this.isLoopRunning)
+        {
+            this.isLoopRunning = true;
+            // requestAnimationFrame is an inbuilt function that does what it says, it litearlly requests an animation from the browser and tells it to update... no shit sherlock wtf why am writing this
+            requestAnimationFrame((timeStamp) => this.gameLoop(timeStamp)) //timestamp is the JS version of time.deltaTime
+        }
+
+        
+    },
+
+    gameLoop(timestamp)
+    {
+        if(this.currentState === 'PLAYING') // three = equals strict comparison, so it is guaranteed to have to be the same and not JS being stupid
+        {
+            this.update();
+            this.render();
+        }
+
+        requestAnimationFrame((timestamp) => this.gameLoop(timestamp));
+    },
+
+    //obvious i don't need to fucking explain what the 2 functions below do me (yes i'm talking to myself for future reference)
+    update()
+    {
+        if(window.Player && typeof window.Player.update === 'function') 
+        {
+            window.Player.update();
+        }
+    },
+
+    
+    render()
+    {
+        if(!this.ctx)
+        {
+            return;
+        }
+
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        if(window.Player && typeof window.Player.render === 'function')
+        {
+            window.Player.render(this.ctx);
+        }
+    }
+
+
+
+};
+
+// the set of code below is for global ui functions (less comments will be present below because I actually know what I'm doing now :D)
+// 下面的评论会少一些，因为我现在真的知道自己在做什么了 :D
+function openMenu(screenId)
+{
+    if(screenId === 'settingsScreen')
+    {
+        Game.previousState = Game.currentState;
+    }
+    Game.showScreen(screenId);
+}
+
+function backToMainMenu()
+{
+    Game.currentState = 'MAIN_MENU';
+    Game.showScreen('mainMenu');
+}
+
+function closeSettings()
+{
+    if(Game.previousState === 'PAUSED')
+    {
+        Game.showScreen('pauseScreen');
+    }
+    else
+    {
+        Game.showScreen('mainMenu');
+    }
+}
+
+function switchTabSettings(tabId, btnElement)
+{
+    document.querySelectorAll('.settingTabs .tabBtn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.settingContent .tabPanel').forEach(panel => panel.classList.add('hidden'));
+
+    if(btnElement)
+    {
+        btnElement.classList.add('active');
+    }
+
+    const targetPanel = document.getElementById(tabId);
+    if (targetPanel)
+    {
+        targetPanel.classList.remove('hidden');
+    }
+}
+
+function updateAudioVolume(val)
+{
+    Game.settings.volume = parseInt(val, 10);
+    if(window.AudioSystem && typeof window.AudioSystem.setVolume === 'function')
+    {
+        window.AudioSystem.setVolume(Game.settings.volume / 100);
+    }
+}
+
+function toggleLanguage()
+{
+    Game.settings.currLang = Game.settings.currLang === 'en' ? 'zh' : 'en';
+
+    const langBtn = document.getElementById('languageButton');
+
+    if(langBtn)
+    {
+        langBtn.textContent = Game.settings.currLang === 'en' ? 'English' : '中文简体'
+    }
+}
+
+function loadSave(slotNumber)
+{
+    Game.currentState = 'PLAYING';
+    Game.showScreen(null);
+    Game.startGameLoop();
+}
+
+function deleteSave(slotNumber)
+{
+    const slotText = document.getElementById(`infoSlot${slotNumber}`);
+
+    if(slotText)
+    {
+        slotText.textContent = 'Empty';
+    }
+}
+
+function togglePause()
+{
+    if(Game.currentState === 'PLAYING')
+    {
+        Game.currentState = 'PAUSED';
+        Game.showScreen('pauseScreen');
+    }
+    else if(Game.currentState === 'PAUSED')
+    {
+        Game.currentState = 'PLAYING';
+        Game.showScreen(null);
+    }
+}
+
+//I am in fact not tripping, Yes there is two different __ToMainMenu functions... I'm sorry me
+function quitToMainMenu()
+{
+    Game.currentState = 'MAIN_MENU';
+
+    if(Game.ctx)
+    {
+        Game.ctx.clearRect(0, 0, Game.canvas.width, Game.canvas.height);
+    }
+
+    if(window.AudioSystem && typeof window.AudioSystem.stopAll === 'function')
+    {
+        window.AudioSystem.stopAll();
+    }
+
+    Game.showScreen('mainMenu');
+}
+
+// initialization
+window.addEventListener('DOMContentLoaded', () =>
+{
+    Game.init();
+});

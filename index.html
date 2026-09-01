@@ -90,49 +90,48 @@
 
                 <!-- Settings Screen -->
                 <div id="settingsScreen" class="uiScreen hidden">
-                    <h2 data-i18n="settings">Settings</h2>
+                    <div class="settingsPanel">
+                        <h2 data-i18n="settings">Settings</h2>
 
-                    <div class="settingTabs">
-                        <button class="tabBtn active" onclick="switchTabSettings('audioTab', this)" data-i18n="audioTab">Audio</button>
-                        <button class="tabBtn" onclick="switchTabSettings('controlsTab', this)" data-i18n="controlsTab">Controls</button>   
-                        <button class="tabBtn" onclick="switchTabSettings('languageTab', this)" data-i18n="languageTab">Language</button>
-                    </div>
-
-                    <div class="settingContent">
-
-                        <!-- audio Settings-->
-                        <div id="audioTab" class="tabPanel">
-                            <div class="settingRow">
-                                <label data-i18n="Volume">Volume</label>
-                                <input type="range" id="audioSlider" min="0" max="100" value="50" oninput="updateAudioVolume(this.value)">
-                            </div>
+                        <div class="settingTabs">
+                            <button class="tabBtn active" onclick="switchTabSettings('audioTab', this)" data-i18n="audioTab">Audio</button>
+                            <button class="tabBtn" onclick="switchTabSettings('controlsTab', this)" data-i18n="controlsTab">Controls</button>   
+                            <button class="tabBtn" onclick="switchTabSettings('languageTab', this)" data-i18n="languageTab">Language</button>
                         </div>
 
-                        <!-- controls overview (idk how the fuck to do remapping since this might need to be portable to android)-->
-                        <div id="controlsTab" class="tabPanel hidden">
-                            <div class="settingRow">
-                                <label data-i18n="controls">Controls</label>
-                                <div class="controlsOverview">
-                                    <p> <strong data-i18n="garageControls">Garage Controls:</strong> WASD</p>
-                                    <p> <strong data-i18n="interact">Interact:</strong> E </p>
-                                    <p> <strong data-i18n="pause">Pause:</strong> ESC </p>
-                                    <p> <strong data-i18n="map">Map:</strong> M </p>
-                                    <p> <strong data-i18n="minigameControls">Minigame Jump:</strong> Spacebar </p>
+                        <div class="settingContent">
+
+                            <!-- audio Settings-->
+                            <div id="audioTab" class="tabPanel">
+                                <div class="settingRow">
+                                    <label data-i18n="Volume">Volume</label>
+                                    <input type="range" id="audioSlider" min="0" max="100" value="50" oninput="updateAudioVolume(this.value)">
+                                </div>
+                            </div>
+
+                            <!-- controls overview (idk how the fuck to do remapping since this might need to be portable to android)-->
+                            <div id="controlsTab" class="tabPanel hidden">
+                                <div class="settingRow">
+                                    <div class="controlsOverview">
+                                        <p> <strong data-i18n="garageControls">Garage Controls:</strong> <span>WASD</span></p>
+                                        <p> <strong data-i18n="interact">Interact:</strong> <span>E</span> </p>
+                                        <p> <strong data-i18n="pause">Pause:</strong> <span>ESC</span> </p>
+                                        <p> <strong data-i18n="map">Map:</strong> <span>M</span> </p>
+                                        <p> <strong data-i18n="minigameControls">Minigame Jump:</strong> <span>Spacebar</span> </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- language setting -->
+                            <div id="languageTab" class="tabPanel hidden">
+                                <div class="settingRow settingRowCenterOverride">
+                                    <button id="languageButton" onclick="toggleLanguage()" data-i18n="language">English</button>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- language setting -->
-                        <div id="languageTab" class="tabPanel hidden">
-                            <div class="settingRow">
-                                <label data-i18n="language">Language</label>
-                                <button id="languageButton" onclick="toggleLanguage()" data-i18n="language">English</button>
-                            </div>
-                        </div>
+                        <button onclick="closeSettings()" data-i18n="back">Back</button>
                     </div>
-
-                    <button onclick="closeSettings()" data-i18n="back">Back</button>
-
                     
                     
                     
