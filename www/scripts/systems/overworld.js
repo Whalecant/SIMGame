@@ -150,7 +150,7 @@ const overworld =
             return true;
         }
 
-        if(this.mode == 'mg' && this.activeMg ** this.activeMg.hideDpad)
+        if(this.mode == 'mg' && this.activeMg && this.activeMg.hideDpad)
         {
             return true;
         }

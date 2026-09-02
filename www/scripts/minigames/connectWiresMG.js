@@ -86,7 +86,7 @@ class connectWireMinigame extends baseMinigame
             this.handleMove(this.getCanvasInputPos(e.touches[0]));
         };
         
-        this.toucheEndHandler = () => this.handleEnd();
+        this.touchEndHandler = () => this.handleEnd();
 
         // passive false prevents the player from accidentally scrolling rather than yk... dragging the fucking wires
         this.canvas.addEventListener('touchstart', this.touchStartHandler, {passive: false});
