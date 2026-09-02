@@ -54,7 +54,29 @@ const rooms =
                 rangeStart: 560,
                 rangeEnd: 720,
                 targetRoom: 'hub'
-            }
+            },
+
+            {
+                edge: 'top',
+                rangeStart: 560,
+                rangeEnd: 720,
+                targetMg: 'connectWireMinigame',
+            },
+
+            {
+                edge: 'left',
+                rangeStart: 260,
+                rangeEnd: 460,
+                targetMg: 'mgTemp1',
+            },
+
+            {
+                edge: 'right',
+                rangeStart: 260,
+                rangeEnd: 460,
+                targetMg: 'mgTemp2',
+            },
+
         ],
 
         render(ctx)
@@ -75,7 +97,28 @@ const rooms =
                 rangeStart: 560,
                 rangeEnd: 720,
                 targetRoom: 'hub'
-            }
+            },
+
+            {
+                edge: 'bot',
+                rangeStart: 560,
+                rangeEnd: 720,
+                targetMg: 'mgTemp3',
+            },
+
+            {
+                edge: 'left',
+                rangeStart: 260,
+                rangeEnd: 460,
+                targetMg: 'mgTemp4',
+            },
+
+            {
+                edge: 'right',
+                rangeStart: 260,
+                rangeEnd: 460,
+                targetMg: 'mgTemp5',
+            },
         ],
 
         render(ctx)
@@ -96,7 +139,28 @@ const rooms =
                 rangeStart: 260,
                 rangeEnd: 460,
                 targetRoom: 'hub'
-            }
+            },
+
+            {
+                edge: 'top',
+                rangeStart: 560,
+                rangeEnd: 720,
+                targetMg: 'mgTemp6',
+            },
+
+            {
+                edge: 'bot',
+                rangeStart: 560,
+                rangeEnd: 720,
+                targetMg: 'mgTemp7',
+            },
+
+            {
+                edge: 'right',
+                rangeStart: 260,
+                rangeEnd: 460,
+                targetMg: 'mgTemp8',
+            },
         ],
 
         render(ctx)
@@ -117,7 +181,28 @@ const rooms =
                 rangeStart: 260,
                 rangeEnd: 460,
                 targetRoom: 'hub'
-            }
+            },
+
+            {
+                edge: 'bot',
+                rangeStart: 560,
+                rangeEnd: 720,
+                targetMg: 'mgTemp9',
+            },
+
+            {
+                edge: 'top',
+                rangeStart: 560,
+                rangeEnd: 720,
+                targetMg: 'mgTemp10',
+            },
+
+            {
+                edge: 'left',
+                rangeStart: 260,
+                rangeEnd: 460,
+                targetMg: 'mgTemp11',
+            },
         ],
 
         render(ctx)

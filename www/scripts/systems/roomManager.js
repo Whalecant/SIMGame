@@ -1,11 +1,13 @@
 const roomManager = 
 {
     currRoomId: 'hub',
+    /*
     isTrans: false,
     transFrames: 30, //uses frames cuz well, i haven't built a fucking timer yet
     framesElapsed: 0,
     transDir: null,
     incomingRoomId: null,
+    */
     margin: 25, //wall thickness
 
     getCurrRoom()
@@ -59,10 +61,12 @@ const roomManager =
 
     checkExits(pos)
     {
+        /*
         if(this.isTrans)
         {
             return;
         }
+        */
 
         const room = this.getCurrRoom();
         const halfWidth = pos.width / 2;
@@ -80,11 +84,14 @@ const roomManager =
 
             if(crossed)
             {
-                this.startTrans(exit);
-                return;
+                return exit;
             }
         }
+
+        return null;
     },
+
+    /*
 
     startTrans(exit)
     {
@@ -138,6 +145,7 @@ const roomManager =
             pos.x = bounds + pos.width;
         }
     },
+    */
 
     drawHorEdge(ctx, y, exit)
     {
@@ -174,6 +182,7 @@ const roomManager =
         this.drawVertEdge(ctx, 1280 - this.margin, room.exits.find(e =>e.edge === 'right'));
     },
 
+    /*
     render(ctx)
     {
         if(!this.isTrans)
@@ -223,6 +232,16 @@ const roomManager =
 
         //for several *OBVIOUS* reasons, broder is loaded after the pan, if you've played any retro game, that is self explanatory
     }
+    */
+
+    renderRoom(ctx)
+    {
+        const room = this.getCurrRoom();
+        room.render(ctx);
+        this.drawBounds(ctx, room);
+    }
+
+    //the multiline comments are the parts taht got moved to overworld.js
 };
 
 window.roomManager = roomManager;

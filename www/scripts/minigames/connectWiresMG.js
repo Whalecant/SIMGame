@@ -2,6 +2,7 @@ class connectWireMinigame extends baseMinigame
 {
     init() //this is also required btw for all minigames due to how i made the template
     {
+        this.hidePlayer = true;
         this.wireCount = 5;
         this.timeRem = 30.00;
         this.isCompleted = false; //this is jsut an edgecase handler since potential bug if player finshes game at exactly 0 seconds... some fucking how
@@ -95,9 +96,12 @@ class connectWireMinigame extends baseMinigame
     getCanvasInputPos(e)
     {
         const rect = this.canvas.getBoundingClientRect(); //inbuilt function, returns an object (DOMRect) with the size of an element and its position relative to the browser viewport
+        const scaleX = this.canvas.width / rect.width;
+        const scaleY = this.canvas.height / rect.height;
+        
         return {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top
+            x: (e.clientX - rect.left) * scaleX,
+            y: (e.clientY - rect.top) * scaleY
         }; //so TIL JS is a bitch (if return is written then a new line then the {}, it autaomatically gives return a ';' which breaks it... LOOK HOW WOULD I KNOW I WRITE CODE LIKE THAT MAN)
     }
 
@@ -266,10 +270,6 @@ class connectWireMinigame extends baseMinigame
         this.canvas.removeEventListener('touchend', this.touchEndHandler)
     }
 
+};
 
-
-
-
-
-
-}
+window.connectWireMinigame = connectWireMinigame;

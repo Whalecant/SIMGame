@@ -7,37 +7,48 @@ const player =
     speed: 8,
     color: 'skyblue',
 
-    update()
+    update(deltaTime)
     {
         if(!window.Input)
         {
             return;
         }
 
-        if(Input.isDown('w'))
+        const freeze = window.overworld && overworld.isTrans;
+
+        if(!freeze)
         {
-            this.y -=this.speed;
+            if(Input.isDown('w'))
+            {
+                this.y -=this.speed;
+            }
+
+            if(Input.isDown('s'))
+            {
+                this.y += this.speed;
+            }
+
+            if(Input.isDown('a'))
+            {
+                this.x -= this.speed;
+            }
+
+            if(Input.isDown('d'))
+            {
+                this.x += this.speed;
+            }
         }
 
-        if(Input.isDown('s'))
-        {
-            this.y += this.speed;
-        }
+        
 
-        if(Input.isDown('a'))
-        {
-            this.x -= this.speed;
-        }
-
-        if(Input.isDown('d'))
-        {
-            this.x += this.speed;
-        }
-
-        if(window.roomManager)
+        /*if(window.roomManager)
         {
             roomManager.roomClamp(this);
-            roomManager.update(this);
+        }*/
+
+        if(window.overworld)
+        {
+            overworld.update(this, deltaTime);
         }
     },
 

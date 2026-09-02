@@ -8,6 +8,7 @@ const Game =
     previousState: null, //this is to make sure for pauses (will use later duh)
     isLoopRunning: false, //to make sure it doesn't duplicate animation frame loops
     pause: null,
+    lastTimeStamp: 0,
 
     // basic settings for the game
     settings:
@@ -27,6 +28,11 @@ const Game =
         }
 
         this.pause = new pauseManager();
+
+        if(window.overworld)
+        {
+            overworld.init(this.canvas, this.ctx);
+        }
     },
 
     showScreen(screenId)
@@ -61,9 +67,12 @@ const Game =
 
     gameLoop(timestamp)
     {
+        const deltaTime = this.lastTimeStamp ? (timestamp - this.lastTimeStamp) / 1000 : 0; //for context, deltaTime is measured in seconds, timestamp is measured in miliseconds (since its rem), so need proper conversion so that it doesn't fuck up timings
+        this.lastTimeStamp = timestamp;
+
         if(this.currentState === 'PLAYING') // three = equals strict comparison, so it is guaranteed to have to be the same and not JS being stupid
         {
-            this.update();
+            this.update(deltaTime);
             this.render();
         }
 
@@ -71,11 +80,11 @@ const Game =
     },
 
     //obvious i don't need to fucking explain what the 2 functions below do me (yes i'm talking to myself for future reference)
-    update()
+    update(deltaTime)
     {
         if(window.Player && typeof window.Player.update === 'function') 
         {
-            window.Player.update();
+            window.Player.update(deltaTime);
         }
     },
 
@@ -89,12 +98,14 @@ const Game =
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        if(window.roomManager)
+        if(window.overworld)
         {
-            roomManager.render(this.ctx);
+            overworld.render(this.ctx);
         }
+
+        const freeze = window.overworld && overworld.hidePlayer();
         
-        if(window.Player && typeof window.Player.render === 'function')
+        if(window.Player && typeof window.Player.render === 'function' && !freeze)
         {
             window.Player.render(this.ctx);
         }
@@ -257,7 +268,8 @@ function quitToMainMenu()
     {
         window.AudioSystem.stopAll();
     }
-
+    
+    Game.showScreen('mainMenu');
     showMobileControls(false);
 }
 
