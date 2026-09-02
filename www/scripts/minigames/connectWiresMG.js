@@ -3,8 +3,9 @@ class connectWireMinigame extends baseMinigame
     init() //this is also required btw for all minigames due to how i made the template
     {
         this.hidePlayer = true;
+        this.hideDpad = true;
         this.wireCount = 5;
-        this.timeRem = 30.00;
+        this.timeRem = 15.00;
         this.isCompleted = false; //this is jsut an edgecase handler since potential bug if player finshes game at exactly 0 seconds... some fucking how
 
         // for mobile support
@@ -85,7 +86,7 @@ class connectWireMinigame extends baseMinigame
             this.handleMove(this.getCanvasInputPos(e.touches[0]));
         };
         
-        this.toucheEndHandler = () => this.handleEnd();
+        this.touchEndHandler = () => this.handleEnd();
 
         // passive false prevents the player from accidentally scrolling rather than yk... dragging the fucking wires
         this.canvas.addEventListener('touchstart', this.touchStartHandler, {passive: false});
@@ -207,11 +208,11 @@ class connectWireMinigame extends baseMinigame
         this.rightNodes.forEach(node => this.drawNode(node));
 
         //for timer UI... cuz i hate HTML and CSS lol :>
-        if(this.timeRem <= 5.0)
+        if(this.timeRem <= 2.5)
         {
             this.ctx.fillStyle = '#b51307';
         }
-        else if(this.timeRem <= 15.0)
+        else if(this.timeRem <= 5.5)
         {
             this.ctx.fillStyle = '#d1bb13';
         }

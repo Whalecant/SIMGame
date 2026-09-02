@@ -109,6 +109,9 @@ const Game =
         {
             window.Player.render(this.ctx);
         }
+
+        const hideDpad = window.overworld && overworld.hideDpad();
+        showDpad(!hideDpad);
     }
 
 
@@ -117,10 +120,9 @@ const Game =
 
 // the set of code below is for global ui functions (less comments will be present below because I actually know what I'm doing now :D)
 // 下面的评论会少一些，因为我现在真的知道自己在做什么了 :D
-function showMobileControls(visible)
+function showDpad(visible)
 {
     const dpad = document.getElementById('dpad');
-    const pauseBtn = document.getElementById('pauseBtnMobile');
 
     if(dpad)
     {
@@ -133,6 +135,11 @@ function showMobileControls(visible)
             dpad.classList.add('hidden');
         }
     }
+}
+
+function showPauseButton(visible)
+{
+    const pauseBtn = document.getElementById('pauseBtnMobile');
 
     if(pauseBtn)
     {
@@ -145,6 +152,13 @@ function showMobileControls(visible)
             pauseBtn.classList.add('hidden');
         }
     }
+}
+
+
+function showMobileControls(visible)
+{
+    showDpad(visible);
+    showPauseButton(visible);
 }
 
 function openMenu(screenId)

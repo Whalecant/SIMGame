@@ -142,6 +142,21 @@ const overworld =
 
         return false;
     },
+
+    hideDpad()
+    {
+        if(this.isTrans)
+        {
+            return true;
+        }
+
+        if(this.mode == 'mg' && this.activeMg && this.activeMg.hideDpad)
+        {
+            return true;
+        }
+
+        return false;
+    },
     
     doSwap(pos)
     {

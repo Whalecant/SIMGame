@@ -9,6 +9,7 @@ class baseMinigame
         this.isRunning = false;
         this.isPaused = false;
         this.hidePlayer = false;
+        this.hideDpad = false;
     }
 
     start()

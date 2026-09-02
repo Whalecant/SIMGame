@@ -7,6 +7,16 @@ const player =
     speed: 8,
     color: 'skyblue',
 
+    sprite: new Image(),
+    isLoaded: false,
+
+    init()
+    {
+        this.sprite.src = './assets/character/firstModelPrototype.png';
+
+        this.sprite.onload = () => {this.isLoaded = true;};
+    },
+
     update(deltaTime)
     {
         if(!window.Input)
@@ -54,9 +64,28 @@ const player =
 
     render(ctx)
     {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
+        if(this.isLoaded)
+        {
+            ctx.drawImage
+            (
+                this.sprite,
+                this.x - this.width/2,
+                this.y - this.height/2,
+                this.width,
+                this.height
+            );
+        }
+        else
+        {
+        
+            ctx.fillStyle = this.color;
+            ctx.fillRect(this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
+        }
+
     }
 };
+
+
+player.init();
 
 window.Player = player; //load bearing player :)) (ok no but in all seriousness, this lets like... everything else works lol, because they all search for this)
