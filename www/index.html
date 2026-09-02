@@ -13,11 +13,15 @@
         
         <script src="scripts/systems/player.js"></script>
         <script src="scripts/systems/randomizer.js"></script>
+        <script src="scripts/systems/rooms.js"></script>
+        <script src="scripts/systems/roomManager.js"></script>
 
         <script src="scripts/minigames/baseMG.js"></script>
         <!--insert all the minigames files here using <script src="scripts/minigames/fileName.js"></script>-->
+        <script src="scripts/minigames/connectWiresMG.js"></script>
 
         <script src="scripts/core/main.js"></script>
+        <script src="scripts/core/pause.js"></script>
     </head>
 
     <body>
@@ -29,6 +33,8 @@
             <canvas id="gameCanvas" width="1280" height="720"></canvas>
 
             <div id="uiOverlay">
+                <button id="pauseBtnMobile" class="pauseBtnMobile hidden" onclick="togglePause()">||</button>
+
                 <div id="mainMenu" class="uiScreen">
                     <h1 data-i18n="title">[Pending Title]</h1>
 
@@ -165,6 +171,15 @@
                         <button onclick="openMenu('settingsScreen')" data-i18n="settings">Settings</button>
                         <button onclick="quitToMainMenu()" data-i18n="mainMenu">Main Menu</button>
                     </div>
+                </div>
+
+                <div id="dpad" class="hidden">
+                    <!--all unicode symbols can be found here https://www.compart.com/en/unicode/U+25C0-->
+                    <button class="dpadBtn" id="dpadUp" data-key="w">▲</button>
+                    <button class="dpadBtn" id="dpadDown" data-key="s">▼</button>
+                    <button class="dpadBtn" id="dpadRight" data-key="d">▶</button>
+                    <button class="dpadBtn" id="dpadLeft" data-key="a">◀</button>
+                    
                 </div>
             </div>
 

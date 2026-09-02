@@ -7,6 +7,7 @@ const Game =
     currentState: 'MAIN_MENU', // to inidicate where the player is (i.e. main menu, playing, paused, etc.)
     previousState: null, //this is to make sure for pauses (will use later duh)
     isLoopRunning: false, //to make sure it doesn't duplicate animation frame loops
+    pause: null,
 
     // basic settings for the game
     settings:
@@ -24,6 +25,8 @@ const Game =
         {
             this.ctx = this.canvas.getContext('2d');
         }
+
+        this.pause = new pauseManager();
     },
 
     showScreen(screenId)
@@ -86,6 +89,11 @@ const Game =
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+        if(window.roomManager)
+        {
+            roomManager.render(this.ctx);
+        }
+        
         if(window.Player && typeof window.Player.render === 'function')
         {
             window.Player.render(this.ctx);
@@ -98,6 +106,36 @@ const Game =
 
 // the set of code below is for global ui functions (less comments will be present below because I actually know what I'm doing now :D)
 // 下面的评论会少一些，因为我现在真的知道自己在做什么了 :D
+function showMobileControls(visible)
+{
+    const dpad = document.getElementById('dpad');
+    const pauseBtn = document.getElementById('pauseBtnMobile');
+
+    if(dpad)
+    {
+        if(visible)
+        {
+            dpad.classList.remove('hidden');
+        }
+        else
+        {
+            dpad.classList.add('hidden');
+        }
+    }
+
+    if(pauseBtn)
+    {
+        if(visible)
+        {
+            pauseBtn.classList.remove('hidden');
+        }
+        else
+        {
+            pauseBtn.classList.add('hidden');
+        }
+    }
+}
+
 function openMenu(screenId)
 {
     if(screenId === 'settingsScreen')
@@ -168,6 +206,8 @@ function loadSave(slotNumber)
     Game.currentState = 'PLAYING';
     Game.showScreen(null);
     Game.startGameLoop();
+
+    showMobileControls(true);
 }
 
 function deleteSave(slotNumber)
@@ -184,13 +224,22 @@ function togglePause()
 {
     if(Game.currentState === 'PLAYING')
     {
+        if(!Game.pause.canPause())
+        {
+            return;
+        }
+
         Game.currentState = 'PAUSED';
         Game.showScreen('pauseScreen');
+
+        showMobileControls(false);
     }
     else if(Game.currentState === 'PAUSED')
     {
         Game.currentState = 'PLAYING';
         Game.showScreen(null);
+
+        showMobileControls(true);
     }
 }
 
@@ -209,7 +258,7 @@ function quitToMainMenu()
         window.AudioSystem.stopAll();
     }
 
-    Game.showScreen('mainMenu');
+    showMobileControls(false);
 }
 
 // initialization

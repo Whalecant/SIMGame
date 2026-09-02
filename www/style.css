@@ -361,6 +361,78 @@ input[type="range"]
     color: lightgray;
 }
 
+#dpad
+{
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    width: 150px;
+    height: 150px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    z-index: 20;
+    pointer-events: auto;
+}
+
+.dpadBtn
+{
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 1.5rem;
+    border-radius: 8px;
+    touch-action: none;
+}
+
+#dpadUp
+{
+    grid-column: 2;
+    grid-row: 1;
+}
+
+#dpadDown
+{
+    grid-column: 2;
+    grid-row: 3;
+}
+
+#dpadRight
+{
+    grid-column: 3;
+    grid-row: 2;
+}
+
+#dpadLeft
+{
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.pauseBtnMobile
+{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    background: rgba(0, 0, 0, 0.1);
+    align-items: safe center;
+    color: white;
+    border: 2px solid white;
+    border-radius: 8px;
+    z-index: 100;
+    cursor: pointer;
+    touch-action: manipulation;
+    pointer-events: auto;
+}
+
+.pauseBtnMobile:active
+{
+    background: rgba(225, 225, 225, 0.3);
+}
+
 @media(max-height: 500px)
 {
     .saveSlotWrapper
