@@ -80,7 +80,7 @@ const roomManager =
                 continue;
             }
 
-            const crossed = (exit.edge === 'top' && pos.y - halfHeight <= bounds) || (exit.edge === 'bot' && pos.y + halfHeight >= 720 - bounds) || (exit.edge === 'left' && pos.x - halfWidth <= bounds) || (exit.edge === 'right' && pos.x + halfWidth >= 1280 - bounds);
+            const crossed = (exit.edge === 'top' && pos.y - halfHeight <= 0) || (exit.edge === 'bot' && pos.y + halfHeight >= 720) || (exit.edge === 'left' && pos.x - halfWidth <= 0) || (exit.edge === 'right' && pos.x + halfWidth >= 1280);
 
             if(crossed)
             {

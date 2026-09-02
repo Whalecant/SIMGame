@@ -3,12 +3,18 @@ const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 
 const input = 
 {
     keysDown: {},
+    keysJustPressed: {},
 
     init()
     {
         window.addEventListener('keydown', (e) =>
         {
-            this.keysDown[e.key.toLowerCase()] = true;
+            const key = e.key.toLowerCase();
+            if(!this.keysDown[key])
+            {
+                this.keysJustPressed[key] = true;
+            }
+            this.keysDown[key] = true;
         });
 
         window.addEventListener('keyup', (e) =>
@@ -48,6 +54,17 @@ const input =
     isDown(key)
     {
         return !!this.keysDown[key.toLowerCase()];
+    },
+
+    consumePress(key)
+    {
+        key = key.toLowerCase();
+        if(this.keysJustPressed[key])
+        {
+            this.keysJustPressed[key] = false;
+            return true;
+        }
+        return false;
     }
 };
 
@@ -64,5 +81,11 @@ window.addEventListener('DOMContentLoaded', () =>
     else
     {
         document.getElementById('dpad').remove();
+
+        const actionbtn = document.getElementById('actionBtnMbl');
+        if(actionbtn)
+        {
+            actionbtn.remove();
+        }
     }
 })

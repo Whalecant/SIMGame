@@ -158,6 +158,16 @@ const overworld =
         return false;
     },
     
+    showActionBtn()
+    {
+        if(this.isTrans)
+        {
+            return false;
+        }
+
+        return this.mode === 'room';
+    },
+
     doSwap(pos)
     {
         if(this.transAct === 'roomToMg')
@@ -165,6 +175,8 @@ const overworld =
             const exit = this.pendingExit;
             this.mode = 'mg';
             this.mgEntryEdge = exit.edge;
+
+            showVehicleTimer(false);
 
             const mgClass = window[exit.targetMg];
             this.activeMg = new mgClass(this.canvas, this.ctx, (result) => this.endMg(result));
@@ -178,6 +190,8 @@ const overworld =
             this.activeMg = null;
             pos.x = this.returnPos.x;
             pos.y = this.returnPos.y;
+
+            showVehicleTimer(true);
 
             const nudge = 20;
             if(this.mgEntryEdge === 'top')
@@ -243,6 +257,10 @@ const overworld =
         }
 
         roomManager.renderRoom(ctx);
+        if(window.Vehicle && roomManager.currRoomId === 'hub')
+        {
+            Vehicle.render(ctx);
+        }
     },
 
     renderTrans(ctx)

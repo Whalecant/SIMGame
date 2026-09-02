@@ -82,6 +82,19 @@ const Game =
     //obvious i don't need to fucking explain what the 2 functions below do me (yes i'm talking to myself for future reference)
     update(deltaTime)
     {
+        if(window.Input)
+        {
+            if(Input.consumePress('e'))
+            {
+                interact();
+            }
+
+            if(Input.consumePress('m'))
+            {
+                toggleMap();
+            }
+        }
+
         if(window.Player && typeof window.Player.update === 'function') 
         {
             window.Player.update(deltaTime);
@@ -112,6 +125,9 @@ const Game =
 
         const hideDpad = window.overworld && overworld.hideDpad();
         showDpad(!hideDpad);
+
+        const showButtons = window.overworld && overworld.showActionBtn();
+        showActionBtn(showButtons);
     }
 
 
@@ -154,11 +170,61 @@ function showPauseButton(visible)
     }
 }
 
+function showActionBtn(visible)
+{
+    const container = document.getElementById('actionBtnMbl');
+
+    if(container)
+    {
+        if(visible)
+        {
+            container.classList.remove('hidden');
+        }
+        else
+        {
+            container.classList.add('hidden');
+        }
+    }
+}
+
+function interact()
+{
+    if(!(window.overworld && overworld.showActionBtn()))
+    {
+        return;
+    }
+}
+
+function toggleMap()
+{
+    if(!(window.overworld && overworld.showActionBtn()))
+    {
+        return;
+    }
+}
 
 function showMobileControls(visible)
 {
     showDpad(visible);
     showPauseButton(visible);
+    showActionBtn(visible);
+}
+
+function showVehicleTimer(visible)
+{
+    const timerElem = document.getElementById('vehicleTimer');
+
+    if(timerElem)
+    {
+        if(visible)
+        {
+            timerElem.classList.remove('hidden');
+        }
+        else
+        {
+            timerElem.classList.add('hidden');
+        }
+    }
 }
 
 function openMenu(screenId)
@@ -233,6 +299,7 @@ function loadSave(slotNumber)
     Game.startGameLoop();
 
     showMobileControls(true);
+    showVehicleTimer(true);
 }
 
 function deleteSave(slotNumber)
@@ -258,6 +325,7 @@ function togglePause()
         Game.showScreen('pauseScreen');
 
         showMobileControls(false);
+        showActionBtn(false);
     }
     else if(Game.currentState === 'PAUSED')
     {
@@ -265,6 +333,7 @@ function togglePause()
         Game.showScreen(null);
 
         showMobileControls(true);
+        showActionBtn(true);
     }
 }
 
@@ -285,6 +354,8 @@ function quitToMainMenu()
     
     Game.showScreen('mainMenu');
     showMobileControls(false);
+    showVehicleTimer(false);
+    showActionBtn(false);
 }
 
 // initialization

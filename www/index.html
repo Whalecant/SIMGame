@@ -16,6 +16,8 @@
         <script src="scripts/systems/rooms.js"></script>
         <script src="scripts/systems/roomManager.js"></script>
         <script src="scripts/systems/overworld.js"></script>
+        <script src="scripts/systems/vehicle.js"></script>
+        <script src="scripts/systems/vehicleManager.js"></script>
 
         <script src="scripts/minigames/baseMG.js"></script>
         <!--insert all the minigames files here using <script src="scripts/minigames/fileName.js"></script>-->
@@ -36,6 +38,8 @@
 
             <div id="uiOverlay">
                 <button id="pauseBtnMobile" class="pauseBtnMobile hidden" onclick="togglePause()">||</button>
+
+                <div id="vehicleTimer" class="vehicleTimerDisplay hidden">---</div>
 
                 <div id="mainMenu" class="uiScreen">
                     <h1 data-i18n="title">[Pending Title]</h1>
@@ -182,6 +186,11 @@
                     <button class="dpadBtn" id="dpadRight" data-key="d">▶</button>
                     <button class="dpadBtn" id="dpadLeft" data-key="a">◀</button>
                     
+                </div>
+
+                <div id="actionBtnMbl" class="hidden">
+                    <button class="actionBtn", id="interactBtn" data-key="e">!</button>
+                    <button class="actionBtn", id="mapBtn" data-key="m">M</button>
                 </div>
             </div>
 

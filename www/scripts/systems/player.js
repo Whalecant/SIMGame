@@ -2,9 +2,9 @@ const player =
 {
     x: 640,
     y: 320,
-    width: 16,
+    width: 20,
     height: 32,
-    speed: 8,
+    speed: 7,
     color: 'skyblue',
 
     sprite: new Image(),
@@ -28,6 +28,9 @@ const player =
 
         if(!freeze)
         {
+            const prevX = this.x;
+            const prevY = this.y;
+
             if(Input.isDown('w'))
             {
                 this.y -=this.speed;
@@ -38,6 +41,11 @@ const player =
                 this.y += this.speed;
             }
 
+            if(window.roomManager && roomManager.currRoomId === 'hub' && window.Vehicle && vehicle.boxCollider(this, this.x, this.y))
+            {
+                this.y = prevY;
+            }
+
             if(Input.isDown('a'))
             {
                 this.x -= this.speed;
@@ -46,6 +54,11 @@ const player =
             if(Input.isDown('d'))
             {
                 this.x += this.speed;
+            }
+
+            if(window.roomManager && roomManager.currRoomId === 'hub' && window.Vehicle && vehicle.boxCollider(this, this.x, this.y))
+            {
+                this.x = prevX;
             }
         }
 
