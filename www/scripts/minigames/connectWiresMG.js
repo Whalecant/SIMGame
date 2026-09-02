@@ -5,7 +5,7 @@ class connectWireMinigame extends baseMinigame
         this.hidePlayer = true;
         this.hideDpad = true;
         this.wireCount = 5;
-        this.timeRem = 15.00;
+        this.timeRem = 20.00;
         this.isCompleted = false; //this is jsut an edgecase handler since potential bug if player finshes game at exactly 0 seconds... some fucking how
 
         // for mobile support
@@ -212,7 +212,7 @@ class connectWireMinigame extends baseMinigame
         {
             this.ctx.fillStyle = '#b51307';
         }
-        else if(this.timeRem <= 5.5)
+        else if(this.timeRem <= 7.5)
         {
             this.ctx.fillStyle = '#d1bb13';
         }

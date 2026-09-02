@@ -314,6 +314,8 @@ function deleteSave(slotNumber)
 
 function togglePause()
 {
+    const vehicleTimer = document.getElementById('vehicleTimer');
+
     if(Game.currentState === 'PLAYING')
     {
         if(!Game.pause.canPause())
@@ -326,6 +328,11 @@ function togglePause()
 
         showMobileControls(false);
         showActionBtn(false);
+
+        if(vehicleTimer)
+        {
+            vehicleTimer.style.color = 'gray';
+        }
     }
     else if(Game.currentState === 'PAUSED')
     {
@@ -334,6 +341,11 @@ function togglePause()
 
         showMobileControls(true);
         showActionBtn(true);
+
+        if(vehicleTimer)
+        {
+            vehicleTimer.style.color = '';
+        }
     }
 }
 
