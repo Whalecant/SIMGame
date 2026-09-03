@@ -49,6 +49,20 @@ const input =
                 this.keysDown[key] = false;
             });
         });
+
+        const actionBtn = document.getElementById('actionBtnMbl');
+        if(actionBtn)
+        {
+            actionBtn.addEventListener('touchstart', (e) =>
+            {
+                e.preventDefault();
+                
+                if(typeof interact === 'function')
+                {
+                    interact();
+                }
+            });
+        }
     },
 
     isDown(key)
