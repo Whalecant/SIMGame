@@ -9,9 +9,12 @@ const Game =
     isLoopRunning: false, //to make sure it doesn't duplicate animation frame loops
     pause: null,
     lastTimeStamp: 0,
+    inMinigame: false,
 
     currentSaveSlot: null,
     vehicleBlueprintOpen: false,
+
+    mapOpen: false,
 
     // basic settings for the game
     settings:
@@ -79,29 +82,67 @@ const Game =
             this.render();
         }
 
+        if(window.Input && typeof Input.clearJustPressed === 'function')
+        {
+            Input.clearJustPressed();
+        }
+
         requestAnimationFrame((timestamp) => this.gameLoop(timestamp));
     },
 
     //obvious i don't need to fucking explain what the 2 functions below do me (yes i'm talking to myself for future reference)
     update(deltaTime)
     {
-        if(window.Input)
+        if(window.gameTimer)
         {
-            if(Input.consumePress('e'))
-            {
-                interact();
-            }
+            window.gameTimer.update(deltaTime);
 
-            if(Input.consumePress('m'))
+            const timer = document.getElementById('vehicleTimer');
+
+            if(timer)
             {
-                toggleMap();
+                timer.textContent = window.gameTimer.getFormattedTime();
             }
         }
 
-        if(window.Player && typeof window.Player.update === 'function') 
+        if(this.mapOpen || this.vehicleBlueprintOpen)
         {
-            window.Player.update(deltaTime);
+            return;
         }
+
+        if(this.inMinigame && window.overworld && overworld.activeMg)
+        {
+            overworld.activeMg.tick(deltaTime);
+        }
+        else
+        {
+            if(window.overworld && window.Player)
+            {
+                overworld.update(Player, deltaTime);
+            }
+
+            if(window.Input && !this.inMinigame)
+            {
+                if(Input.consumePress('e'))
+                {
+                    interact();
+                }
+
+                if(Input.consumePress('m'))
+                {
+                    toggleMap();
+                }
+            }
+
+            if(window.Player && typeof window.Player.update === 'function' && !this.inMinigame)
+            {
+                window.Player.update(deltaTime);
+            }
+        }
+
+        
+
+        
     },
 
     
@@ -119,17 +160,19 @@ const Game =
             overworld.render(this.ctx);
         }
 
-        const freeze = window.overworld && overworld.hidePlayer();
+        const anyOverlayOpen = this.mapOpen || this.vehicleBlueprintOpen;
+
+        const freeze = window.overworld && overworld.hidePlayer() || this.anyOverlayOpen;
         
         if(window.Player && typeof window.Player.render === 'function' && !freeze)
         {
             window.Player.render(this.ctx);
         }
 
-        const hideDpad = window.overworld && overworld.hideDpad();
+        const hideDpad = window.overworld && overworld.hideDpad() || anyOverlayOpen;
         showDpad(!hideDpad);
 
-        const showButtons = window.overworld && overworld.showActionBtn();
+        const showButtons = window.overworld && overworld.showActionBtn() || anyOverlayOpen;
         showActionBtn(showButtons);
     }
 
@@ -192,7 +235,7 @@ function showActionBtn(visible)
 
 function interact()
 {
-    if(!(window.overworld && overworld.showActionBtn()))
+    if(!(window.overworld && overworld.showActionBtn()) || Game.inMinigame)
     {
         return;
     }
@@ -208,8 +251,80 @@ function interact()
 
     if(window.Vehicle && window.Player && window.roomManager && roomManager.currRoomId === 'hub' && Vehicle.nearPlayer(Player))
     {
-        openVehicleBlueprint();
+        if(window.vehicleManager && window.vehicleManager.heldPart)
+        {
+            window.vehicleManager.deliverHeldPart();
+        }
+        else
+        {
+            openVehicleBlueprint();
+        }
+        
         return;
+    }
+
+    if(window.stationManager && window.Player && window.roomManager)
+    {
+        const station = window.stationManager.getNearbyStation(window.Player, roomManager.currRoomId)
+        
+        if(station)
+        {
+            if(window.vehicleManager && window.vehicleManager.heldPart)
+            {
+                showMsgPopup(getText('alrCarryPart'));
+                return;
+            }
+
+            startMinigameInstance(station.currentMgId, station.rewardPartKey);
+            return;
+        }
+    }
+
+}
+
+function startMinigameInstance(mgId, rewardPartKey)
+{
+    if(!window[mgId])
+    {
+        return;
+    }
+
+    Game.inMinigame = true;
+
+    const pauseBtn = document.getElementById('pauseBtnMobile');
+
+    if(pauseBtn)
+    {
+        pauseBtn.textContent = 'X';
+        pauseBtn.classList.add('inMinigame');
+    }
+
+    if(window.Input && typeof Input.clearJustPressed === 'function')
+    {
+        Input.clearJustPressed();
+        Input.keysDown = {};
+    }
+
+    const mgInstance = new window[mgId]
+    (
+        Game.canvas,
+        Game.ctx,
+        (success) => completeMiniGame(mgId, success, rewardPartKey)
+    );
+
+    if(window.overworld)
+    {
+        overworld.activeMg = mgInstance;
+        overworld.mode = 'mg';
+    }
+
+    if(typeof mgInstance.start === 'function')
+    {
+        mgInstance.start();
+    }
+    else if(typeof mgInstance.init === 'function')
+    {
+        mgInstance.init();
     }
 }
 
@@ -219,6 +334,92 @@ function toggleMap()
     {
         return;
     }
+
+    Game.mapOpen = true;
+
+    const mapOverlay = document.getElementById('mapOverlay')
+
+    if(mapOverlay)
+    {
+        mapOverlay.classList.remove('hidden');
+    }
+
+    showMobileControls(false);
+    showActionBtn(false);
+
+    setTimeout(() =>
+    {
+        document.addEventListener('click', closeMap)
+    }, 0);
+}
+
+function closeMap()
+{
+    Game.mapOpen = false;
+
+    const mapOverlay = document.getElementById('mapOverlay');
+    if(mapOverlay)
+    {
+        mapOverlay.classList.add('hidden');
+    }
+
+    showMobileControls(true);
+
+    const showButtons = window.overworld && overworld.showActionBtn();
+    showActionBtn(showButtons);
+
+    document.removeEventListener('click', closeMap);
+}
+
+function openMinigameOverlay(mgId)
+{
+    const mgOverlay = document.getElementById(mgId);
+    if(!mgOverlay)
+    {
+        return;
+    }
+
+    Game.inMinigame = true;
+    mgOverlay.classList.remove('hidden');
+
+    if(window[mgId] && typeof window[mgId].init === 'function')
+    {
+        window[mgId].init();
+    }
+}
+
+function completeMiniGame(mgId, success, rewardPartKey)
+{
+    Game.inMinigame = false;
+
+    const pauseBtn = document.getElementById('pauseBtnMobile');
+
+    if(pauseBtn)
+    {
+        pauseBtn.text = '||';
+        pauseBtn.classList.remove('inMinigame');
+    }
+
+    if(window.overworld)
+    {
+        overworld.activeMg = null;
+        overworld.mode = 'room';
+    }
+
+    const mgOverlay = document.getElementById(mgId);
+    if(mgOverlay)
+    {
+        mgOverlay.classList.add('hidden');
+    }
+
+    if(window.vehicleManager)
+    {
+        if(success && rewardPartKey)
+        {
+            window.vehicleManager.receivePart(rewardPartKey);
+        }
+    }
+
 }
 
 function openVehicleBlueprint()
@@ -374,11 +575,16 @@ function resetNewGame()
 
     if(window.vehicleManager)
     {
-        clearInterval(window.vehicleManager.timerInterval);
         window.vehicleManager.currentVehicleIdx = 0;
         window.vehicleManager.repairCount = 0;
         window.vehicleManager.activeVehicle = null;
+        window.vehicleManager.heldPart = null;
         window.vehicleManager.spawnNextVeh();
+    }
+
+    if(window.gameTimer)
+    {
+        window.gameTimer.reset();
     }
 }
 
@@ -406,8 +612,12 @@ function loadSave(slotNumber)
             window.vehicleManager.currentVehicleIdx = data.vehicle.currentVehicleIdx;
             window.vehicleManager.repairCount = data.vehicle.repairCount;
             window.vehicleManager.activeVehicle = data.vehicle.activeVehicle;
+        }
 
-            window.vehicleManager.startTimer();
+        if(window.gameTimer && data.timer)
+        {
+            window.gameTimer.currDay = data.timer.currDay;
+            window.gameTimer.elapsedSec = data.timer.elapsedSec;
         }
         
     }
@@ -485,7 +695,9 @@ function refreshSaveSlotDisplay(slot)
     if(data)
     {
         const vehicleNum = (data.vehicle && typeof data.vehicle.currentVehicleIdx === 'number') ? data.vehicle.currentVehicleIdx + 1 : 1;
-        slotText.textContent = `Vehicle ${vehicleNum}/15`;
+        const dayNum = (data.timer && typeof data.timer.currDay === 'number') ? data.timer.currDay : 1;
+
+        slotText.textContent = `Day ${dayNum} | Vehicle ${vehicleNum}`;
     }
     else
     {
@@ -520,7 +732,24 @@ function showMsgPopup(message, duration = 2000)
 
 function togglePause()
 {
-    const vehicleTimer = document.getElementById('vehicleTimer');
+
+    if(Game.inMinigame && window.overworld && overworld.activeMg)
+    {
+        overworld.activeMg.stop(false);
+        return;
+    }
+
+    if(Game.vehicleBlueprintOpen || Game.mapOpen)
+    {
+        return;
+    }
+
+    const timer = document.getElementById('vehicleTimer');
+
+    if(timer && window.gameTimer)
+    {
+        timer.textContent = window.gameTimer.getFormattedTime();
+    }
 
     if(Game.currentState === 'PLAYING')
     {
@@ -535,9 +764,9 @@ function togglePause()
         showMobileControls(false);
         showActionBtn(false);
 
-        if(vehicleTimer)
+        if(timer)
         {
-            vehicleTimer.style.color = 'gray';
+            timer.style.color = 'gray';
         }
     }
     else if(Game.currentState === 'PAUSED')
@@ -548,9 +777,9 @@ function togglePause()
         showMobileControls(true);
         showActionBtn(true);
 
-        if(vehicleTimer)
+        if(timer)
         {
-            vehicleTimer.style.color = 'white';
+            timer.style.color = 'white';
         }
     }
 }
@@ -570,11 +799,11 @@ function quitToMainMenu()
         window.AudioSystem.stopAll();
     }
 
-    const vehicleTimer = document.getElementById('vehicleTimer');
+    const timer = document.getElementById('vehicleTimer');
 
-    if(vehicleTimer)
+    if(timer)
     {
-        vehicleTimer.style.color = 'white';
+        timer.style.color = 'white';
     }
 
     Game.showScreen('mainMenu');

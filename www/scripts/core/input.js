@@ -72,6 +72,11 @@ const input =
 
     consumePress(key)
     {
+        if(!key)
+        {
+            return false;
+        }
+
         key = key.toLowerCase();
         if(this.keysJustPressed[key])
         {
@@ -79,6 +84,11 @@ const input =
             return true;
         }
         return false;
+    },
+
+    clearJustPressed()
+    {
+        this.keysJustPressed = {};
     }
 };
 

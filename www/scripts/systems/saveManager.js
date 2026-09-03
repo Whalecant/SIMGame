@@ -29,7 +29,11 @@ const saveManager =
                 activeVehicle: window.vehicleManager.activeVehicle
             },
 
-            savedAt: Date.now()
+            timer:
+            {
+                currDay: window.gameTimer.currDay,
+                elapsedSec: window.gameTimer.elapsedSec
+            }
         };
 
         localStorage.setItem(this.keyFor(slot), JSON.stringify(data)); //JSON.stringifyt just conversts data in ajvascript into a JSON sting

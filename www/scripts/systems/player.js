@@ -2,9 +2,9 @@ const player =
 {
     x: 640,
     y: 400,
-    width: 32,
-    height: 64,
-    speed: 4.5,
+    width: 48,
+    height: 48,
+    speed: 5,
     color: 'skyblue',
 
     sprite: new Image(),
@@ -45,6 +45,7 @@ const player =
         }
 
         const freeze = window.overworld && overworld.isTrans;
+        const currRoom = window.roomManager ? roomManager.currRoomId : 'hub';
 
         if(!freeze)
         {
@@ -77,6 +78,11 @@ const player =
                 this.y = prevY;
             }
 
+            if(window.stationManager && stationManager.checkCollision(this, currRoom, this.x, this.y))
+            {
+                this.y = prevY;
+            }
+
             if(Input.isDown('a'))
             {
                 this.x -= this.speed;
@@ -97,6 +103,11 @@ const player =
             }
 
             if(window.roomManager && roomManager.currRoomId === 'hub' && window.savePoint && savePoint.boxCollider(this, this.x, this.y))
+            {
+                this.x = prevX;
+            }
+
+            if(window.stationManager && stationManager.checkCollision(this, currRoom, this.x, this.y))
             {
                 this.x = prevX;
             }

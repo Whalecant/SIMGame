@@ -140,6 +140,11 @@ h2
     text-align: center;
 }
 
+h5
+{
+    text-align: center;
+}
+
 .menuButtons
 {
     display: flex;
@@ -479,6 +484,12 @@ input[type="range"]
     background: rgba(225, 225, 225, 0.3);
 }
 
+.pauseBtnMobile.inMinigame
+{
+    background-color: #c70902;
+    color: white;
+}
+
 .vehicleTimerDisplay
 {
     position: absolute;
@@ -544,6 +555,24 @@ input[type="range"]
 .vehiclePartRow.done
 {
     background: rgba(0, 255, 0, 0.1);
+}
+
+#mapOverlay
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 75%;
+    height: 75%;
+
+    background: rgba(248, 245, 60, 0.681);
+
+    z-index: 500;
+    pointer-events: auto;
+
+    
 }
 
 #actionBtnMbl

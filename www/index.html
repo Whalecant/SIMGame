@@ -12,6 +12,7 @@
         <script src="scripts/core/audio.js"></script>
         <script src="scripts/core/strings.js"></script>
         
+        <script src="scripts/systems/gameTimer.js"></script>
         <script src="scripts/systems/player.js"></script>
         <script src="scripts/systems/randomizer.js"></script>
         <script src="scripts/systems/rooms.js"></script>
@@ -22,6 +23,7 @@
         <script src="scripts/systems/saveManager.js"></script>
         <script src="scripts/systems/savePoint.js"></script>
 
+        <script src="scripts/minigames/minigameStation.js"></script>
         <script src="scripts/minigames/baseMG.js"></script>
         <!--insert all the minigames files here using <script src="scripts/minigames/fileName.js"></script>-->
         <script src="scripts/minigames/connectWiresMG.js"></script>
@@ -146,7 +148,8 @@
                                         <p> <strong data-i18n="interact">Interact:</strong> <span>E</span> </p>
                                         <p> <strong data-i18n="pause">Pause:</strong> <span>ESC</span> </p>
                                         <p> <strong data-i18n="map">Map:</strong> <span>M</span> </p>
-                                        <p> <strong data-i18n="minigameControls">Minigame Jump:</strong> <span>Spacebar</span> </p>
+                                        <p> <strong data-i18n="minigameControls">Minigame Controls:</strong> <span>SPACEBAR</span> </p>
+                                        <p> <strong data-i18n="exitMinigame">Exit Minigame:</strong> <span>Q</span> </p>
                                     </div>
                                 </div>
                             </div>
@@ -212,6 +215,13 @@
                     <div class="vehicleBlueprintPanel">
                         <h2 data-i18n="partsTitle">Required Parts</h2>
                         <div id="vehiclePartsList" class="vehiclePartsList"></div>
+                        <h5 data-i18n="closeNotice">Click anywhere to close</h5>
+                    </div>
+                </div>
+
+                <div id="mapOverlay" class="hidden">
+                    <div class="mapContent">
+                        
                     </div>
                 </div>
             </div>

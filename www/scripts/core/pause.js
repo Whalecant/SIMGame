@@ -24,6 +24,11 @@ class pauseManager
             return false;
         }
 
+        if(Game.inMinigame)
+        {
+            return true;
+        }
+
         return true;
     }
 }

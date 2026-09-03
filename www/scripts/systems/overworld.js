@@ -57,7 +57,7 @@ const overworld =
         }
         else if(this.mode == 'mg')
         {                
-           this.activeMg.tick(deltaTime);
+            this.activeMg.tick(deltaTime);
         }
     },
 
@@ -265,6 +265,11 @@ const overworld =
         if(window.savePoint && roomManager.currRoomId === 'hub')
         {
             savePoint.render(ctx);
+        }
+
+        if(window.stationManager && window.roomManager)
+        {
+            window.stationManager.renderRoom(ctx, roomManager.currRoomId);
         }
     },
 

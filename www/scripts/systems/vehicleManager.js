@@ -5,10 +5,9 @@ class vehicleManager
         this.currentVehicleIdx = 0; //0 to 14 for 15 of them
         this.repairCount = 0;
         this.activeVehicle = null;
-        this.timer = 0;
-        this.timerInterval = null;
+        this.heldPart = null;
 
-        this.allParts = ['wires', 'part2', 'part3', 'part4', 'part5', 'part6', 'part7', 'part8', 'part9', 'part10', 'part11', 'part12'];
+        this.allParts = ['Wires', 'Part2', 'Part3', 'Part4', 'Part5', 'Part6', 'Part7', 'Part8', 'Part9', 'Part10', 'Part11', 'Part12'];
     }
 
     getPartCount(vehicleNum)
@@ -33,26 +32,77 @@ class vehicleManager
             return Math.floor(Math.random() * 3) + 7;
         }
 
-        if(vehicleNum == 14)
+        if(vehicleNum >= 14)
         {
-            return 10;
+            return Math.floor(Math.random() * 3) + 8;
+        }
+
+        if(vehicleNum >= 19)
+        {
+            return Math.floor(Math.random() * 3) + 10;
         }
         
     }
 
-    getTimeLim(partCount)
+    receivePart(partKey)
     {
-        return partCount * 60 + 30;
+        if(this.heldPart)
+        {
+            if(typeof showMsgPopup === 'function')
+            {
+                showMsgPopup(getText('alrCarryPart'));
+            }
+
+            return false;
+        }
+        
+        this.heldPart = partKey;
+
+        if(typeof showMsgPopup === 'function')
+        {
+            showMsgPopup(`${getText('acquiredPart')}${partKey}`);
+        }
+
+        return true;
+    }
+
+    deliverHeldPart()
+    {
+        if(!this.heldPart || !this.activeVehicle)
+        {
+            return;
+        }
+
+        const partKey = this.heldPart;
+
+        if(this.activeVehicle.parts.hasOwnProperty(partKey) && !this.activeVehicle.parts[partKey])
+        {
+            this.activeVehicle.parts[partKey] = true;
+            this.activeVehicle.installedParts++;
+
+            if(typeof showMsgPopup === 'function')
+            {
+                showMsgPopup(`${getText('installedPart')}${partKey}`);
+            }
+
+            if(this.activeVehicle.installedParts >= this.activeVehicle.totalParts)
+            {
+                this.finishVehicle(true);
+            }
+        }
+        else
+        {
+            if(typeof showMsgPopup === 'function')
+            {
+                showMsgPopup(`${getText('scrappedPart')}${partKey}`);
+            }
+        }
+
+        this.heldPart = null;
     }
 
     spawnNextVeh()
     {
-        if(this.currentVehicleIdx >= 15)
-        {
-            this.ending();
-            return null;
-        }
-
         const vehicleNum = this.currentVehicleIdx;
         const count = this.getPartCount(vehicleNum);
 
@@ -73,44 +123,10 @@ class vehicleManager
             parts: requiredParts,
             totalParts: count,
             installedParts: 0,
-            timeRem: this.getTimeLim(count),
             isComplete: false
         };
 
-        this.startTimer();
         return this.activeVehicle;
-    }
-
-    startTimer()
-    {
-        clearInterval(this.timerInterval); // allows clearing of timers set with setInteveral
-
-        this.timerInterval = setInterval(() =>
-        {
-            if(Game.currentState === 'PLAYING' && !overworld.isTrans)
-            {
-                this.activeVehicle.timeRem--;
-            }
-
-            const vehicleTimer = document.getElementById('vehicleTimer');
-            
-            if(vehicleTimer)
-            {
-                vehicleTimer.textContent = this.activeVehicle.timeRem;
-            }
-
-            if(this.activeVehicle.timeRem <= 0)
-            {
-                this.vehicleFail();
-            }
-
-            
-        }, 1000);
-    }
-
-    timePenalty(seconds)
-    {
-        this.activeVehicle.timeRem = Math.max(0, this.activeVehicle.timeRem - seconds);
     }
 
     completePart(partKey)
@@ -129,18 +145,9 @@ class vehicleManager
         }
     }
 
-    vehicleFail()
-    {
-        clearInterval(this.timerInterval);
-
-        alert(`Timeout for vehicle #${this.activeVehicle.id + 1}`);
-
-        this.finishVehicle(false);
-    }
-
     finishVehicle(success)
     {
-        clearInterval(this.timerInterval);
+        
         if(success)
         {
             this.repairCount++;
@@ -148,19 +155,11 @@ class vehicleManager
 
         this.currentVehicleIdx++;
 
-        if(this.currentVehicleIdx < 15)
-        {
-            this.spawnNextVeh();
-        }
-        else
-        {
-            this.ending();
-        }
+        this.spawnNextVeh();
     }
 
     ending()
     {
-        clearInterval(this.timerInterval);
 
         let endingType = 'BAD';
 

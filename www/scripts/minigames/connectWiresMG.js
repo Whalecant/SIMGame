@@ -1,11 +1,16 @@
 class connectWireMinigame extends baseMinigame
 {
+    constructor(canvas, ctx, onComplete, rewardPartKey = 'wires')
+    {
+        super(canvas, ctx, onComplete);
+        this.rewardPartKey = rewardPartKey;
+    }
+
     init() //this is also required btw for all minigames due to how i made the template
     {
         this.hidePlayer = true;
         this.hideDpad = true;
         this.wireCount = 5;
-        this.timeRem = 20.00;
         this.isCompleted = false; //this is jsut an edgecase handler since potential bug if player finshes game at exactly 0 seconds... some fucking how
 
         // for mobile support
@@ -66,11 +71,11 @@ class connectWireMinigame extends baseMinigame
     {
         this.mouseDownHandler = (e) => this.handleStart(this.getCanvasInputPos(e)); //the more you know, 'e' stands for even in JS, just used to idnicate if certain event happed, very simple for control schemes :thumbsup:
         this.mouseMoveHandler = (e) => this.handleMove(this.getCanvasInputPos(e));
-        this.mouseUpHanlder = () => this.handleEnd();
+        this.mouseUpHandler = () => this.handleEnd();
 
         this.canvas.addEventListener('mousedown', this.mouseDownHandler);
         this.canvas.addEventListener('mousemove', this.mouseMoveHandler);
-        this.canvas.addEventListener('mouseup', this.mouseUpHanlder);
+        this.canvas.addEventListener('mouseup', this.mouseUpHandler);
         // another feature about javascript i jsut learned, DOM events (the events for add and remove event listeners) needs it to be enitrely lowercase... i think i learned this in the past but its been a bit lol, also again, i write in camelCase by default for code :v
 
         // for mobile port, e.preventDefault seems very self explanatory me, istg if I somehow forget it when making the documentation I'll slap the ever living day lights out of myself ay
@@ -140,7 +145,9 @@ class connectWireMinigame extends baseMinigame
         {
             if(this.isInsideNode(this.mousePos, rNode))
             {
-                if(rNode.color == this.activeNode.color)
+                const isRightConnected = this.connections.some(c => c.endNode === rNode);
+
+                if(!isRightConnected && rNode.color == this.activeNode.color)
                 {
                     this.connections.push
                     (
@@ -153,7 +160,7 @@ class connectWireMinigame extends baseMinigame
                     if(this.connections.length === this.wireCount)
                     {
                         this.isCompleted = true;
-                        this.stop(true); //win... idt i need to elaborate more lol
+                        this.stop(true, this.rewardPartKey); //win... idt i need to elaborate more lol
                         return;
                     }
                 }
@@ -177,18 +184,13 @@ class connectWireMinigame extends baseMinigame
     // for well... updating the fucking time for lose con lol
     update(deltaTime) //this is also required btw for all minigames due to how i made the template
     {
+        super.update(deltaTime) //super lets the code yoink from its parent
+
         if(this.isCompleted)
         {
             return;
         }
 
-        this.timeRem -= deltaTime;
-
-        if(this.timeRem <= 0)
-        {
-            this.timeRem = 0;
-            this.stop(false); //failed
-        }
     }
 
     render() //this is also required btw for all minigames due to how i made the template
@@ -207,24 +209,9 @@ class connectWireMinigame extends baseMinigame
         this.leftNodes.forEach(node => this.drawNode(node));
         this.rightNodes.forEach(node => this.drawNode(node));
 
-        //for timer UI... cuz i hate HTML and CSS lol :>
-        if(this.timeRem <= 2.5)
-        {
-            this.ctx.fillStyle = '#b51307';
-        }
-        else if(this.timeRem <= 7.5)
-        {
-            this.ctx.fillStyle = '#d1bb13';
-        }
-        else
-        {
-            this.ctx.fillStyle = '#ffffff';
-        }
-
         this.ctx.font = '16px Segoe UI, sans-serif';
         this.ctx.textAlign = 'center';
-        this.ctx.fillText(`${this.timeRem.toFixed(2)}`, this.canvas.width / 2, 30);
- 
+
 
     }
 
@@ -264,7 +251,7 @@ class connectWireMinigame extends baseMinigame
     {
         this.canvas.removeEventListener('mousedown', this.mouseDownHandler);
         this.canvas.removeEventListener('mousemove', this.mouseMoveHandler);
-        this.canvas.removeEventListener('mouseup', this.mouseUpHanlder);
+        this.canvas.removeEventListener('mouseup', this.mouseUpHandler);
 
         this.canvas.removeEventListener('touchstart', this.touchStartHandler);
         this.canvas.removeEventListener('touchmove', this.touchMoveHandler);
