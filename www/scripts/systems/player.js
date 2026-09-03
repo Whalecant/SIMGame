@@ -72,6 +72,11 @@ const player =
                 this.y = prevY;
             }
 
+            if(window.roomManager && roomManager.currRoomId === 'hub' && window.savePoint && savePoint.boxCollider(this, this.x, this.y))
+            {
+                this.y = prevY;
+            }
+
             if(Input.isDown('a'))
             {
                 this.x -= this.speed;
@@ -87,6 +92,11 @@ const player =
             }
 
             if(window.roomManager && roomManager.currRoomId === 'hub' && window.Vehicle && vehicle.boxCollider(this, this.x, this.y))
+            {
+                this.x = prevX;
+            }
+
+            if(window.roomManager && roomManager.currRoomId === 'hub' && window.savePoint && savePoint.boxCollider(this, this.x, this.y))
             {
                 this.x = prevX;
             }

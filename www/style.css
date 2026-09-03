@@ -99,6 +99,28 @@ body
     display: none !important; /*!important makes it well... the most important thing*/
 }
 
+.msgPopup
+{
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    z-index: 200;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.msgPopup.visible
+{
+    opacity: 1;
+}
+
 h1
 {
     font-size: clamp(2rem, 5vw, 3.2rem);
@@ -202,8 +224,6 @@ button:active
     width: 100%;
 }
 
-
-
 .slotDetails
 {
     color: lightgray;
@@ -215,6 +235,30 @@ button:active
 {
     display: flex;
     gap: 0.5rem;
+}
+
+#confirmDelete
+{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    pointer-events: auto;
+
+    background: #212121;
+    border: 1px solid #6b6b6b;
+    border-radius: 8px;
+    padding: 24px 32px;
+
+    max-width: 400px;
+    text-align: safe center;
+
+}
+
+#confirmDelete h2
+{
+    margin: 12px 0 20px;
 }
 
 #btnSaveBack, #btnSettingsBack, #btnCreditsBack

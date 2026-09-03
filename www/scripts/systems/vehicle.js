@@ -6,6 +6,10 @@ const vehicle =
     height: 100,
     color: '#020101',
 
+    colliderWidth: 180,
+    colliderHeight: 50,
+    colliderOffset: 20,
+
     render(ctx)
     {
         ctx.fillStyle = this.color;
@@ -22,10 +26,13 @@ const vehicle =
         const top = nextY - halfHeight;
         const bot = nextY + halfHeight;
 
-        const vLeft = this.x - this.width/2;
-        const vRight = this.x + this.width/2;
-        const vTop = this.y - this.height/2;
-        const vBot = this.y + this.height/2;
+        const cx = this.x;
+        const cy = this.y - this.colliderOffset;
+
+        const vLeft = cx - this.colliderWidth/2;
+        const vRight = cx + this.colliderWidth/2;
+        const vTop = cy - this.colliderHeight/2;
+        const vBot = cy + this.colliderHeight/2;
 
         return left < vRight && right > vLeft && top < vBot && bot > vTop;
     }

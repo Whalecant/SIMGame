@@ -179,6 +179,6 @@ class vehicleManager
 
     }
 
-}
+};
 
 window.vehicleManager = new vehicleManager();

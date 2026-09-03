@@ -10,6 +10,7 @@
         <script src="scripts/core/lang.js"></script>
         <script src="scripts/core/input.js"></script>
         <script src="scripts/core/audio.js"></script>
+        <script src="scripts/core/strings.js"></script>
         
         <script src="scripts/systems/player.js"></script>
         <script src="scripts/systems/randomizer.js"></script>
@@ -18,14 +19,17 @@
         <script src="scripts/systems/overworld.js"></script>
         <script src="scripts/systems/vehicle.js"></script>
         <script src="scripts/systems/vehicleManager.js"></script>
+        <script src="scripts/systems/saveManager.js"></script>
+        <script src="scripts/systems/savePoint.js"></script>
 
         <script src="scripts/minigames/baseMG.js"></script>
         <!--insert all the minigames files here using <script src="scripts/minigames/fileName.js"></script>-->
         <script src="scripts/minigames/connectWiresMG.js"></script>
         <script src="scripts/minigames/tempMgPlaceholder.js"></script>
 
-        <script src="scripts/core/main.js"></script>
         <script src="scripts/core/pause.js"></script>
+        <script src="scripts/core/main.js"></script>
+
     </head>
 
     <body>
@@ -40,6 +44,8 @@
                 <button id="pauseBtnMobile" class="pauseBtnMobile hidden" onclick="togglePause()">||</button>
 
                 <div id="vehicleTimer" class="vehicleTimerDisplay hidden">---</div>
+
+                <div id="msgPopup" class="msgPopup"></div>
 
                 <div id="mainMenu" class="uiScreen">
                     <h1 data-i18n="title">Shipwright's Countdown:<br>Civilizations future</h1>
@@ -102,6 +108,15 @@
                     <button id="btnSaveBack" onclick="backToMainMenu()" data-i18n="back">Back</button>
                 </div>
 
+                <!--Delete confirmation screen-->
+                <div id="confirmDelete" class="hidden">
+                    <h2 data-i18n="confirmDelete">Confirm Delete?</h2>
+                    <div class="menuButtons">
+                        <button class="btnWarn"id="btnConfirmDelete" onclick="confirmDeleteSave()" data-i18n="confirm">Confirm</button>
+                        <button id="btnCancelDelete" onclick="cancelDeleteSave()" data-i18n="cancel">Cancel</button>
+                    </div>
+                </div>
+
                 <!-- Settings Screen -->
                 <div id="settingsScreen" class="uiScreen hidden">
                     <div class="settingsPanel">
@@ -156,11 +171,11 @@
                     <h2 data-i18n="credits">Credits</h2>
 
                     <div class="creditsContent">
-                        <p><strong data-i18n="roleProgrammers">Programmers:</strong> <span>[Programmer Names]</span></p>
-                        <p><strong data-i18n="roleArtist">Artist:</strong> <span>[Artist Names]</span></p>
-                        <p><strong data-i18n="roleSoundDesigner">Sound Designer:</strong> <span>[Sound Designer Name]</span></p>
-                        <p><strong data-i18n="roleWriter">Writer:</strong> <span>[Writer Names]</span></p>
-                        <p><strong data-i18n="specialThanks">Special Thanks:</strong><span>[Contributor Names]</span></p>
+                        <p><strong data-i18n="roleProgrammers">Programmers:</strong> <span>颜键杨，赵习君</span></p>
+                        <p><strong data-i18n="roleArtist">Artist:</strong> <span>邓明善，徐思佳</span></p>
+                        <p><strong data-i18n="roleSoundDesigner">Sound Designer:</strong> <span>颜键杨</span></p>
+                        <p><strong data-i18n="roleWriter">Writer:</strong> <span>宋理，赵一诺</span></p>
+                        <p><strong data-i18n="roleVideo">Promotional Video:</strong> <span>赵习君</span></p>
 
                     </div>
 

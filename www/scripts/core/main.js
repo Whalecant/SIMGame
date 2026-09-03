@@ -10,6 +10,8 @@ const Game =
     pause: null,
     lastTimeStamp: 0,
 
+    currentSaveSlot: null,
+
     // basic settings for the game
     settings:
     {
@@ -193,6 +195,15 @@ function interact()
     {
         return;
     }
+
+    if(window.savePoint && window.Player && window.roomManager && roomManager.currRoomId === 'hub' && savePoint.nearPlayer(Player))
+    {
+        saveManager.save(Game.currentSaveSlot);
+        
+        showMsgPopup(getText('saveMsg'));
+
+        return;
+    }
 }
 
 function toggleMap()
@@ -233,6 +244,12 @@ function openMenu(screenId)
     {
         Game.previousState = Game.currentState;
     }
+
+    if(screenId === 'saveScreen')
+    {
+        refreshAllSaveSlots();
+    }
+
     Game.showScreen(screenId);
 }
 
@@ -292,8 +309,63 @@ function toggleLanguage()
     }
 }
 
+function resetNewGame()
+{
+    if(window.Player)
+    {
+        Player.x = 640;
+        Player.y = 400;
+    }
+
+    if(window.roomManager)
+    {
+        roomManager.currRoomId = 'hub';
+    }
+
+    if(window.vehicleManager)
+    {
+        clearInterval(window.vehicleManager.timerInterval);
+        window.vehicleManager.currentVehicleIdx = 0;
+        window.vehicleManager.repairCount = 0;
+        window.vehicleManager.activeVehicle = null;
+        window.vehicleManager.spawnNextVeh();
+    }
+}
+
 function loadSave(slotNumber)
 {
+    Game.currentSaveSlot = slotNumber;
+
+    const data = window.saveManager ? saveManager.load(slotNumber): null;
+    
+    if(data)
+    {
+        if(window.Player)
+        {
+            Player.x = data.playerX;
+            Player.y = data.playerY;
+        }
+
+        if(window.roomManager)
+        {
+            roomManager.currRoomId = data.roomId;
+        }
+
+        if(window.vehicleManager && data.vehicle)
+        {
+            window.vehicleManager.currentVehicleIdx = data.vehicle.currentVehicleIdx;
+            window.vehicleManager.repairCount = data.vehicle.repairCount;
+            window.vehicleManager.activeVehicle = data.vehicle.activeVehicle;
+
+            window.vehicleManager.startTimer();
+        }
+        
+    }
+    else
+    {
+        resetNewGame();
+    }
+
     Game.currentState = 'PLAYING';
     Game.showScreen(null);
     Game.startGameLoop();
@@ -302,14 +374,98 @@ function loadSave(slotNumber)
     showVehicleTimer(true);
 }
 
+let pendingDeleteSlot = null;
+
 function deleteSave(slotNumber)
 {
-    const slotText = document.getElementById(`infoSlot${slotNumber}`);
+    pendingDeleteSlot = slotNumber;
 
-    if(slotText)
+    const confirmDelete = document.getElementById('confirmDelete');
+    if(confirmDelete)
+    {
+        confirmDelete.classList.remove('hidden');
+    }
+}
+
+function confirmDeleteSave()
+{
+    if(pendingDeleteSlot === null)
+    {
+        return;
+    }
+
+    if(window.saveManager)
+    {
+        saveManager.deleteSave(pendingDeleteSlot);
+    }
+
+    refreshSaveSlotDisplay(pendingDeleteSlot);
+
+    pendingDeleteSlot = null;
+
+    const confirmDelete = document.getElementById('confirmDelete');
+    if(confirmDelete)
+    {
+        confirmDelete.classList.add('hidden');
+    }
+}
+
+function cancelDeleteSave()
+{
+    pendingDeleteSlot = null;
+    
+    const confirmDelete = document.getElementById('confirmDelete');
+    if(confirmDelete)
+    {
+        confirmDelete.classList.add('hidden');
+    }
+}
+
+function refreshSaveSlotDisplay(slot)
+{
+    const slotText = document.getElementById(`infoSlot${slot}`);
+    
+    if(!slotText)
+    {
+        return;
+    }
+
+    const data = window.saveManager ? saveManager.load(slot) : null;
+
+    if(data)
+    {
+        const vehicleNum = (data.vehicle && typeof data.vehicle.currentVehicleIdx === 'number') ? data.vehicle.currentVehicleIdx + 1 : 1;
+        slotText.textContent = `Vehicle ${vehicleNum}/15`;
+    }
+    else
     {
         slotText.textContent = 'Empty';
     }
+}
+
+function refreshAllSaveSlots()
+{
+    [1, 2, 3].forEach(refreshSaveSlotDisplay);
+}
+
+let msgPopupTimeout = null;
+
+function showMsgPopup(message, duration = 2000)
+{
+    const msgPopup = document.getElementById('msgPopup');
+    if(!msgPopup)
+    {
+        return;
+    }
+
+    msgPopup.textContent = message;
+    msgPopup.classList.add('visible');
+
+    clearTimeout(msgPopupTimeout);
+    msgPopupTimeout = setTimeout(() =>
+    {
+        msgPopup.classList.remove('visible');
+    }, duration);
 }
 
 function togglePause()
@@ -344,7 +500,7 @@ function togglePause()
 
         if(vehicleTimer)
         {
-            vehicleTimer.style.color = '';
+            vehicleTimer.style.color = 'white';
         }
     }
 }
@@ -363,7 +519,12 @@ function quitToMainMenu()
     {
         window.AudioSystem.stopAll();
     }
-    
+
+    if(vehicleTimer)
+    {
+        vehicleTimer.style.color = 'white';
+    }
+
     Game.showScreen('mainMenu');
     showMobileControls(false);
     showVehicleTimer(false);

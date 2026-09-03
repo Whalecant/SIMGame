@@ -261,6 +261,11 @@ const overworld =
         {
             Vehicle.render(ctx);
         }
+
+        if(window.savePoint && roomManager.currRoomId === 'hub')
+        {
+            savePoint.render(ctx);
+        }
     },
 
     renderTrans(ctx)
