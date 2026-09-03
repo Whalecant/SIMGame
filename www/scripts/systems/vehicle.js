@@ -5,6 +5,7 @@ const vehicle =
     width: 200,
     height: 100,
     color: '#020101',
+    radius: 125,
 
     colliderWidth: 180,
     colliderHeight: 50,
@@ -14,6 +15,14 @@ const vehicle =
     {
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
+    },
+
+    nearPlayer(pos)
+    {
+        const dx = pos.x - this.x;
+        const dy = pos.y - this.y;
+
+        return Math.sqrt(dx * dx + dy * dy) <= this.radius;
     },
 
     boxCollider(pos, nextX, nextY)

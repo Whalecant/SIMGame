@@ -2,12 +2,16 @@ const strings =
 {
     en:
     {
-        saveMsg: 'Game Saved'
+        saveMsg: 'Game Saved',
+        partDone: 'Installed',
+        partMissing: 'Missing',
     },
 
     zh:
     {
-        saveMsg: '游戏已保存'
+        saveMsg: '游戏已保存',
+        partDone: '已安装',
+        partMissing: '缺失',
     }
 };
 

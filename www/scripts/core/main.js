@@ -11,6 +11,7 @@ const Game =
     lastTimeStamp: 0,
 
     currentSaveSlot: null,
+    vehicleBlueprintOpen: false,
 
     // basic settings for the game
     settings:
@@ -204,6 +205,12 @@ function interact()
 
         return;
     }
+
+    if(window.Vehicle && window.Player && window.roomManager && roomManager.currRoomId === 'hub' && Vehicle.nearPlayer(Player))
+    {
+        openVehicleBlueprint();
+        return;
+    }
 }
 
 function toggleMap()
@@ -212,6 +219,49 @@ function toggleMap()
     {
         return;
     }
+}
+
+function openVehicleBlueprint()
+{
+    const overlay = document.getElementById('vehicleBlueprint');
+    const list = document.getElementById('vehiclePartsList');
+
+    if(!overlay || !list || !window.vehicleManager || !window.vehicleManager.activeVehicle)
+    {
+        return;
+    }
+
+    list.innerHTML = '';
+    const parts = window.vehicleManager.activeVehicle.parts;
+
+    Object.keys(parts).forEach(partKey =>
+    {
+        const row = document.createElement('div');
+        row.className = 'VehiclePartRow' + (parts[partKey] ? 'done' : '');
+        row.textContent = `${partKey} - ${parts[partKey] ? getText('partDone') : getText('partMissing')}`;
+        list.appendChild(row);
+    });
+
+    overlay.classList.remove('hidden');
+    Game.vehicleBlueprintOpen = true;
+
+    setTimeout(() =>
+    {
+        document.addEventListener('click', closeVehicleBlueprint);
+    }, 0);
+}
+
+function closeVehicleBlueprint()
+{
+    const overlay = document.getElementById('vehicleBlueprint');
+    if(overlay)
+    {
+        overlay.classList.add('hidden');
+    }
+
+    Game.vehicleBlueprintOpen = false;
+
+    document.removeEventListener('click', closeVehicleBlueprint);
 }
 
 function showMobileControls(visible)
@@ -519,6 +569,8 @@ function quitToMainMenu()
     {
         window.AudioSystem.stopAll();
     }
+
+    const vehicleTimer = document.getElementById('vehicleTimer');
 
     if(vehicleTimer)
     {
