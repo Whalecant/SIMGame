@@ -50,16 +50,30 @@ const input =
             });
         });
 
-        const actionBtn = document.getElementById('actionBtnMbl');
-        if(actionBtn)
+        const interactBtn = document.getElementById('interactBtn');
+        if(interactBtn)
         {
-            actionBtn.addEventListener('touchstart', (e) =>
+            interactBtn.addEventListener('touchstart', (e) =>
             {
                 e.preventDefault();
                 
                 if(typeof interact === 'function')
                 {
                     interact();
+                }
+            });
+        }
+
+        const mapBtn = document.getElementById('napBtn');
+        if(mapBtn)
+        {
+            mapBtn.addEventListener('touchstart', (e) =>
+            {
+                e.preventDefault();
+                
+                if(typeof interact === 'function')
+                {
+                    toggleMap();
                 }
             });
         }

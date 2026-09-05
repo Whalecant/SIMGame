@@ -164,7 +164,7 @@ const Game =
 
         const anyOverlayOpen = this.mapOpen || this.vehicleBlueprintOpen;
 
-        const freeze = window.overworld && overworld.hidePlayer() || this.anyOverlayOpen;
+        const freeze = window.overworld && overworld.hidePlayer() || anyOverlayOpen;
         
         if(window.Player && typeof window.Player.render === 'function' && !freeze)
         {
@@ -349,9 +349,12 @@ function toggleMap()
     showMobileControls(false);
     showActionBtn(false);
 
+    //this overly added shit is just to make sure its safe
+
+    document.removeEventListener('click', closeMap)
     setTimeout(() =>
     {
-        document.addEventListener('click', closeMap)
+        document.addEventListener('click', closeMap);
     }, 0);
 }
 
@@ -372,7 +375,7 @@ function closeMap()
 
     document.removeEventListener('click', closeMap);
 }
-
+/**
 function openMinigameOverlay(mgId)
 {
     const mgOverlay = document.getElementById(mgId);
@@ -389,6 +392,7 @@ function openMinigameOverlay(mgId)
         window[mgId].init();
     }
 }
+**/
 
 function completeMiniGame(mgId, success, rewardPartKey)
 {
@@ -398,7 +402,7 @@ function completeMiniGame(mgId, success, rewardPartKey)
 
     if(pauseBtn)
     {
-        pauseBtn.text = '||';
+        pauseBtn.textContent = '||';
         pauseBtn.classList.remove('inMinigame');
     }
 
@@ -435,19 +439,27 @@ function openVehicleBlueprint()
     }
 
     list.innerHTML = '';
+    const activeVehicle = window.vehicleManager.activeVehicle;
     const parts = window.vehicleManager.activeVehicle.parts;
+    const totals = activeVehicle.partsTotal || parts;
 
     Object.keys(parts).forEach(partKey =>
     {
         const row = document.createElement('div');
-        row.className = 'VehiclePartRow' + (parts[partKey] ? 'done' : '');
-        row.textContent = `${partKey} - ${parts[partKey] ? getText('partDone') : getText('partMissing')}`;
+
+        const countRem = parts[partKey];
+        const total = (totals[partKey] !== undefined) ? totals[partKey] : missing;
+        const isDone = countRem <= 0;
+
+        row.className = 'vehiclePartRow' + (countRem === 0 ? ' done' : '');
+        row.textContent = isDone ?  `${partKey} x${total} - ${getText('partDone')}` :`${partKey} x${total} - ${getText('partMissing')} x${countRem}`  ;
         list.appendChild(row);
     });
 
     overlay.classList.remove('hidden');
     Game.vehicleBlueprintOpen = true;
 
+    document.removeEventListener('click', closeVehicleBlueprint);
     setTimeout(() =>
     {
         document.addEventListener('click', closeVehicleBlueprint);
@@ -581,6 +593,12 @@ function resetNewGame()
         window.vehicleManager.repairCount = 0;
         window.vehicleManager.activeVehicle = null;
         window.vehicleManager.heldPart = null;
+
+
+        window.vehicleManager.triggeredEnd = false;
+        window.vehicleManager.endingType = null;
+        window.vehicleManager.endlessMode = false;
+
         window.vehicleManager.spawnNextVeh();
     }
 
@@ -598,6 +616,17 @@ function loadSave(slotNumber)
     
     if(data)
     {
+        if(data.vehicle && (data.vehicle.endingType === 'BAD' || data.vehicle.endingType === 'NEUTRAL'))
+        {
+            if(window.vehicleManager)
+            {
+                window.vehicleManager.endingType = data.vehicle.endingType;
+            }
+
+            showCutscene(data.vehicle.endingType);
+            return;
+        }
+
         if(window.Player)
         {
             Player.x = data.playerX;
@@ -614,6 +643,8 @@ function loadSave(slotNumber)
             window.vehicleManager.currentVehicleIdx = data.vehicle.currentVehicleIdx;
             window.vehicleManager.repairCount = data.vehicle.repairCount;
             window.vehicleManager.activeVehicle = data.vehicle.activeVehicle;
+            window.vehicleManager.endlessMode = data.vehicle.endlessMode || false;
+            window.vehicleManager.endingType = data.vehicle.endingType || null;
         }
 
         if(window.gameTimer && data.timer)
@@ -794,6 +825,43 @@ function togglePause()
         }
     }
 }
+
+function showCutscene(endingType)
+{
+    showMobileControls(false);
+
+    Game.showScreen('cutscene');
+
+    const titleElem = document.getElementById('cutsceneTitle');
+    if(titleElem)
+    {
+        titleElem.textContent = `${endingType} ENDING`;
+    }
+
+    let unlockedEndless = false;
+
+    if(endingType === 'GOOD' && window.vehicleManager)
+    {
+        window.vehicleManager.endlessModeUnlock = true;
+        window.vehicleManager.endlessMode = true;
+    }
+
+    const continueBtn = document.getElementById('cutsceneContBtn');
+    if(continueBtn)
+    {
+        continueBtn.onclick = () =>
+        {
+            quitToMainMenu();
+
+            if(unlockedEndless)
+            {
+                showMsgPopup(getText('endlessModeUnlock'));
+            }
+        }
+    }
+    
+}
+
 
 //I am in fact not tripping, Yes there is two different __ToMainMenu functions... I'm sorry me
 function quitToMainMenu()

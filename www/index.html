@@ -24,7 +24,7 @@
         <script src="scripts/systems/savePoint.js"></script>
         <script src="scripts/systems/achievementManager.js"></script>
         <script src="scripts/systems/login.js"></script>
-        
+
         <script src="scripts/minigames/minigameStation.js"></script>
         <script src="scripts/minigames/baseMG.js"></script>
         <!--insert all the minigames files here using <script src="scripts/minigames/fileName.js"></script>-->
@@ -57,7 +57,7 @@
                     </button>
 
                     <div class="navRight">
-                        <button class="topNavBtn" data-i18n="Login" style="background-color: rgb(49, 176, 83);" onclick="window.location.href='login.html'">
+                        <button class="topNavBtn" data-i18n="login" style="background-color: rgb(49, 176, 83);" onclick="window.location.href='login.html'">
                             Login
                         </button>
                     </div>
@@ -151,7 +151,7 @@
                             <!-- audio Settings-->
                             <div id="audioTab" class="tabPanel">
                                 <div class="settingRow">
-                                    <label data-i18n="Volume">Volume</label>
+                                    <label data-i18n="volume">Volume</label>
                                     <input type="range" id="audioSlider" min="0" max="100" value="50" oninput="updateAudioVolume(this.value)">
                                 </div>
                             </div>
@@ -223,8 +223,8 @@
                 </div>
 
                 <div id="actionBtnMbl" class="hidden">
-                    <button class="actionBtn", id="interactBtn" data-key="e">!</button>
-                    <button class="actionBtn", id="mapBtn" data-key="m">M</button>
+                    <button class="actionBtn" id="interactBtn" data-key="e">!</button>
+                    <button class="actionBtn" id="mapBtn" data-key="m">M</button>
                 </div>
 
                 <div id="vehicleBlueprint" class="vehicleBlueprint hidden">
@@ -239,6 +239,13 @@
                     <div class="mapContent">
                         
                     </div>
+                </div>
+
+                <div id="cutscene" class="uiScreen cutsceneOverlay hidden">
+                    <h1 id="cutsceneTitle" class="cutsceneTitle">ENDING</h1>
+                    <button id="cutsceneContBtn" class="topNavBtn cutsceneBtn">
+                        Continue
+                    </button>
                 </div>
             </div>
 

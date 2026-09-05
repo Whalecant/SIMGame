@@ -724,6 +724,30 @@ input[type="range"]
     }
 }
 
+.cutsceneOverlay
+{
+    background-color: rgba(0, 0, 0, 0.95);
+    display: flex;
+    flex-direction: column;
+    align-items: column;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.cutsceneTitle
+{
+    color: white;
+    font-size: 3rem;
+    margin-bottom: 2rem;
+}
+
+.cutsceneBtn
+{
+    padding: 12px 32px;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
 /*achievement stuff below*/
 
 .achievementsGrid

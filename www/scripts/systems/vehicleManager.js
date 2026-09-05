@@ -2,10 +2,14 @@ class vehicleManager
 {
     constructor()
     {
-        this.currentVehicleIdx = 0; //0 to 14 for 15 of them
+        this.currentVehicleIdx = 0;
         this.repairCount = 0;
         this.activeVehicle = null;
         this.heldPart = null;
+
+        this.triggeredEnd = false;
+        this.endlessModeUnlock = false;
+        this.endlessMode = false;
 
         this.allParts = ['Wires', 'Part2', 'Part3', 'Part4', 'Part5', 'Part6', 'Part7', 'Part8', 'Part9', 'Part10', 'Part11', 'Part12'];
     }
@@ -19,27 +23,51 @@ class vehicleManager
 
         if(vehicleNum <= 4)
         {
-            return Math.floor(Math.random() * 3) + 4;
+            return Math.floor(Math.random() * 3) + 4; //4-6
         }
 
         if(vehicleNum <= 8)
         {
-            return Math.floor(Math.random() * 4) + 5;
+            return Math.floor(Math.random() * 4) + 5; //5-8
+        }
+
+        if(vehicleNum == 9)
+        {
+            return 8;
         }
 
         if(vehicleNum <= 13)
         {
-            return Math.floor(Math.random() * 3) + 7;
+            return Math.floor(Math.random() * 3) + 7; //7-9
         }
 
-        if(vehicleNum >= 14)
+        if(vehicleNum == 14)
         {
-            return Math.floor(Math.random() * 3) + 8;
+            return 10;
         }
 
-        if(vehicleNum >= 19)
+        if(vehicleNum <= 18)
         {
-            return Math.floor(Math.random() * 3) + 10;
+            return Math.floor(Math.random() * 2) + 10; // 10-11
+        }
+
+        if(vehicleNum == 19)
+        {
+            return 12;
+        }
+
+        if(vehicleNum >= 20)
+        {
+            const currDay = (window.gameTimer && window.gameTimer.currDay) ? window.gameTimer.currDay : 1;
+
+            const vehicleBonus = Math.floor((vehicleNum - 20) / 3); // adds 1 extra part each 3 vehicles
+            const dayBonus = Math.floor(currDay / 5) // adds 1 extra part every 5 days
+
+            const baseParts = 12 + vehicleBonus + dayBonus
+
+            const randomVariance = Math.floor((Math.random() * ((Math.random() * 2) + 3)) + 1); //random extra parts (i wanted to have some fun so the odds are liek skewed to all hell but who cares :P)
+
+            return baseParts + randomVariance;
         }
         
     }
@@ -75,9 +103,9 @@ class vehicleManager
 
         const partKey = this.heldPart;
 
-        if(this.activeVehicle.parts.hasOwnProperty(partKey) && !this.activeVehicle.parts[partKey])
+        if(this.activeVehicle.parts.hasOwnProperty(partKey) && this.activeVehicle.parts[partKey] > 0)
         {
-            this.activeVehicle.parts[partKey] = true;
+            this.activeVehicle.parts[partKey]--;
             this.activeVehicle.installedParts++;
 
             if(typeof showMsgPopup === 'function')
@@ -105,22 +133,33 @@ class vehicleManager
     {
         const vehicleNum = this.currentVehicleIdx;
         const count = this.getPartCount(vehicleNum);
-
-        const shuffled = [...this.allParts].sort(() => 0.5 - Math.random()); //picks the necesary amoutn from teh possibel lsit of parts
-        const selectedParts = shuffled.slice(0, count);
-
         const requiredParts = {};
 
-        selectedParts.forEach(part =>
+        if(vehicleNum >= 20)
         {
-            requiredParts[part] = false;
+            for(let i = 0; i < count; i++)
+            {
+                const randomPart = this.allParts[Math.floor(Math.random() *  this.allParts.length)];
+                requiredParts[randomPart] = (requiredParts[randomPart] || 0) + 1;
+            }
         }
-        );
+        else
+        {
+            const shuffled = [...this.allParts].sort(() => 0.5 - Math.random()); //picks the necesary amoutn from teh possibel lsit of parts
+            const selectedParts = shuffled.slice(0, count);
+
+            selectedParts.forEach(part =>
+            {
+                requiredParts[part] = 1;
+            }
+            )
+        }
 
         this.activeVehicle = 
         {
             id: vehicleNum,
             parts: requiredParts,
+            partsTotal: {...requiredParts},
             totalParts: count,
             installedParts: 0,
             isComplete: false
@@ -136,7 +175,7 @@ class vehicleManager
             return;
         }
 
-        this.activeVehicle.parts[partKey] = true;
+        this.activeVehicle.parts[partKey]--;
         this.activeVehicle.installedParts++;
 
         if(this.activeVehicle.installedParts >= this.activeVehicle.totalParts)
@@ -161,6 +200,12 @@ class vehicleManager
     ending()
     {
 
+        if(this.triggeredEnd)
+        {
+            return;
+        }
+        this.triggeredEnd = true;
+
         let endingType = 'BAD';
 
         if(this.repairCount >= 15)
@@ -171,9 +216,20 @@ class vehicleManager
         {
             endingType = 'NEUTRAL';
         }
-
+        
+        this.endingType = endingType;
         Game.currentState = 'END';
         console.log(`Repaired #${this.repairCount}, Ending Type #${endingType}`);
+
+        if(window.saveManager && Game.currentSaveSlot)
+        {
+            saveManager.save(Game.currentSaveSlot);
+        }
+
+        if(typeof showCutscene === 'function')
+        {
+            showCutscene(endingType);
+        }
         
 
     }

@@ -25,8 +25,10 @@ const saveManager =
             vehicle:
             {
                 currentVehicleIdx: window.vehicleManager.currentVehicleIdx,
-                repairCount: window.vehicleManager. repairCount,
-                activeVehicle: window.vehicleManager.activeVehicle
+                repairCount: window.vehicleManager.repairCount,
+                activeVehicle: window.vehicleManager.activeVehicle,
+                endlessMode: window.vehicleManager.endlessMode,
+                endingType: window.vehicleManager.endingType || null,
             },
 
             timer:

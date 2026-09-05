@@ -9,7 +9,8 @@ const strings =
         acquiredPart: 'Acquired Part: ',
         installedPart: 'Part Installed: ',
         scrappedPart: 'Part Scrapped: ',
-        takeToVeh: 'Bring back to vehicle'
+        takeToVeh: 'Bring back to vehicle',
+        endlesModeUnlock: 'Endless Mode has been unlocked',
     },
 
     zh:
@@ -21,7 +22,8 @@ const strings =
         acquiredPart: '获得零件：',
         installedPart: '已安装零件：',
         scrappedPart: '零件已报废：',
-        takeToVeh: '请将其送到载具处'
+        takeToVeh: '请将其送到载具处',
+        endlesModeUnlock: '无尽模式已解锁',
     }
 };
 
