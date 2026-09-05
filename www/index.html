@@ -22,7 +22,9 @@
         <script src="scripts/systems/vehicleManager.js"></script>
         <script src="scripts/systems/saveManager.js"></script>
         <script src="scripts/systems/savePoint.js"></script>
-
+        <script src="scripts/systems/achievementManager.js"></script>
+        <script src="scripts/systems/login.js"></script>
+        
         <script src="scripts/minigames/minigameStation.js"></script>
         <script src="scripts/minigames/baseMG.js"></script>
         <!--insert all the minigames files here using <script src="scripts/minigames/fileName.js"></script>-->
@@ -48,6 +50,18 @@
                 <div id="vehicleTimer" class="vehicleTimerDisplay hidden">---</div>
 
                 <div id="msgPopup" class="msgPopup"></div>
+                
+                <div class="topNavLinks">
+                    <button class="topNavBtn navLeft" data-i18n="nav" style="background-color: rgb(53, 53, 170);"onclick="window.location.href='navigation.html'">
+                        Navigation
+                    </button>
+
+                    <div class="navRight">
+                        <button class="topNavBtn" data-i18n="Login" style="background-color: rgb(49, 176, 83);" onclick="window.location.href='login.html'">
+                            Login
+                        </button>
+                    </div>
+                </div>
 
                 <div id="mainMenu" class="uiScreen">
                     <h1 data-i18n="title">Shipwright's Countdown:<br>Civilizations Future</h1>
@@ -55,7 +69,9 @@
                     <div class="menuButtons">
                         <button onclick="openMenu('saveScreen')" data-i18n="play">Play</button>
                         <button onclick="openMenu('settingsScreen')" data-i18n="settings">Settings</button>
+                        <button onclick="window.location.href='achivements.html'" data-i18n="achievements">Achievements</button>
                         <button onclick="openMenu('creditsScreen')" data-i18n="credits">Credits</button>
+
                     </div>
                 </div>
 

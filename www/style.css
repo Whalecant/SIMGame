@@ -99,6 +99,44 @@ body
     display: none !important; /*!important makes it well... the most important thing*/
 }
 
+.topNavLinks
+{
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    pointer-events: auto;
+}
+
+.navRight
+{
+    display: flex;
+    gap: 8px;
+}
+
+.topNavBtn
+{
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 6px 12px;
+    font-size: 12px;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.topNavBtn:hover
+{
+    background: rgba(255, 255, 255, 0.2);
+    border-color: white;
+    color: snow;
+}
+
 .msgPopup
 {
     position: absolute;
@@ -684,4 +722,105 @@ input[type="range"]
     {
         margin-bottom: 0.75rem;
     }
+}
+
+/*achievement stuff below*/
+
+.achievementsGrid
+{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    padding: 1.5rem 0;
+}
+
+.achievementCard
+{
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    border-radius: 12px;
+    background: #2a2a2a;
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.achievementCard:hover
+{
+    transform: scale(1.08);
+}
+
+.achievementCard.locked
+{
+    opacity: 0.5;
+    filter: grayscale(1);
+}
+
+.achievementCard.unlocked
+{
+    border-color: lightgreen;
+    background: rgba(76, 175, 80, 0.15);
+}
+
+.achievementPopup
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    background: #1e1e1e;
+    color: white;
+    padding: 1.5rem;
+    text-align: center;
+    width: min(90vw, 320px);
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.achievementPopup::backdrop
+{
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(3px);
+}
+
+.popupIcon
+{
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.popupContent
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.popupContent p
+{
+    color: #ccc;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+}
+
+.achievementPopup button
+{
+    width: auto;
+    min-width: 100px;
+    padding: 0.4rem 1.2rem;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
 }

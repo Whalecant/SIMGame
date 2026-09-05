@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <title data-i18n="title"> Shipwright's Countdown</title>
+        <link rel="stylesheet" href="subPage.css">
+    </head>
+
+    <body>
+        <!--simple notice and what not-->
+        <div id="mobileBlocker">
+            <h2 style="color: maroon; ">Desktop Only Page</h2>
+            <p> We apolgogize but this portal requires a wider screen. Please view on desktop or in a wider screen <br>(Translataion: I'm too lazy to set up mobile port at the moment ~ lead programmer)</p>
+        </div>
+
+        <div class="staticPageContainer fullWidth">
+            <div style="display: flex; justify-content: space-between; align-items: 1.5rem; width: 100%;">
+                <h1>Change Logs</h1>
+                <button class="navBtn" style="width: auto; padding: 0.5rem 1.2rem; margin: 0;" onclick="window.location.href='navigation.html'">
+                    <span class="btnTitle">Back</span>
+                </button>
+            </div>
+            
+
+            
+            
+            <div class="memberContainer" style="text-align: left;">
+                <div class="memberCard" style="flex-direction: column;">
+                    <div class="memberHeader" style="width: 100%; margin-bottom: 0.5rem; padding: 0.5rem;">
+                        <span class="memberName" style="font-size: 1.1rem;">Beta V1.0.1 - Sub Pages</span>
+                        <span class="memberRole">06/09/2026</span>
+                    </div>
+                    <ul class="memberTask" style="padding-left: 1.5rem;">
+                        <li>Added new stylesheet for all the subpages (subPage.css)</li>
+                        <li>Added Navigation page to go between main game page and some sub pages</li>
+                        <li>Added member introduction page</li>
+                        <li>Added Lore Page, though not completed yet</li>
+                        <li>Added gallery page for archiving art and all media</li>
+                        <li>Added changelog page</li>
+                        <li>Added achivement page</li>
+                        <li>Added login and registration functionality page</li>
+                        <li>Added dekstop lock for certain screens (will remove later once can)</li>
+                        <li>Added localStorage system for the login and registration page</li>
+                        <li>Changed how gameplay works past the first 7 days, will now go on endlessly with scaling difficulty</li>
+                        <li>Dev Note: DELTARUNE REFERENCE????</li>
+                    </ul>
+                </div>
+
+                <div class="memberCard" style="flex-direction: column;">
+                    <div class="memberHeader" style="width: 100%; margin-bottom: 0.5rem; padding: 0.5rem;">
+                        <span class="memberName" style="font-size: 1.1rem;">Beta V1.0.0 - Beta Build</span>
+                        <span class="memberRole">04/09/2026</span>
+                    </div>
+                    <ul class="memberTask" style="padding-left: 1.5rem;">
+                        <li>Changed how the timer system works, now is a day based system rather than a per vehicle system</li>
+                        <li>Changed how to access the minigames</li>
+                        <li>Added minigame stations with semi-proper collider</li>
+                        <li>Added map overlay skeleton</li>
+                        <li>Fixed the vehicle blueprint overlay jank</li>
+                        <li>Edited pevious sprite model, now has a proper functioning animation with some bob to make it look nicer</li>
+                        <li>Edited pause button a bit to make it... nicer</li>
+                        <li>Edited room transitions duration to not be as fast</li>
+                        <li>Edited mingame screen for the wire connections minigame</li>
+                        <li>Edited save states as to what it tracks to include days rather than just vehicles now</li>
+                        <li>Fixed the collider for the vehicles</li>
+                        <li>Other miscelaneous changes as this was the main port from the alpha version to the beta version</li>
+                        <li>Added proper confirmation for deleting save files</li>
+                        <li>Dev note: I'm tired since this was a big push and I had to rework a lot of mechanics</li>
+                    </ul>
+                </div>
+
+                <div class="memberCard" style="flex-direction: column;">
+                    <div class="memberHeader" style="width: 100%; margin-bottom: 0.5rem; padding: 0.5rem;">
+                        <span class="memberName" style="font-size: 1.1rem;">Alpha V0.3.0 - Save States</span>
+                        <span class="memberRole">03/09/2026</span>
+                    </div>
+                    <ul class="memberTask" style="padding-left: 1.5rem;">
+                        <li>Added proper save states</li>
+                        <li>Added some more mobile buttons for the upcoming mobile port</li>
+                        <li>Added proper interact button for the vehicle and save states to enable saving and opening the missing parts list</li>
+                        <li>Added proper save point placement and colliders (sort of)</li>
+                        <li>Dev notes: I HATE MAKING COLLIDERS IN HTML</li>
+                    </ul>
+                </div>
+
+                <div class="memberCard" style="flex-direction: column;">
+                    <div class="memberHeader" style="width: 100%; margin-bottom: 0.5rem; padding: 0.5rem;">
+                        <span class="memberName" style="font-size: 1.1rem;">Alpha V0.2.2 - Maps and Vehicles</span>
+                        <span class="memberRole">02/09/2026</span>
+                    </div>
+                    <ul class="memberTask" style="padding-left: 1.5rem;">
+                        <li>Added the overworld map with proper screen transition</li>
+                        <li>Added proper room and camera boundaries and borders</li>
+                        <li>Added link from each room/wing to their respective minigame counter</li>
+                        <li>Added the vehicle object with "proper" colliders (still no interact option yet)</li>
+                    </ul>
+                </div>
+
+                <div class="memberCard" style="flex-direction: column;">
+                    <div class="memberHeader" style="width: 100%; margin-bottom: 0.5rem; padding: 0.5rem;">
+                        <span class="memberName" style="font-size: 1.1rem;">Alpha V0.1.3 - Mobile Port</span>
+                        <span class="memberRole">02/09/2026</span>
+                    </div>
+                    <ul class="memberTask" style="padding-left: 1.5rem;">
+                        <li>Added proper mobile port... i think</li>
+                        <li>Added proper dpad and physical pause button for mobile port</li>
+                    </ul>
+                </div>
+
+                <div class="memberCard" style="flex-direction: column;">
+                    <div class="memberHeader" style="width: 100%; margin-bottom: 0.5rem; padding: 0.5rem;">
+                        <span class="memberName" style="font-size: 1.1rem;">Alpha V0.1.2 - Minigames</span>
+                        <span class="memberRole">02/09/2026</span>
+                    </div>
+                    <ul class="memberTask" style="padding-left: 1.5rem;">
+                        <li>Created inital minigame template for future use</li>
+                        <li>Created first minigame for example for teamates</li>
+                        <li>Set up minigame timers for each minigame</li>
+                    </ul>
+                </div>
+
+                <div class="memberCard" style="flex-direction: column;">
+                    <div class="memberHeader" style="width: 100%; margin-bottom: 0.5rem; padding: 0.5rem;">
+                        <span class="memberName" style="font-size: 1.1rem;">Alpha V0.1.1 - Movement controls</span>
+                        <span class="memberRole">02/09/2026</span>
+                    </div>
+                    <ul class="memberTask" style="padding-left: 1.5rem;">
+                        <li>Added player movement</li>
+                        <li>Also added the pause screen</li>
+                    </ul>
+                </div>
+
+                <div class="memberCard" style="flex-direction: column;">
+                    <div class="memberHeader" style="width: 100%; margin-bottom: 0.5rem; padding: 0.5rem;">
+                        <span class="memberName" style="font-size: 1.1rem;">Alpha V0.1.0 - Game world</span>
+                        <span class="memberRole">02/09/2026</span>
+                    </div>
+                    <ul class="memberTask" style="padding-left: 1.5rem;">
+                        <li>Added the actual gameplay world itself</li>
+                        <li>currently houses only the first Screen itself and the player character</li>
+                    </ul>
+                </div>
+
+                <div class="memberCard" style="flex-direction: column;">
+                    <div class="memberHeader" style="width: 100%; margin-bottom: 0.5rem; padding: 0.5rem;">
+                        <span class="memberName" style="font-size: 1.1rem;">Alpha V0.0.3 - Main menu screens Update</span>
+                        <span class="memberRole">01/09/2026</span>
+                    </div>
+                    <ul class="memberTask" style="padding-left: 1.5rem;">
+                        <li>Extra changes for just quality changes to the screens</li>
+                    </ul>
+                </div>
+
+                <div class="memberCard" style="flex-direction: column;">
+                    <div class="memberHeader" style="width: 100%; margin-bottom: 0.5rem; padding: 0.5rem;">
+                        <span class="memberName" style="font-size: 1.1rem;">Alpha V0.0.2 - Main menu screens</span>
+                        <span class="memberRole">01/09/2026</span>
+                    </div>
+                    <ul class="memberTask" style="padding-left: 1.5rem;">
+                        <li>Added settings screen</li>
+                        <li>Added save screen</li>
+                        <li>Added Credits screen</li>
+                    </ul>
+                </div>
+
+                <div class="memberCard" style="flex-direction: column;">
+                    <div class="memberHeader" style="width: 100%; margin-bottom: 0.5rem; padding: 0.5rem;">
+                        <span class="memberName" style="font-size: 1.1rem;">Alpha V0.0.1 - Main Menu</span>
+                        <span class="memberRole">01/09/2026</span>
+                    </div>
+                    <ul class="memberTask" style="padding-left: 1.5rem;">
+                        <li>Made main menu screen</li>
+                        <li>Added settings button, save and load button, and credits button</li>
+                    </ul>
+                </div>
+                
+
+                
+        </div>
+    </body>
+</html>

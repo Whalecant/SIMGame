@@ -57,6 +57,8 @@ const Game =
             }
         }
 
+        updateTopNavVis(screenId);
+
     },
 
     startGameLoop()
@@ -736,6 +738,15 @@ function togglePause()
     if(Game.inMinigame && window.overworld && overworld.activeMg)
     {
         overworld.activeMg.stop(false);
+        Game.inMinigame = false;
+
+        const pauseBtn = document.getElementById('pauseBtnMobile');
+        if(pauseBtn)
+        {
+            pauseBtn.textContent = '||';
+            pauseBtn.classList.remove('inMinigame');
+        }
+
         return;
     }
 
@@ -810,6 +821,24 @@ function quitToMainMenu()
     showMobileControls(false);
     showVehicleTimer(false);
     showActionBtn(false);
+}
+
+function updateTopNavVis(screenId)
+{
+    const topNav = document.querySelector('.topNavLinks');
+    if(!topNav)
+    {
+        return;
+    }
+
+    if(screenId === 'mainMenu')
+    {
+        topNav.classList.remove('hidden');
+    }
+    else
+    {
+        topNav.classList.add('hidden');
+    }
 }
 
 // initialization
