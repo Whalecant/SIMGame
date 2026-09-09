@@ -65,7 +65,7 @@ const stationManager =
     stations:
     [
         new minigameStation('northWing', 300, 150, 64, 64, 'connectWireMinigame', 'Wires', 75, 15, 30, 30),
-        new minigameStation('northWing', 600, 150, 64, 64, 'mgTemp1', 'Part2', 75, 15, 30, 30),
+        new minigameStation('northWing', 600, 150, 64, 64, 'forestLevel1Minigame', 'Part2', 75, 15, 30, 30),
         new minigameStation('northWing', 900, 150, 64, 64, 'mgTemp2', 'Part3', 75, 15, 30, 30),
 
         new minigameStation('southWing', 300, 450, 64, 64, 'mgTemp3', 'Part4', 75, 15, 30, 30),
