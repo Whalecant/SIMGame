@@ -8,6 +8,13 @@ class forestPlatformMinigame extends baseMinigame
         this.sprite.src = './assets/character/characterAnimationSpritesheet.png';
         this.spriteLoaded = false;
         this.sprite.onload = () => { this.spriteLoaded = true; };
+        this.mapImages = {};
+        for(const imageName of ['background1', 'wall', 'key', 'destination', 'lock'])
+        {
+            const image = new Image();
+            image.src = `./assets/map/${imageName}.png`;
+            this.mapImages[imageName] = image;
+        }
     }
 
     init()
@@ -19,17 +26,21 @@ class forestPlatformMinigame extends baseMinigame
         this.wallUnit = 24;
         this.itemUnit = this.wallUnit;
         this.gravity = 1800;
-        this.runSpeed = 100;
+        this.runSpeed = 150;
         this.jumpHeight = this.wallUnit * 4;
         this.jumpSpeed = Math.sqrt(2 * this.gravity * this.jumpHeight);
         this.spawn = { x: 120, y: 592 };
         this.isComplete = false;
+        this.goalStayTime = 0;
         this.heldKey = null;
         this.controlMode = 'player';
         this.growth = 0;
         this.namedObjects = new Set();
         this.nameNotice = '';
         this.nameNoticeTimer = 0;
+        this.promptNotice = '';
+        this.promptNoticeTimer = 0;
+        this.prompts = [];
 
         this.platforms = [
             { x: 0, y: this.worldHeight - this.wallUnit * 2, width: this.worldWidth, height: this.wallUnit * 2 },
@@ -77,6 +88,9 @@ class forestPlatformMinigame extends baseMinigame
             animationTimer: 0,
             isMoving: false
         };
+
+        this.normalPlayerWidth = this.player.width;
+        this.normalPlayerHeight = this.player.height;
 
         this.machine = null;
         this.beamSegments = [];
@@ -152,6 +166,7 @@ class forestPlatformMinigame extends baseMinigame
         this.handleControlInteractions();
         this.updateSeedsAndBatteries();
         this.updateNearbyNames();
+        this.updateNearbyPrompts();
 
         if(this.controlMode !== 'combined' && this.traps.some(trap => this.intersects(player, trap)))
         {
@@ -174,8 +189,16 @@ class forestPlatformMinigame extends baseMinigame
 
         if(this.intersects(player, this.goal))
         {
-            this.isComplete = true;
-            this.stop(true, this.rewardPartKey);
+            this.goalStayTime += dt;
+            if(this.goalStayTime >= 1)
+            {
+                this.isComplete = true;
+                this.stop(true, this.rewardPartKey);
+            }
+        }
+        else
+        {
+            this.goalStayTime = 0;
         }
     }
 
@@ -292,8 +315,8 @@ class forestPlatformMinigame extends baseMinigame
         else if(this.controlMode === 'combined' && this.machine && this.isWithinRange(this.machine, this.wallUnit))
         {
             this.controlMode = 'player';
-            this.player.width = this.wallUnit;
-            this.player.height = this.wallUnit * 2;
+            this.player.width = this.normalPlayerWidth;
+            this.player.height = this.normalPlayerHeight;
         }
     }
 
@@ -502,7 +525,7 @@ class forestPlatformMinigame extends baseMinigame
             return;
         }
 
-        if(this.heldKey === target.color)
+        if(nearLock || this.heldKey === target.color)
         {
             if(nearLock)
             {
@@ -559,6 +582,26 @@ class forestPlatformMinigame extends baseMinigame
         }
     }
 
+    updateNearbyPrompts()
+    {
+        const range = this.wallUnit * 3;
+        const prompt = this.prompts.find(item =>
+            !item.shown && this.isWithinRange(item, range)
+        );
+
+        if(prompt)
+        {
+            prompt.shown = true;
+            this.promptNotice = prompt.text;
+            this.promptNoticeTimer = 10;
+        }
+
+        if(this.promptNoticeTimer > 0)
+        {
+            this.promptNoticeTimer = Math.max(0, this.promptNoticeTimer - 1 / 60);
+        }
+    }
+
     intersectsRect(first, second)
     {
         return first.x < second.x + second.width &&
@@ -596,13 +639,16 @@ class forestPlatformMinigame extends baseMinigame
     render()
     {
         const ctx = this.ctx;
-        ctx.fillStyle = '#183b3b';
-        ctx.fillRect(0, 0, this.worldWidth, this.worldHeight);
-
-        ctx.fillStyle = '#285c45';
-        ctx.fillRect(0, 0, this.worldWidth, 300);
-        ctx.fillStyle = '#78b159';
-        ctx.fillRect(0, this.worldHeight - this.wallUnit * 2, this.worldWidth, this.wallUnit * 2);
+        const background = this.mapImages.background1;
+        if(background.complete && background.naturalWidth > 0)
+        {
+            ctx.drawImage(background, 0, 0, this.worldWidth, this.worldHeight);
+        }
+        else
+        {
+            ctx.fillStyle = '#183b3b';
+            ctx.fillRect(0, 0, this.worldWidth, this.worldHeight);
+        }
 
         for(const platform of this.platforms)
         {
@@ -614,11 +660,7 @@ class forestPlatformMinigame extends baseMinigame
 
         for(const wall of this.walls)
         {
-            ctx.fillStyle = '#6b4633';
-            ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
-            ctx.strokeStyle = '#b8794f';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(wall.x, wall.y, wall.width, wall.height);
+            this.drawWallTiles(wall);
         }
 
         for(const box of this.boxes)
@@ -638,22 +680,12 @@ class forestPlatformMinigame extends baseMinigame
 
         for(const key of this.keys)
         {
-            ctx.fillStyle = key.color || '#f7d154';
-            ctx.beginPath();
-            ctx.arc(key.x + key.width / 2, key.y + key.height / 2, key.width * 0.28, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillRect(key.x + key.width * 0.48, key.y + key.height * 0.42, key.width * 0.42, key.height * 0.16);
+            this.drawMapImage('key', key);
         }
 
         for(const lock of this.locks)
         {
-            ctx.fillStyle = lock.color || '#8c9aa6';
-            ctx.fillRect(lock.x + lock.width * 0.18, lock.y + lock.height * 0.38, lock.width * 0.64, lock.height * 0.48);
-            ctx.strokeStyle = '#d8e0e6';
-            ctx.lineWidth = 4;
-            ctx.beginPath();
-            ctx.arc(lock.x + lock.width / 2, lock.y + lock.height * 0.4, lock.width * 0.22, Math.PI, 0);
-            ctx.stroke();
+            this.drawMapImage('lock', lock);
         }
 
         for(const door of this.doors)
@@ -748,12 +780,11 @@ class forestPlatformMinigame extends baseMinigame
             ctx.stroke();
         }
 
-        ctx.fillStyle = '#f5d76e';
-        ctx.fillRect(this.goal.x, this.goal.y, this.goal.width, this.goal.height);
-        ctx.fillStyle = '#3b2f2f';
+        this.drawMapImage('destination', this.goal);
+        ctx.fillStyle = '#ffffff';
         ctx.font = '18px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('EXIT', this.goal.x + this.goal.width / 2, this.goal.y + 45);
+        ctx.fillText(`出口 ${Math.min(1, this.goalStayTime).toFixed(1)}s`, this.goal.x + this.goal.width / 2, this.goal.y - 6);
 
         this.drawPlayer();
 
@@ -772,6 +803,54 @@ class forestPlatformMinigame extends baseMinigame
             ctx.fillStyle = '#ffffff';
             ctx.textAlign = 'center';
             ctx.fillText(this.nameNotice, this.worldWidth / 2, 77);
+        }
+
+        if(this.promptNoticeTimer > 0)
+        {
+            ctx.fillStyle = 'rgba(80, 80, 80, 0.9)';
+            ctx.fillRect(this.worldWidth / 2 - 280, this.worldHeight - 92, 560, 42);
+            ctx.fillStyle = '#ffffff';
+            ctx.textAlign = 'center';
+            ctx.fillText(this.promptNotice, this.worldWidth / 2, this.worldHeight - 65);
+        }
+    }
+
+    drawMapImage(imageName, rectangle)
+    {
+        const image = this.mapImages[imageName];
+        if(image && image.complete && image.naturalWidth > 0)
+        {
+            this.ctx.drawImage(image, rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+        }
+    }
+
+    drawWallTiles(rectangle)
+    {
+        const image = this.mapImages.wall;
+        if(!image || !image.complete || image.naturalWidth === 0)
+        {
+            this.ctx.fillStyle = '#6b4633';
+            this.ctx.fillRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+            return;
+        }
+
+        const cellWidth = this.worldWidth / 50;
+        const cellHeight = this.worldHeight / 50;
+        const columns = Math.max(1, Math.round(rectangle.width / cellWidth));
+        const rows = Math.max(1, Math.round(rectangle.height / cellHeight));
+
+        for(let row = 0; row < rows; row++)
+        {
+            for(let column = 0; column < columns; column++)
+            {
+                this.ctx.drawImage(
+                    image,
+                    rectangle.x + column * cellWidth,
+                    rectangle.y + row * cellHeight,
+                    cellWidth,
+                    cellHeight
+                );
+            }
         }
     }
 
