@@ -9,7 +9,7 @@ class forestPlatformMinigame extends baseMinigame
         this.spriteLoaded = false;
         this.sprite.onload = () => { this.spriteLoaded = true; };
         this.mapImages = {};
-        for(const imageName of ['background1', 'wall', 'key', 'destination', 'lock'])
+        for(const imageName of ['background1', 'wall', 'key', 'destination', 'lock', 'door', 'trap'])
         {
             const image = new Image();
             image.src = `./assets/map/${imageName}.png`;
@@ -63,6 +63,8 @@ class forestPlatformMinigame extends baseMinigame
         this.keys = [];
         this.locks = [];
         this.doors = [];
+        this.hiddenDoors = [];
+        this.pressurePlates = [];
         this.traps = [];
         this.fragileWalls = [];
         this.machines = [];
@@ -135,6 +137,7 @@ class forestPlatformMinigame extends baseMinigame
 
         this.updateBoxes(dt);
         this.updateKeys(dt);
+        this.updatePressurePlates();
 
         if(movingLeft)
         {
@@ -168,7 +171,7 @@ class forestPlatformMinigame extends baseMinigame
         this.updateNearbyNames();
         this.updateNearbyPrompts();
 
-        if(this.controlMode !== 'combined' && this.traps.some(trap => this.intersects(player, trap)))
+        if(this.controlMode !== 'combined' && this.traps.some(trap => this.intersectsTrap(player, trap)))
         {
             this.stop(false);
             return;
@@ -177,7 +180,7 @@ class forestPlatformMinigame extends baseMinigame
         if(this.controlMode === 'combined')
         {
             this.destroyFragileWalls();
-            this.traps = this.traps.filter(trap => !this.intersects(this.player, trap));
+            this.traps = this.traps.filter(trap => !this.intersectsTrap(this.player, trap));
         }
 
         this.updateBeam();
@@ -206,7 +209,7 @@ class forestPlatformMinigame extends baseMinigame
     {
         player.x += distance;
 
-        for(const platform of [...this.platforms, ...this.walls, ...this.fragileWalls, ...this.doors])
+        for(const platform of [...this.platforms, ...this.walls, ...this.fragileWalls, ...this.doors.filter(door => door.active !== false), ...this.hiddenDoors.filter(door => door.opened)])
         {
             if(!this.intersects(player, platform))
             {
@@ -286,7 +289,9 @@ class forestPlatformMinigame extends baseMinigame
 
     getColliders()
     {
-        return [...this.platforms, ...this.walls, ...this.fragileWalls, ...this.doors, ...this.boxes, ...(this.machine ? [this.machine] : [])];
+        const openedHiddenDoors = this.hiddenDoors.filter(door => door.opened);
+        const openDoors = this.doors.filter(door => door.active !== false);
+        return [...this.platforms, ...this.walls, ...this.fragileWalls, ...openDoors, ...openedHiddenDoors, ...this.boxes, ...(this.machine ? [this.machine] : [])];
     }
 
     handleControlInteractions()
@@ -367,7 +372,7 @@ class forestPlatformMinigame extends baseMinigame
                 break;
             }
 
-            const blocker = [...this.walls, ...this.fragileWalls, ...this.doors].find(item => this.pointInRect(point, item));
+            const blocker = [...this.walls, ...this.fragileWalls, ...this.doors.filter(door => door.active !== false), ...this.hiddenDoors.filter(door => door.opened)].find(item => this.pointInRect(point, item));
             if(blocker)
             {
                 break;
@@ -410,7 +415,13 @@ class forestPlatformMinigame extends baseMinigame
             if(this.pointInRect(point, battery) && battery.color)
             {
                 battery.active = true;
-                this.doors = this.doors.filter(door => door.color !== battery.color);
+                this.doors.forEach(door =>
+                {
+                    if(door.color === battery.color)
+                    {
+                        door.active = true;
+                    }
+                });
             }
         }
     }
@@ -439,7 +450,7 @@ class forestPlatformMinigame extends baseMinigame
             box.velocityY = (box.velocityY || 0) + this.gravity * deltaTime;
             box.y += box.velocityY * deltaTime;
 
-            for(const collider of [...this.platforms, ...this.walls, ...this.doors])
+            for(const collider of [...this.platforms, ...this.walls, ...this.doors.filter(door => door.active !== false), ...this.hiddenDoors.filter(door => door.opened)])
             {
                 if(!this.intersectsRect(box, collider))
                 {
@@ -483,7 +494,7 @@ class forestPlatformMinigame extends baseMinigame
             key.velocityY = (key.velocityY || 0) + this.gravity * deltaTime;
             key.y += key.velocityY * deltaTime;
 
-            for(const collider of [...this.platforms, ...this.walls, ...this.doors, ...this.boxes])
+            for(const collider of [...this.platforms, ...this.walls, ...this.doors.filter(door => door.active !== false), ...this.hiddenDoors.filter(door => door.opened), ...this.boxes])
             {
                 if(this.intersectsRect(key, collider) && key.velocityY > 0)
                 {
@@ -514,10 +525,10 @@ class forestPlatformMinigame extends baseMinigame
 
     handleInteractions()
     {
-        const lockRange = this.wallUnit;
+        const lockRange = Math.max(this.wallUnit, this.worldWidth / 50 * 2);
         const doorRange = this.wallUnit * 3;
         const nearLock = this.locks.find(lock => this.isWithinRange(lock, lockRange));
-        const nearDoor = this.doors.find(door => this.isWithinRange(door, doorRange));
+        const nearDoor = this.doors.find(door => door.active !== false && this.isWithinRange(door, doorRange));
         const target = nearLock || nearDoor;
 
         if(!target || !window.Input || !Input.consumePress('e'))
@@ -530,10 +541,96 @@ class forestPlatformMinigame extends baseMinigame
             if(nearLock)
             {
                 this.locks = this.locks.filter(lock => lock !== nearLock);
+                this.openDoorsForChannel(nearLock.channel || nearLock.color);
             }
-            this.doors = this.doors.filter(door => door.color !== target.color);
+            else
+            {
+                this.openDoorsForChannel(target.channel || target.color);
+            }
             this.heldKey = null;
         }
+    }
+
+    openDoorsForChannel(channel)
+    {
+        this.doors.forEach(door =>
+        {
+            if(door.controlSource === 'lock' && (door.channel || door.color) === channel)
+            {
+                door.active = false;
+            }
+        });
+        this.hiddenDoors.forEach(door =>
+        {
+            if(door.controlSource === 'lock' && (door.channel || door.color) === channel)
+            {
+                door.opened = true;
+            }
+        });
+    }
+
+    updatePressurePlates()
+    {
+        for(const plate of this.pressurePlates)
+        {
+            const playerOnPlate = this.intersectsRect(this.playerBounds(), plate);
+            const heavyObjectOnPlate = this.boxes.some(box => this.isObjectOnPlate(box, plate));
+            plate.active = playerOnPlate || heavyObjectOnPlate;
+
+            const channel = plate.channel || plate.color;
+            this.doors.forEach(door =>
+            {
+                if(door.controlSource === 'pressure' && (door.channel || door.color) === channel)
+                {
+                    door.active = plate.active;
+                }
+            });
+            this.hiddenDoors.forEach(door =>
+            {
+                if(door.controlSource === 'pressure' && (door.channel || door.color) === channel)
+                {
+                    door.opened = plate.active;
+                }
+            });
+        }
+    }
+
+    isObjectOnPlate(object, plate)
+    {
+        const overlap = object.x < plate.x + plate.width && object.x + object.width > plate.x;
+        const bottom = object.y + object.height;
+        return overlap && bottom >= plate.y - 2 && bottom <= plate.y + plate.height + 2;
+    }
+
+    playerBounds()
+    {
+        return {
+            x: this.player.x - this.player.width / 2,
+            y: this.player.y - this.player.height / 2,
+            width: this.player.width,
+            height: this.player.height
+        };
+    }
+
+    intersectsTrap(player, trap)
+    {
+        const activeTrapArea = {
+            x: trap.x,
+            y: trap.y + trap.height / 2,
+            width: trap.width,
+            height: trap.height / 2
+        };
+        return this.intersectsRect(this.playerBoundsFor(player), activeTrapArea);
+    }
+
+    playerBoundsFor(player)
+    {
+        return {
+            x: player.x - player.width / 2,
+            y: player.y - player.height / 2,
+            width: player.width,
+            height: player.height
+        };
     }
 
     isWithinRange(rectangle, range)
@@ -688,25 +785,33 @@ class forestPlatformMinigame extends baseMinigame
             this.drawMapImage('lock', lock);
         }
 
-        for(const door of this.doors)
+        for(const door of this.doors.filter(door => door.active !== false))
         {
-            ctx.fillStyle = door.color || '#8c9aa6';
-            ctx.fillRect(door.x, door.y, door.width, door.height);
-            ctx.strokeStyle = '#ffffff';
+            this.drawMapTiles('door', door);
+        }
+
+        for(const door of this.hiddenDoors)
+        {
+            if(!door.opened)
+            {
+                continue;
+            }
+
+            this.drawWallTiles(door);
+        }
+
+        for(const plate of this.pressurePlates)
+        {
+            ctx.fillStyle = plate.active ? '#e6c84f' : '#8c7c38';
+            ctx.fillRect(plate.x, plate.y, plate.width, plate.height);
+            ctx.strokeStyle = '#fff3a6';
             ctx.lineWidth = 2;
-            ctx.strokeRect(door.x, door.y, door.width, door.height);
+            ctx.strokeRect(plate.x, plate.y, plate.width, plate.height);
         }
 
         for(const trap of this.traps)
         {
-            ctx.fillStyle = '#d94b4b';
-            ctx.fillRect(trap.x, trap.y, trap.width, trap.height);
-            ctx.fillStyle = '#2b1d1d';
-            ctx.beginPath();
-            ctx.moveTo(trap.x, trap.y + trap.height);
-            ctx.lineTo(trap.x + trap.width / 2, trap.y);
-            ctx.lineTo(trap.x + trap.width, trap.y + trap.height);
-            ctx.fill();
+            this.drawMapTiles('trap', trap);
         }
 
         for(const fragileWall of this.fragileWalls)
@@ -831,6 +936,34 @@ class forestPlatformMinigame extends baseMinigame
         {
             this.ctx.fillStyle = '#6b4633';
             this.ctx.fillRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+            return;
+        }
+
+        const cellWidth = this.worldWidth / 50;
+        const cellHeight = this.worldHeight / 50;
+        const columns = Math.max(1, Math.round(rectangle.width / cellWidth));
+        const rows = Math.max(1, Math.round(rectangle.height / cellHeight));
+
+        for(let row = 0; row < rows; row++)
+        {
+            for(let column = 0; column < columns; column++)
+            {
+                this.ctx.drawImage(
+                    image,
+                    rectangle.x + column * cellWidth,
+                    rectangle.y + row * cellHeight,
+                    cellWidth,
+                    cellHeight
+                );
+            }
+        }
+    }
+
+    drawMapTiles(imageName, rectangle)
+    {
+        const image = this.mapImages[imageName];
+        if(!image || !image.complete || image.naturalWidth === 0)
+        {
             return;
         }
 

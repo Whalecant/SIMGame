@@ -64,17 +64,17 @@ const stationManager =
 {
     stations:
     [
-        new minigameStation('northWing', 300, 150, 64, 64, 'connectWireMinigame', 'Wires', 75, 15, 30, 30),
-        new minigameStation('northWing', 600, 150, 64, 64, 'forestLevel1Minigame', 'Part2', 75, 15, 30, 30),
-        new minigameStation('northWing', 900, 150, 64, 64, 'mgTemp2', 'Part3', 75, 15, 30, 30),
+        new minigameStation('northWing', 300, 150, 64, 64, 'forestLevel1Minigame', 'Part1', 75, 15, 30, 30),
+        new minigameStation('northWing', 600, 150, 64, 64, 'forestLevel2Minigame', 'Part2', 75, 15, 30, 30),
+        new minigameStation('northWing', 900, 150, 64, 64, 'forestLevel3Minigame', 'Part3', 75, 15, 30, 30),
 
-        new minigameStation('southWing', 300, 450, 64, 64, 'mgTemp3', 'Part4', 75, 15, 30, 30),
-        new minigameStation('southWing', 600, 450, 64, 64, 'mgTemp4', 'Part5', 75, 15, 30, 30),
-        new minigameStation('southWing', 900, 450, 64, 64, 'mgTemp5', 'Part6', 75, 15, 30, 30),
+        new minigameStation('southWing', 300, 450, 64, 64, 'forestLevel4Minigame', 'Part4', 75, 15, 30, 30),
+        new minigameStation('southWing', 600, 450, 64, 64, 'forestLevel5Minigame', 'Part5', 75, 15, 30, 30),
+        new minigameStation('southWing', 900, 450, 64, 64, 'forestLevel6Minigame', 'Part6', 75, 15, 30, 30),
 
-        new minigameStation('eastWing', 1000, 125, 64, 64, 'mgTemp6', 'Part7', 75, 15, 30, 30),
-        new minigameStation('eastWing', 1000, 325, 64, 64, 'mgTemp7', 'Part8', 75, 15, 30, 30),
-        new minigameStation('eastWing', 1000, 525, 64, 64, 'mgTemp8', 'Part9', 75, 15, 30, 30),
+        new minigameStation('eastWing', 1000, 125, 64, 64, 'forestLevel7Minigame', 'Part7', 75, 15, 30, 30),
+        new minigameStation('eastWing', 1000, 325, 64, 64, 'forestLevel8Minigame', 'Part8', 75, 15, 30, 30),
+        new minigameStation('eastWing', 1000, 525, 64, 64, 'forestLevel9Minigame', 'Part9', 75, 15, 30, 30),
 
         new minigameStation('westWing', 200, 125, 64, 64, 'mgTemp9', 'Part10', 75, 15, 30, 30),
         new minigameStation('westWing', 200, 325, 64, 64, 'mgTemp10', 'Part11', 75, 15, 30, 30),

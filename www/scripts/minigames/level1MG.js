@@ -20,9 +20,9 @@ class forestLevel1Minigame extends forestPlatformMinigame
             keys: [{ ...this.cellRect(5, 27), color: 'orange', name: '钥匙1' }],
             locks: [{ ...this.cellRect(29, 10), color: 'blue', name: '机关2' }],
             doors: [
-                { ...this.cellRect(23, 16, 1, 3), color: 'orange', name: '机关门1' },
-                { ...this.cellRect(35, 16, 1, 3), color: 'orange', name: '机关门1' },
-                { ...this.cellRect(41, 16, 1, 3), color: 'blue', name: '机关门2' }
+                { ...this.cellRect(23, 16, 1, 3), color: 'orange', channel: 'orange', controlSource: 'lock', name: '机关门1' },
+                { ...this.cellRect(35, 16, 1, 3), color: 'orange', channel: 'orange', controlSource: 'lock', name: '机关门1' },
+                { ...this.cellRect(41, 16, 1, 3), color: 'blue', channel: 'blue', controlSource: 'lock', name: '机关门2' }
             ],
             traps: [],
             machine: null,
