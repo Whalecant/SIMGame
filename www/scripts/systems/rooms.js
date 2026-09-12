@@ -30,7 +30,7 @@ const rooms =
                 rangeStart: 560, 
                 rangeEnd: 720, 
                 targetRoom: 'southWing',
-                length: 230,
+                length: 150,
                 thickness: 90,
             },
 
