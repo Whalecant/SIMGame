@@ -60,50 +60,167 @@ class minigameStation
     }
 }
 
-const stationManager = 
+class stationManager
 {
-    stations:
-    [
-        new minigameStation('northWing', 300, 150, 64, 64, 'forestLevel1Minigame', 'Part1', 75, 15, 30, 30),
-        new minigameStation('northWing', 600, 150, 64, 64, 'forestLevel2Minigame', 'Part2', 75, 15, 30, 30),
-        new minigameStation('northWing', 900, 150, 64, 64, 'forestLevel3Minigame', 'Part3', 75, 15, 30, 30),
-
-        new minigameStation('southWing', 300, 450, 64, 64, 'forestLevel4Minigame', 'Part4', 75, 15, 30, 30),
-        new minigameStation('southWing', 600, 450, 64, 64, 'forestLevel5Minigame', 'Part5', 75, 15, 30, 30),
-        new minigameStation('southWing', 900, 450, 64, 64, 'forestLevel6Minigame', 'Part6', 75, 15, 30, 30),
-
-        new minigameStation('eastWing', 1000, 125, 64, 64, 'forestLevel7Minigame', 'Part7', 75, 15, 30, 30),
-        new minigameStation('eastWing', 1000, 325, 64, 64, 'forestLevel8Minigame', 'Part8', 75, 15, 30, 30),
-        new minigameStation('eastWing', 1000, 525, 64, 64, 'forestLevel9Minigame', 'Part9', 75, 15, 30, 30),
-
-        new minigameStation('westWing', 200, 125, 64, 64, 'mgTemp9', 'Part10', 75, 15, 30, 30),
-        new minigameStation('westWing', 200, 325, 64, 64, 'mgTemp10', 'Part11', 75, 15, 30, 30),
-        new minigameStation('westWing', 200, 525, 64, 64, 'mgTemp11', 'Part12', 75, 15, 30, 30),
-    ],
-
-    getRoomStations(roomName)
+    constructor()
     {
-        return this.stations.filter(station => station.room === roomName);
-    },
+        this.completedLevels = new Set();
 
-    checkCollision(player, currRoom, nextX, nextY)
-    {
-        const roomStations = this.getRoomStations(currRoom);
-        return roomStations.some(station => (station.boxCollider(player, nextX, nextY))); // some() is a funciton to test if at least 1 element in the array provided a callback funciton
-    },
+        this.nodeColors = {
+            goldNode: '#ffd700',
+            blackNode: '#333333',
+            whiteNode: '#ffffff',
+            purpleNode: '#9b59b6',
+            pinkNode: '#ff69b4',
+            azureNode: '#007fff',
+            emeraldNode: '#50c878',
+            amberNode: '#ffbf00',
+        }
 
-    getNearbyStation(player, currRoom)
-    {
-        const roomStations = this.getRoomStations(currRoom);
-        return roomStations.find(station => station.nearPlayer(player)) || null;
-    },
+        this.roomNodes = 
+        {
+            northWing: [
+                {
+                    currentMgId: 'goldNode', 
+                    x: 400, 
+                    y: 300, 
+                    width: 60, 
+                    height: 60, 
+                    levelIdx: 1, 
+                    rewardPartKey: 'Part1',
+                },
+                {
+                    currentMgId: 'blackNode',
+                    x: 800,
+                    y: 300,
+                    width: 60,
+                    height: 60,
+                    levelIdx: 2,
+                    rewardPartKey: 'Part2',
+                },
+            ],
+            southWing: [
+                {
+                    currentMgId: 'whiteNode',
+                    x: 400,
+                    y: 400,
+                    width: 60,
+                    height: 60,
+                    levelIdx: 3,
+                    rewardPartKey: 'Part3',
+                },
+                {
+                    currentMgId: 'purpleNode',
+                    x: 880,
+                    y: 400,
+                    width: 60,
+                    height: 60,
+                    levelIdx: 4,
+                    rewardPartKey: 'Part4',
+                },
+            ],
+            eastWing: [
+                {
+                    currentMgId: 'pinkNode',
+                    x: 640,
+                    y: 200,
+                    width: 60,
+                    height: 60,
+                    levelIdx: 5,
+                    rewardPartKey: 'Part5',
+                },
+                {
+                    currentMgId: 'azureNode',
+                    x: 640,
+                    y: 500,
+                    width: 60,
+                    height: 60,
+                    levelIdx: 6,
+                    rewardPartKey: 'Part6',
+                },
+            ],
+            westWing: [
+                {
+                    currentMgId: 'emeraldNode',
+                    x: 640,
+                    y: 200, 
+                    width: 60,
+                    height: 60,
+                    levelIdx: 7,
+                    rewardPartKey: 'Part7',
+                },
+                {
+                    currentMgId: 'amberNode',
+                    x: 640,
+                    y: 500,
+                    width: 60,
+                    height: 60,
+                    levelIdx: 8,
+                    rewardPartKey: 'Part8',
+                },
+            ],
+        };
+    }
 
-    renderRoom(ctx, currRoom)
+    get minigames()
     {
-        const roomStations = this.getRoomStations(currRoom);
-        roomStations.forEach(station => station.render(ctx));
+        return {
+            'goldNode': window.forestLevel1Minigame,
+            'blackNode': window.forestLevel2Minigame,
+            'whiteNode': window.forestLevel3Minigame,
+            'purpleNode': window.forestLevel4Minigame,
+            'pinkNode': window.forestLevel5Minigame,
+            'azureNode': window.forestLevel6Minigame,
+            'emeraldNode': window.forestLevel7Minigame,
+            'amberNode': window.forestLevel8Minigame,
+            'redNode': window.forestLevel9Minigame,
+        };
+
+    }
+
+    markLevelComplete(levelIdx)
+    {
+        this.completedLevels.add(levelIdx);
+    }
+
+    getNearbyStation(player, roomId)
+    {
+        const nodes = this.roomNodes[roomId];
+        if(!nodes)
+            return null;
+    
+        for(const node of nodes)
+        {
+            const dX = player.x - node.x;
+            const dY = player.y - node.y;
+            const dist = Math.sqrt(dX * dX + dY * dY);
+
+            if(dist <= 60)
+                return node;
+        }
+        return null;
+    }
+
+    renderRoom(ctx, roomId)
+    {
+        const nodes = this.roomNodes[roomId];
+        if(!nodes)
+            return;
+
+        ctx.font = '14px courier-new';
+        ctx.textAlign = 'center';
+
+        for(const node of nodes)
+        {
+            const isCompleted = this.completedLevels.has(node.levelIdx);
+            ctx.fillStyle = isCompleted ? '#e74c3c' : this.nodeColors[node.currentMgId];
+            ctx.fillRect(node.x - node.width/2, node.y - node.height/2, node.width, node.height);
+
+            ctx.fillStyle = ((node.currentMgId === 'whiteNode' && !isCompleted) || (node.currentMgId === 'goldNode' && !isCompleted)) ? '#000000' : '#ffffff';
+            ctx.fillText(`Lvl ${node.levelIdx}`, node.x, node.y + 5);
+        }
     }
 };
 
-window.stationManager = stationManager;
+window.stationManager = new stationManager();
 

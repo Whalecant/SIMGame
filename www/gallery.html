@@ -113,6 +113,13 @@
             max-height: 240px;
         }
 
+        .audioPlayer
+        {
+            width: 100%;
+            margin-top: 0.5rem;
+            accent-color: #7a5c3a;
+        }
+
         .navBtn {
             background-color: #e6d8bc;
             border: 2px solid #9b8b72;
@@ -176,7 +183,7 @@
             line-height: 1.5;
         }
 
-        @media (max-width: 768px) {
+        @media (max-height: 500px) {
             #mobileBlocker {
                 display: flex !important;
             }
@@ -199,6 +206,7 @@
             <p>All media archives, from cutscenes to images to audio</p>
         </div>
 
+        <div class="sectionTitle">Artwork & Visuals</div>
         <div class="galleryGrid">
             <div class="galleryCard">
                 <div class="galleryLabel">Airship Vehicle Sprite</div>
@@ -216,10 +224,73 @@
             </div>
         </div>
 
+        <div class="sectionTitle">Soundtrack Archive</div>
+        <div class="galleryGrid">
+            <div class="galleryCard">
+                <div class="galleryLabel">Gold BGM</div>
+                <audio controls class="audioPlayer" src="assets/audio/bgm/goldBgm.wav"></audio>
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel">Black BGM</div>
+                <audio controls class="audioPlayer" src="assets/audio/bgm/blackBgm.wav"></audio>
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel">White BGM</div>
+                <audio controls class="audioPlayer" src="assets/audio/bgm/whiteBgm.wav"></audio>
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel">Purple BGM</div>
+                <audio controls class="audioPlayer" src="assets/audio/bgm/purpleBgm.wav"></audio>
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel">Pink BGM</div>
+                <audio controls class="audioPlayer" src="assets/audio/bgm/pinkBgm.wav"></audio>
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel">Azure BGM</div>
+                <audio controls class="audioPlayer" src="assets/audio/bgm/azureBgm.wav"></audio>
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel">Emerald BGM</div>
+                <audio controls class="audioPlayer" src="assets/audio/bgm/emeraldBgm.wav"></audio>
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel">Amber BGM</div>
+                <audio controls class="audioPlayer" src="assets/audio/bgm/amberBgm.wav"></audio>
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel">Red BGM</div>
+                <audio controls class="audioPlayer" src="assets/audio/bgm/redBgm.wav"></audio>
+            </div>
+        </div>
         <div class="buttonWrap">
             <button class="navBtn" onclick="window.location.href='navigation.html'">Back</button>
         </div>
     </div>
+
+    <script>
+        const audioPlayers = document.querySelectorAll('.audioPlayer')
+
+        audioPlayers.forEach(player =>
+        {
+            player.addEventListener('player', () => {
+                audioPlayers.forEach(otherPlayer => {
+                    if(otherPlayer !== player)
+                    {
+                        otherPlayer.pause();
+                    }
+                });
+            });
+        });
+    </script>
 
 </body>
 </html>
