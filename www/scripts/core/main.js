@@ -436,7 +436,7 @@ function openVehicleBlueprint()
     const overlay = document.getElementById('vehicleBlueprint');
     const list = document.getElementById('vehiclePartsList');
 
-    if(!overlay || !list || !window.vehicle)
+    if(!overlay || !list || !window.Vehicle)
     {
         return;
     }
