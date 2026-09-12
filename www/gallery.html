@@ -1,48 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-        <title data-i18n="title"> Shipwright's Countdown</title>
-        <link rel="stylesheet" href="subPage.css">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Shipwright's Countdown · Gallery Archive</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    <body>
-        <!--simple notice and what not-->
-        <div id="mobileBlocker">
-            <h2 style="color: maroon; ">Desktop Only Page</h2>
-            <p> We apolgogize but this portal requires a wider screen. Please view on desktop or in a wider screen <br>(Translataion: I'm too lazy to set up mobile port at the moment ~ lead programmer)</p>
+        body {
+            background-color: #1a1612;
+            font-family: 'Courier New', 'Times New Roman', serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+        .archive {
+            width: min(95vw, 1200px);
+            background-color: #2b241c;
+            border-radius: 6px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.9), inset 0 0 0 1px #5a4a38;
+            padding: 2rem;
+            border-top: 6px solid #8a7a64;
+        }
+
+        .archiveHeader {
+            background-color: #f3ecd8;
+            border: 1px solid #b09b7e;
+            border-radius: 4px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: inset 0 0 0 1px #e6d8bc;
+        }
+
+        .archiveHeader h1 {
+            font-size: 2.2rem;
+            color: #4a2e1b;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border-bottom: 2px double #a0845e;
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .archiveHeader p {
+            font-style: italic;
+            color: #6f5a44;
+            font-size: 0.95rem;
+        }
+
+        .galleryGrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .galleryCard {
+            background-color: #f3ecd8;
+            border: 1px solid #b09b7e;
+            border-radius: 4px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), inset 0 0 0 1px #e6d8bc;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .galleryCard:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5), inset 0 0 0 1px #e6d8bc;
+        }
+
+        .galleryCard.wideCard {
+            grid-column: span 2;
+        }
+
+        .galleryLabel {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #5c3f28;
+            text-align: center;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border-bottom: 1px dashed #b09b7e;
+            padding-bottom: 0.4rem;
+            width: 100%;
+        }
+
+        .galleryImage {
+            width: 100%;
+            height: auto;
+            max-height: 180px;
+            object-fit: contain;
+            border: 1px solid #d6c6aa;
+            border-radius: 2px;
+            background-color: #0b0f19;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+        }
+
+        .galleryCard.wideCard .galleryImage {
+            max-height: 240px;
+        }
+
+        .navBtn {
+            background-color: #e6d8bc;
+            border: 2px solid #9b8b72;
+            border-radius: 30px;
+            padding: 0.85rem 2.2rem;
+            color: #2e241a;
+            cursor: pointer;
+            font-family: 'Courier New', 'Times New Roman', serif;
+            font-weight: bold;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 0 #7a5c3a;
+            display: inline-block;
+        }
+
+        .navBtn:hover {
+            background-color: #dac9a8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #7a5c3a;
+        }
+
+        .navBtn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #7a5c3a;
+        }
+
+        .buttonWrap {
+            display: flex;
+            justify-content: center;
+        }
+
+        #mobileBlocker {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #1a1612;
+            color: #f3ecd8;
+            z-index: 999999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        #mobileBlocker h2 {
+            color: #d4a373;
+            border-bottom: 1px dashed #b09b7e;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        #mobileBlocker p {
+            color: #cfc1a8;
+            max-width: 400px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            #mobileBlocker {
+                display: flex !important;
+            }
+            .archive {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="mobileBlocker">
+        <h2>Desktop Only Page</h2>
+        <p>We apologize, but this portal requires a wider screen. Please view on desktop or in a wider screen.</p>
+    </div>
+
+    <div class="archive">
+        <div class="archiveHeader">
+            <h1>Gallery Archive</h1>
+            <p>All media archives, from cutscenes to images to audio</p>
         </div>
 
-        <div class="staticPageContainer fullScreenGallery">
-            <div>
-                <h1>Gallery Archive (WIP)</h1>
-                <p class="subtitle">All media archives, from cutscenes to images to audio</p>
-
-                <div class="galleryGrid">
-                    <div class="galleryItem">
-                        <p class="galleryCaption">Airship Vehicle Sprite</p>
-                        <img src="assets/airshipAndGears/airshipModel.png" alt="Art of Airship" class="galleryImage" >
-                    </div>
-                    
-                    <div class="galleryItem">
-                        <p class="galleryCaption">Early Character Concept Art</p>
-                        <img src="assets/character/firstModelPrototype.png" alt="Character Concept Art" class="galleryImage" >
-                    </div>
-
-                    <div class="galleryItem wideItem">
-                        <p class="galleryCaption">Character Spritesheet</p>
-                        <img src="assets/character/characterAnimationSpritesheet.png" alt="Character spritesheet" class="galleryImage">
-                    </div>
-                </div>
-
-                    
+        <div class="galleryGrid">
+            <div class="galleryCard">
+                <div class="galleryLabel">Airship Vehicle Sprite</div>
+                <img src="assets/airshipAndGears/airshipModel.png" alt="Art of Airship" class="galleryImage">
             </div>
 
-            <button class="navBtn" style="margin-top:2rem; width:15%;" onclick="window.location.href='navigation.html'">
-                <span class="btnTitle">Back</span>
-            </button>
+            <div class="galleryCard">
+                <div class="galleryLabel">Early Character Concept Art</div>
+                <img src="assets/character/firstModelPrototype.png" alt="Character Concept Art" class="galleryImage">
+            </div>
+
+            <div class="galleryCard wideCard">
+                <div class="galleryLabel">Character Spritesheet</div>
+                <img src="assets/character/characterAnimationSpritesheet.png" alt="Character spritesheet" class="galleryImage">
+            </div>
         </div>
 
-    </body>
+        <div class="buttonWrap">
+            <button class="navBtn" onclick="window.location.href='navigation.html'">Back</button>
+        </div>
+    </div>
+
+</body>
 </html>
