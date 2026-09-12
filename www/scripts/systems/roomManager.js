@@ -24,40 +24,108 @@ const roomManager =
         return pos.y >= exit.rangeStart && pos.y <= exit.rangeEnd;
     },
 
+    isInsideIslandBounds(pos, room)
+    {
+        if(!room)
+            return true;
+
+        const cx = room.centerX || 640;
+        const cy = room.centerY || 360;
+        const rx = room.radiusX || 380;
+        const ry = room.radiusY || 180;
+
+        const dx = pos.x - cx;
+        const dy = pos.y - cy;
+
+        if(Array.isArray(room.exits))
+        {
+            for (const exit of room.exits)
+            {
+                if(this.inExitRange(pos, exit))
+                {
+                    if(exit.edge === 'top' && pos.y < cy)
+                        return true;
+                    if(exit.edge === 'bot' && pos.y > cy)
+                        return true;
+                    if(exit.edge === 'left' && pos.x < cx)
+                        return true;
+                    if(exit.edge === 'right' && pos.x > cx)
+                        return true;
+                }
+            }
+        }
+        
+
+        return((dx * dx) / (rx * rx) + (dy * dy) / (ry * ry)) <= 1;
+    },
+
     roomClamp(pos)
     {
+        const room = this.getCurrRoom();
+        if(!room)
+            return;
+
         const halfWidth = pos.width / 2;
         const halfHeight = pos.height / 2;
-        const bounds = this.margin;
 
-        const room = this.getCurrRoom();
+        const minX = room.minX ?? 200;
+        const maxX = room.maxX ?? 1080;
+        const minY = room.minY ?? 180;
+        const maxY = room.maxY ?? 540;
 
-        const topExit = room.exits.find(e => e.edge === 'top' && this.inExitRange(pos, e));
-        const botExit = room.exits.find(e => e.edge === 'bot' && this.inExitRange(pos, e));
-        const leftExit = room.exits.find(e => e.edge === 'left' && this.inExitRange(pos, e));
-        const rightExit = room.exits.find(e => e.edge === 'right' && this.inExitRange(pos, e));
-    
-        if(pos.y - halfHeight < bounds && !topExit)
+        const topExit = room.exits?.find(e => e.edge === 'top' && this.inExitRange(pos, e));
+        const botExit = room.exits?.find(e => e.edge === 'bot' && this.inExitRange(pos, e));
+        const leftExit = room.exits?.find(e => e.edge === 'left' && this.inExitRange(pos, e));
+        const rightExit = room.exits?.find(e => e.edge === 'right' && this.inExitRange(pos, e));
+
+        if (pos.y - halfHeight < minY && !topExit) 
         {
-            pos.y = bounds + halfHeight;
+            pos.y = minY + halfHeight;
         }
-
-        if(pos.y + halfHeight > 720-bounds && !botExit)
+        if (pos.y + halfHeight > maxY && !botExit) 
         {
-            pos.y = 720 - bounds - halfHeight;
+            pos.y = maxY - halfHeight;
         }
-
-        if(pos.x - halfWidth < bounds && !leftExit)
+        if (pos.x - halfWidth < minX && !leftExit) 
         {
-            pos.x = bounds + halfWidth;
+            pos.x = minX + halfWidth;
         }
-
-        if(pos.x + halfWidth > 1280-bounds && !rightExit)
+        if (pos.x + halfWidth > maxX && !rightExit) 
         {
-            pos.x = 1280 - bounds - halfWidth;
+            pos.x = maxX - halfWidth;
         }
-
     },
+
+        // const halfWidth = pos.width / 2;
+        // const halfHeight = pos.height / 2;
+        // const bounds = this.margin;
+
+        // const room = this.getCurrRoom();
+
+        // const topExit = room.exits.find(e => e.edge === 'top' && this.inExitRange(pos, e));
+        // const botExit = room.exits.find(e => e.edge === 'bot' && this.inExitRange(pos, e));
+        // const leftExit = room.exits.find(e => e.edge === 'left' && this.inExitRange(pos, e));
+        // const rightExit = room.exits.find(e => e.edge === 'right' && this.inExitRange(pos, e));
+    
+        // if(pos.y - halfHeight < bounds && !topExit)
+        // {
+        //     pos.y = bounds + halfHeight;
+        // }
+
+        // if(pos.y + halfHeight > 720-bounds && !botExit)
+        // {
+        //     pos.y = 720 - bounds - halfHeight;
+        // }
+
+        // if(pos.x - halfWidth < bounds && !leftExit)
+        // {
+        //     pos.x = bounds + halfWidth;
+        // }
+
+        // if(pos.x + halfWidth > 1280-bounds && !rightExit)
+        // {
+        //     pos.x = 1280 - bounds - halfWidth;
+        // }
 
     checkExits(pos)
     {
@@ -71,7 +139,7 @@ const roomManager =
         const room = this.getCurrRoom();
         const halfWidth = pos.width / 2;
         const halfHeight = pos.height / 2;
-        const bounds = this.margin;
+                
 
         for(const exit of room.exits)
         {
@@ -234,12 +302,52 @@ const roomManager =
     }
     */
 
+
+
+    renderBridges(ctx, room)
+    {
+        if(!bridgeSprite.complete || bridgeSprite.naturalWidth === 0)
+            return;
+
+        for (const exit of room.exits)
+        {
+            ctx.save();
+
+            const len = exit.length || 180;
+            const thick = exit.thickness || 80;
+
+            if(exit.edge === 'left')
+            {
+                ctx.drawImage(bridgeSprite, 0, exit.rangeStart, len, thick);            }
+            else if(exit.edge === 'right')
+            {
+                ctx.drawImage(bridgeSprite, 1280 - len, exit.rangeStart, len, thick);
+            }
+            else if(exit.edge === 'top')
+            {
+                const midX = (exit.rangeStart + exit.rangeEnd) / 2;
+                ctx.translate(midX, len / 2);
+                ctx.rotate(Math.PI / 2);
+                ctx.drawImage(bridgeSprite, -len / 2, -thick / 2, len, thick);
+            }
+            else if(exit.edge === 'bot')
+            {
+                const midX = (exit.rangeStart + exit.rangeEnd) / 2;
+                ctx.translate(midX, 720 - len / 2);
+                ctx.rotate(-Math.PI / 2);
+                ctx.drawImage(bridgeSprite, -len / 2, -thick / 2, len, thick);
+            }
+
+            ctx.restore();
+        }
+    },
+
     renderRoom(ctx)
     {
         const room = this.getCurrRoom();
         room.render(ctx);
-        this.drawBounds(ctx, room);
-    }
+        this.renderBridges(ctx, room)
+    },
 
     //the multiline comments are the parts taht got moved to overworld.js
 };

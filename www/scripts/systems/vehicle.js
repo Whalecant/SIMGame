@@ -1,13 +1,13 @@
 const vehicle = 
 {
-    x: 640,
-    y: 250,
-    width: 200,
+    x: 920,
+    y: 450,
+    width: 150,
     height: 100,
     color: '#020101',
-    radius: 125,
+    radius: 150,
 
-    colliderWidth: 150,
+    colliderWidth: 100,
     colliderHeight: 10,
     colliderOffset: 20,
 

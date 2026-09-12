@@ -82,8 +82,8 @@ class stationManager
             northWing: [
                 {
                     currentMgId: 'goldNode', 
-                    x: 400, 
-                    y: 300, 
+                    x: 500, 
+                    y: 550, 
                     width: 60, 
                     height: 60, 
                     levelIdx: 1, 
@@ -91,8 +91,8 @@ class stationManager
                 },
                 {
                     currentMgId: 'blackNode',
-                    x: 800,
-                    y: 300,
+                    x: 750,
+                    y: 550,
                     width: 60,
                     height: 60,
                     levelIdx: 2,
@@ -102,8 +102,8 @@ class stationManager
             southWing: [
                 {
                     currentMgId: 'whiteNode',
-                    x: 400,
-                    y: 400,
+                    x: 500,
+                    y: 200,
                     width: 60,
                     height: 60,
                     levelIdx: 3,
@@ -111,8 +111,8 @@ class stationManager
                 },
                 {
                     currentMgId: 'purpleNode',
-                    x: 880,
-                    y: 400,
+                    x: 750,
+                    y: 200,
                     width: 60,
                     height: 60,
                     levelIdx: 4,
@@ -122,8 +122,8 @@ class stationManager
             eastWing: [
                 {
                     currentMgId: 'pinkNode',
-                    x: 640,
-                    y: 200,
+                    x: 400,
+                    y: 300,
                     width: 60,
                     height: 60,
                     levelIdx: 5,
@@ -131,8 +131,8 @@ class stationManager
                 },
                 {
                     currentMgId: 'azureNode',
-                    x: 640,
-                    y: 500,
+                    x: 400,
+                    y: 450,
                     width: 60,
                     height: 60,
                     levelIdx: 6,
@@ -142,8 +142,8 @@ class stationManager
             westWing: [
                 {
                     currentMgId: 'emeraldNode',
-                    x: 640,
-                    y: 200, 
+                    x: 1000,
+                    y: 300, 
                     width: 60,
                     height: 60,
                     levelIdx: 7,
@@ -151,8 +151,8 @@ class stationManager
                 },
                 {
                     currentMgId: 'amberNode',
-                    x: 640,
-                    y: 500,
+                    x: 1000,
+                    y: 450,
                     width: 60,
                     height: 60,
                     levelIdx: 8,
