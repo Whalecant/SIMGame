@@ -1,20 +1,36 @@
+const houseSprite = new Image();
+houseSprite.src = 'assets/map/house.png';
+
 const savePoint =
 {
-    x: 450,
-    y: 250,
-    width: 35,
-    height: 50,
-    radius: 60,
+    x: 300,
+    y: 450,
+    width: 96,
+    height: 96,
+    radius: 120,
     color: '#a91313' ,
 
-    colliderWidth: 20,
-    colliderHeight: 18,
-    colliderOffset: 14,
+    colliderWidth: 50,
+    colliderHeight: 50,
+    colliderOffset: 20,
 
     render(ctx)
     {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
+        if(!ctx)
+            return;
+
+        if(houseSprite.complete && houseSprite.naturalWidth !== 0)
+        {
+            ctx.drawImage(houseSprite, this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
+
+        }
+        else
+        {
+            ctx.fillStyle = this.color;
+            ctx.fillRect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
+        }
+
+        
     },
 
     nearPlayer(pos)

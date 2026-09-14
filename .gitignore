@@ -156,3 +156,6 @@ android/.idea/
 
 #Capacitor
 .DS_Store
+
+#for the recordings
+extraReocrdings

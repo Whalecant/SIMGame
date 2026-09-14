@@ -78,11 +78,6 @@ const player =
                 this.y = prevY;
             }
 
-            if(window.stationManager && stationManager.checkCollision(this, currRoom, this.x, this.y))
-            {
-                this.y = prevY;
-            }
-
             if(Input.isDown('a'))
             {
                 this.x -= this.speed;
@@ -106,12 +101,7 @@ const player =
             {
                 this.x = prevX;
             }
-
-            if(window.stationManager && stationManager.checkCollision(this, currRoom, this.x, this.y))
-            {
-                this.x = prevX;
-            }
-
+            
             if(this.isMoving)
             {
                 this.animTimer += deltaTime;

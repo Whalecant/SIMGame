@@ -31,6 +31,8 @@ const Game =
         if(this.canvas)
         {
             this.ctx = this.canvas.getContext('2d');
+
+            this.ctx.imageSmoothingEnabled = false;
         }
 
         this.pause = new pauseManager();
@@ -70,7 +72,6 @@ const Game =
             requestAnimationFrame((timeStamp) => this.gameLoop(timeStamp)) //timestamp is the JS version of time.deltaTime... NOT THE FUCK WAS THIS COMMENT ME HELLO???, deltaTime still exists here, timeStamp is to show how long the webpage has been loaded
         }
 
-        
     },
 
     gameLoop(timestamp)
@@ -95,18 +96,6 @@ const Game =
     //obvious i don't need to fucking explain what the 2 functions below do me (yes i'm talking to myself for future reference)
     update(deltaTime)
     {
-        if(window.gameTimer)
-        {
-            window.gameTimer.update(deltaTime);
-
-            const timer = document.getElementById('vehicleTimer');
-
-            if(timer)
-            {
-                timer.textContent = window.gameTimer.getFormattedTime();
-            }
-        }
-
         if(this.mapOpen || this.vehicleBlueprintOpen)
         {
             return;
@@ -141,13 +130,8 @@ const Game =
                 window.Player.update(deltaTime);
             }
         }
-
-        
-
-        
     },
 
-    
     render()
     {
         if(!this.ctx)
@@ -177,9 +161,6 @@ const Game =
         const showButtons = window.overworld && overworld.showActionBtn() || anyOverlayOpen;
         showActionBtn(showButtons);
     }
-
-
-
 };
 
 // the set of code below is for global ui functions (less comments will be present below because I actually know what I'm doing now :D)
@@ -253,16 +234,19 @@ function interact()
 
     if(window.Vehicle && window.Player && window.roomManager && roomManager.currRoomId === 'hub' && Vehicle.nearPlayer(Player))
     {
-        if(window.vehicleManager && window.vehicleManager.heldPart)
+        if(Vehicle.isFullyRepaired())
         {
-            window.vehicleManager.deliverHeldPart();
+            if(confirm("All 8 parts installed! Enter final level?"))
+            {
+                startMinigameInstance('redNode', null);
+            }
+            return;
+
         }
-        else
-        {
-            openVehicleBlueprint();
-        }
-        
+
+        openVehicleBlueprint();
         return;
+
     }
 
     if(window.stationManager && window.Player && window.roomManager)
@@ -271,23 +255,27 @@ function interact()
         
         if(station)
         {
-            if(window.vehicleManager && window.vehicleManager.heldPart)
+            if(window.stationManager.isLevelComplete && window.stationManager.isLevelComplete(station.currentMgId))
             {
-                showMsgPopup(getText('alrCarryPart'));
+                showMsgPopup("Level already completed")
                 return;
             }
 
             startMinigameInstance(station.currentMgId, station.rewardPartKey);
             return;
         }
+
     }
 
 }
 
 function startMinigameInstance(mgId, rewardPartKey)
 {
-    if(!window[mgId])
+    const mgClass = window.stationManager ? window.stationManager.minigames[mgId] : null;
+
+    if(!mgClass)
     {
+        console.error(`No minigame class with node color '${mgId}'`);
         return;
     }
 
@@ -307,7 +295,7 @@ function startMinigameInstance(mgId, rewardPartKey)
         Input.keysDown = {};
     }
 
-    const mgInstance = new window[mgId]
+    const mgInstance = new mgClass
     (
         Game.canvas,
         Game.ctx,
@@ -327,6 +315,11 @@ function startMinigameInstance(mgId, rewardPartKey)
     else if(typeof mgInstance.init === 'function')
     {
         mgInstance.init();
+    }
+
+    if(window.audioManager)
+    {
+        window.audioManager.playBgm(mgId);
     }
 }
 
@@ -398,6 +391,11 @@ function completeMiniGame(mgId, success, rewardPartKey)
 {
     Game.inMinigame = false;
 
+    if(window.audioManager)
+    {
+        window.audioManager.stopBgm();
+    }
+
     const pauseBtn = document.getElementById('pauseBtnMobile');
 
     if(pauseBtn)
@@ -412,20 +410,25 @@ function completeMiniGame(mgId, success, rewardPartKey)
         overworld.mode = 'room';
     }
 
-    const mgOverlay = document.getElementById(mgId);
-    if(mgOverlay)
+    if(success)
     {
-        mgOverlay.classList.add('hidden');
-    }
-
-    if(window.vehicleManager)
-    {
-        if(success && rewardPartKey)
+        if(mgId === 'redNode')
         {
-            window.vehicleManager.receivePart(rewardPartKey);
+            showCutscene('GOOD');
+            return;
+        }
+
+        if(rewardPartKey && window.Vehicle)
+        {
+            window.Vehicle.installPart(rewardPartKey);
+            showMsgPopup(`${rewardPartKey} installed! (${window.Vehicle.installedParts.size}/8)`);
+        }
+
+        if(window.stationManager)
+        {
+            window.stationManager.markLevelComplete(mgId);
         }
     }
-
 }
 
 function openVehicleBlueprint()
@@ -433,28 +436,24 @@ function openVehicleBlueprint()
     const overlay = document.getElementById('vehicleBlueprint');
     const list = document.getElementById('vehiclePartsList');
 
-    if(!overlay || !list || !window.vehicleManager || !window.vehicleManager.activeVehicle)
+    if(!overlay || !list || !window.Vehicle)
     {
         return;
     }
 
     list.innerHTML = '';
-    const activeVehicle = window.vehicleManager.activeVehicle;
-    const parts = window.vehicleManager.activeVehicle.parts;
-    const totals = activeVehicle.partsTotal || parts;
+    const required = ['Part1', 'Part2', 'Part3', 'Part4', 'Part5', 'Part6', 'Part7', 'Part8'];
 
-    Object.keys(parts).forEach(partKey =>
+    required.forEach(partKey =>
     {
         const row = document.createElement('div');
+        const isInstalled = window.Vehicle.installedParts.has(partKey);
 
-        const countRem = parts[partKey];
-        const total = (totals[partKey] !== undefined) ? totals[partKey] : missing;
-        const isDone = countRem <= 0;
-
-        row.className = 'vehiclePartRow' + (countRem === 0 ? ' done' : '');
-        row.textContent = isDone ?  `${partKey} x${total} - ${getText('partDone')}` :`${partKey} x${total} - ${getText('partMissing')} x${countRem}`  ;
+        row.className = 'vehiclePartRow' + (isInstalled ? 'done' : '');
+        row.textContent = isInstalled ? `${partKey} - Installed` : `${partKey} - Missing`
         list.appendChild(row);
-    });
+    }
+    );
 
     overlay.classList.remove('hidden');
     Game.vehicleBlueprintOpen = true;
@@ -484,23 +483,6 @@ function showMobileControls(visible)
     showDpad(visible);
     showPauseButton(visible);
     showActionBtn(visible);
-}
-
-function showVehicleTimer(visible)
-{
-    const timerElem = document.getElementById('vehicleTimer');
-
-    if(timerElem)
-    {
-        if(visible)
-        {
-            timerElem.classList.remove('hidden');
-        }
-        else
-        {
-            timerElem.classList.add('hidden');
-        }
-    }
 }
 
 function openMenu(screenId)
@@ -556,9 +538,9 @@ function switchTabSettings(tabId, btnElement)
 function updateAudioVolume(val)
 {
     Game.settings.volume = parseInt(val, 10);
-    if(window.AudioSystem && typeof window.AudioSystem.setVolume === 'function')
+    if(window.audioManager && typeof window.audioManager.setVolume === 'function')
     {
-        window.AudioSystem.setVolume(Game.settings.volume / 100);
+        window.audioManager.setVolume(Game.settings.volume / 100);
     }
 }
 
@@ -587,24 +569,14 @@ function resetNewGame()
         roomManager.currRoomId = 'hub';
     }
 
-    if(window.vehicleManager)
+    if(window.Vehicle)
     {
-        window.vehicleManager.currentVehicleIdx = 0;
-        window.vehicleManager.repairCount = 0;
-        window.vehicleManager.activeVehicle = null;
-        window.vehicleManager.heldPart = null;
-
-
-        window.vehicleManager.triggeredEnd = false;
-        window.vehicleManager.endingType = null;
-        window.vehicleManager.endlessMode = false;
-
-        window.vehicleManager.spawnNextVeh();
+        window.Vehicle.installedParts.clear();
     }
 
-    if(window.gameTimer)
+    if(window.stationManager)
     {
-        window.gameTimer.reset();
+        window.stationManager.completedLevels.clear();
     }
 }
 
@@ -616,16 +588,6 @@ function loadSave(slotNumber)
     
     if(data)
     {
-        if(data.vehicle && (data.vehicle.endingType === 'BAD' || data.vehicle.endingType === 'NEUTRAL'))
-        {
-            if(window.vehicleManager)
-            {
-                window.vehicleManager.endingType = data.vehicle.endingType;
-            }
-
-            showCutscene(data.vehicle.endingType);
-            return;
-        }
 
         if(window.Player)
         {
@@ -640,17 +602,12 @@ function loadSave(slotNumber)
 
         if(window.vehicleManager && data.vehicle)
         {
-            window.vehicleManager.currentVehicleIdx = data.vehicle.currentVehicleIdx;
-            window.vehicleManager.repairCount = data.vehicle.repairCount;
-            window.vehicleManager.activeVehicle = data.vehicle.activeVehicle;
-            window.vehicleManager.endlessMode = data.vehicle.endlessMode || false;
-            window.vehicleManager.endingType = data.vehicle.endingType || null;
+            window.Vehicle.installedParts = new Set(data.installedParts);
         }
 
-        if(window.gameTimer && data.timer)
+        if(window.stationManager && data.completedLevels)
         {
-            window.gameTimer.currDay = data.timer.currDay;
-            window.gameTimer.elapsedSec = data.timer.elapsedSec;
+            window.stationManager.completedLevels = new Set(data.completedLevels)
         }
         
     }
@@ -664,7 +621,6 @@ function loadSave(slotNumber)
     Game.startGameLoop();
 
     showMobileControls(true);
-    showVehicleTimer(true);
 }
 
 let pendingDeleteSlot = null;
@@ -771,6 +727,11 @@ function togglePause()
         overworld.activeMg.stop(false);
         Game.inMinigame = false;
 
+        if(window.audioManager)
+        {
+            window.audioManager.stopBgm();
+        }
+
         const pauseBtn = document.getElementById('pauseBtnMobile');
         if(pauseBtn)
         {
@@ -786,13 +747,6 @@ function togglePause()
         return;
     }
 
-    const timer = document.getElementById('vehicleTimer');
-
-    if(timer && window.gameTimer)
-    {
-        timer.textContent = window.gameTimer.getFormattedTime();
-    }
-
     if(Game.currentState === 'PLAYING')
     {
         if(!Game.pause.canPause())
@@ -806,10 +760,6 @@ function togglePause()
         showMobileControls(false);
         showActionBtn(false);
 
-        if(timer)
-        {
-            timer.style.color = 'gray';
-        }
     }
     else if(Game.currentState === 'PAUSED')
     {
@@ -819,10 +769,6 @@ function togglePause()
         showMobileControls(true);
         showActionBtn(true);
 
-        if(timer)
-        {
-            timer.style.color = 'white';
-        }
     }
 }
 
@@ -838,13 +784,11 @@ function showCutscene(endingType)
         titleElem.textContent = `${endingType} ENDING`;
     }
 
-    let unlockedEndless = false;
-
-    if(endingType === 'GOOD' && window.vehicleManager)
-    {
-        window.vehicleManager.endlessModeUnlock = true;
-        window.vehicleManager.endlessMode = true;
-    }
+    // if(endingType === 'GOOD' && window.vehicleManager)
+    // {
+    //     window.vehicleManager.endlessModeUnlock = true;
+    //     window.vehicleManager.endlessMode = true;
+    // }
 
     const continueBtn = document.getElementById('cutsceneContBtn');
     if(continueBtn)
@@ -852,11 +796,6 @@ function showCutscene(endingType)
         continueBtn.onclick = () =>
         {
             quitToMainMenu();
-
-            if(unlockedEndless)
-            {
-                showMsgPopup(getText('endlessModeUnlock'));
-            }
         }
     }
     
@@ -873,21 +812,13 @@ function quitToMainMenu()
         Game.ctx.clearRect(0, 0, Game.canvas.width, Game.canvas.height);
     }
 
-    if(window.AudioSystem && typeof window.AudioSystem.stopAll === 'function')
+    if(window.audioManager && typeof window.audioManager.stopAll === 'function')
     {
-        window.AudioSystem.stopAll();
-    }
-
-    const timer = document.getElementById('vehicleTimer');
-
-    if(timer)
-    {
-        timer.style.color = 'white';
+        window.audioManager.stopAll();
     }
 
     Game.showScreen('mainMenu');
     showMobileControls(false);
-    showVehicleTimer(false);
     showActionBtn(false);
 }
 
