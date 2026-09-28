@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <title data-i18n="title"> Shipwright's Countdown: Civilizations Future </title>
+        <link rel="stylesheet" href="style.css">
+
+        <script src="scripts/core/lang.js"></script>
+        <script src="scripts/core/input.js"></script>
+        <script src="scripts/core/audio.js"></script>
+        <script src="scripts/core/strings.js"></script>
+        
+        <script src="scripts/systems/gameTimer.js"></script>
+        <script src="scripts/systems/player.js"></script>
+        <script src="scripts/systems/randomizer.js"></script>
+        <script src="scripts/systems/rooms.js"></script>
+        <script src="scripts/systems/roomManager.js"></script>
+        <script src="scripts/systems/overworld.js"></script>
+        <script src="scripts/systems/vehicle.js"></script>
+        <script src="scripts/systems/vehicleManager.js"></script>
+        <script src="scripts/systems/saveManager.js"></script>
+        <script src="scripts/systems/savePoint.js"></script>
+        <script src="scripts/systems/achievementManager.js"></script>
+        <script src="scripts/systems/login.js"></script>
+
+
+        <script src="scripts/minigames/baseMG.js"></script>
+        <!--insert all the minigames files here using <script src="scripts/minigames/fileName.js"></script>-->
+        <script src="scripts/minigames/game-levels.js"></script>
+        <script src="scripts/minigames/level1MG.js"></script>
+        <script src="scripts/minigames/level2MG.js"></script>
+        <script src="scripts/minigames/level3MG.js"></script>
+        <script src="scripts/minigames/level4MG.js"></script>
+        <script src="scripts/minigames/level5MG.js"></script>
+        <script src="scripts/minigames/level6MG.js"></script>
+        <script src="scripts/minigames/level7MG.js"></script>
+        <script src="scripts/minigames/level8MG.js"></script>
+        <script src="scripts/minigames/level9MG.js"></script>
+        <script src="scripts/minigames/tempMgPlaceholder.js"></script>
+
+        <script src="scripts/minigames/minigameStation.js"></script>
+
+        <script src="scripts/core/pause.js"></script>
+        <script src="scripts/core/main.js"></script>
+
+    </head>
+
+    <body>
+
+
+        <div class="gameContainer">
+            
+            <!--1280 by 720 px is the most scalable resolution since we will need both android and desktop support-->
+            <canvas id="gameCanvas" width="1280" height="720"></canvas>
+
+            <div id="uiOverlay">
+                <button id="pauseBtnMobile" class="pauseBtnMobile hidden" onclick="togglePause()">||</button>
+
+                <div id="vehicleTimer" class="vehicleTimerDisplay hidden">---</div>
+
+                <div id="msgPopup" class="msgPopup"></div>
+                
+                <div class="topNavLinks">
+                    <button class="topNavBtn navLeft" data-i18n="nav" style="background-color: rgb(53, 53, 170);"onclick="window.location.href='navigation.html'">
+                        Navigation
+                    </button>
+
+                    <div class="navRight">
+                        <button class="topNavBtn" data-i18n="login" style="background-color: rgb(49, 176, 83);" onclick="window.location.href='login.html'">
+                            Login
+                        </button>
+                    </div>
+                </div>
+
+                <div id="mainMenu" class="uiScreen">
+                    <h1 data-i18n="title">Shipwright's Countdown:<br>Civilizations Future</h1>
+
+                    <div class="menuButtons">
+                        <button onclick="openMenu('saveScreen')" data-i18n="play">Play</button>
+                        <button onclick="openMenu('settingsScreen')" data-i18n="settings">Settings</button>
+                        <button onclick="window.location.href='achivements.html'" data-i18n="achievements">Achievements</button>
+                        <button onclick="openMenu('creditsScreen')" data-i18n="credits">Credits</button>
+
+                    </div>
+                </div>
+
+                <!-- Play Choose Screen-->
+                <div id="saveScreen" class="uiScreen hidden">
+                    <h2 data-i18n="selectSave">Select Save Slot</h2>
+
+                    <div class="saveSlotWrapper">
+                        <!-- save slot 1 -->
+                        <div class="saveSlotContainer">
+                            <div class="saveSlot">
+                                <div class="saveSlotInfo">
+                                    <h3><span data-i18n="slot">Slot</span> 1 </h3>
+                                    <p id="infoSlot1" class="slotDetails">Empty</p>
+                                </div>
+                                <div class="slotActions">
+                                    <button onclick="loadSave(1)" data-i18n="load">Load</button>
+                                    <button class="btnWarn" onclick="deleteSave(1)" data-i18n="delete">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- save slot 2 -->
+                        <div class="saveSlotContainer">
+                            <div class="saveSlot">
+                                <div class="saveSlotInfo">
+                                    <h3><span data-i18n="slot">Slot</span> 2 </h3>
+                                    <p id="infoSlot2" class="slotDetails">Empty</p>
+                                </div>
+                                <div class="slotActions">
+                                    <button onclick="loadSave(2)" data-i18n="load">Load</button>
+                                    <button class="btnWarn" onclick="deleteSave(2)" data-i18n="delete">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- save slot 3 -->
+                        <div class="saveSlotContainer">
+                            <div class="saveSlot">
+                                <div class="saveSlotInfo">
+                                    <h3><span data-i18n="slot">Slot</span> 3 </h3>
+                                    <p id="infoSlot3" class="slotDetails">Empty</p>
+                                </div>
+                                <div class="slotActions">
+                                    <button onclick="loadSave(3)" data-i18n="load">Load</button>
+                                    <button class="btnWarn" onclick="deleteSave(3)" data-i18n="delete">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="btnSaveBack" onclick="backToMainMenu()" data-i18n="back">Back</button>
+                </div>
+
+                <!--Delete confirmation screen-->
+                <div id="confirmDelete" class="hidden">
+                    <h2 data-i18n="confirmDelete">Confirm Delete?</h2>
+                    <div class="menuButtons">
+                        <button class="btnWarn"id="btnConfirmDelete" onclick="confirmDeleteSave()" data-i18n="confirm">Confirm</button>
+                        <button id="btnCancelDelete" onclick="cancelDeleteSave()" data-i18n="cancel">Cancel</button>
+                    </div>
+                </div>
+
+                <!-- Settings Screen -->
+                <div id="settingsScreen" class="uiScreen hidden">
+                    <div class="settingsPanel">
+                        <h2 data-i18n="settings">Settings</h2>
+
+                        <div class="settingTabs">
+                            <button class="tabBtn active" onclick="switchTabSettings('audioTab', this)" data-i18n="audioTab">Audio</button>
+                            <button class="tabBtn" onclick="switchTabSettings('controlsTab', this)" data-i18n="controlsTab">Controls</button>   
+                            <button class="tabBtn" onclick="switchTabSettings('languageTab', this)" data-i18n="languageTab">Language</button>
+                        </div>
+
+                        <div class="settingContent">
+
+                            <!-- audio Settings-->
+                            <div id="audioTab" class="tabPanel">
+                                <div class="settingRow">
+                                    <label data-i18n="volume">Volume</label>
+                                    <input type="range" id="audioSlider" min="0" max="100" value="50" oninput="updateAudioVolume(this.value)">
+                                </div>
+                            </div>
+
+                            <!-- controls overview (idk how the fuck to do remapping since this might need to be portable to android)-->
+                            <div id="controlsTab" class="tabPanel hidden">
+                                <div class="settingRow">
+                                    <div class="controlsOverview">
+                                        <p> <strong data-i18n="garageControls">Garage Controls:</strong> <span>WASD</span></p>
+                                        <p> <strong data-i18n="interact">Interact:</strong> <span>E</span> </p>
+                                        <p> <strong data-i18n="pause">Pause:</strong> <span>ESC</span> </p>
+                                        <p> <strong data-i18n="map">Map:</strong> <span>M</span> </p>
+                                        <p> <strong data-i18n="minigameControls">Minigame Controls:</strong> <span>SPACEBAR</span> </p>
+                                        <p> <strong data-i18n="exitMinigame">Exit Minigame:</strong> <span>Q</span> </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- language setting -->
+                            <div id="languageTab" class="tabPanel hidden">
+                                <div class="settingRow settingRowCenterOverride">
+                                    <button id="languageButton" onclick="toggleLanguage()" data-i18n="language">English</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button id="btnSettingsBack" onclick="closeSettings()" data-i18n="back">Back</button>
+                    </div>
+                    
+                    
+                    
+                </div>
+
+                <!-- Credits Screen -->
+                <div id="creditsScreen" class="uiScreen hidden">
+                    <h2 data-i18n="credits">Credits</h2>
+
+                    <div class="creditsContent">
+                        <p><strong data-i18n="roleProgrammers">Programmers:</strong> <span>颜键杨，赵习君</span></p>
+                        <p><strong data-i18n="roleArtist">Artist:</strong> <span>邓明善，徐思佳</span></p>
+                        <p><strong data-i18n="roleSoundDesigner">Sound Designer:</strong> <span>颜键杨</span></p>
+                        <p><strong data-i18n="roleWriter">Writer:</strong> <span>宋理，赵一诺</span></p>
+                        <p><strong data-i18n="roleVideo">Promotional Video:</strong> <span>赵习君</span></p>
+
+                    </div>
+
+                    <button id="btnCreditsBack" onclick="backToMainMenu()" data-i18n="back">Back</button>
+            
+                </div>
+
+                <!-- pause screen -->
+                <div id="pauseScreen" class="uiScreen hidden">
+                    <h2 data-i18n="paused">Paused</h2>
+
+                    <div class="menuButtons">
+                        <button onclick="togglePause()" data-i18n="resume">Resume</button>
+                        <button onclick="openMenu('settingsScreen')" data-i18n="settings">Settings</button>
+                        <button onclick="quitToMainMenu()" data-i18n="mainMenu">Main Menu</button>
+                    </div>
+                </div>
+
+                <div id="dpad" class="hidden">
+                    <!--all unicode symbols can be found here https://www.compart.com/en/unicode/U+25C0-->
+                    <button class="dpadBtn" id="dpadUp" data-key="w">▲</button>
+                    <button class="dpadBtn" id="dpadDown" data-key="s">▼</button>
+                    <button class="dpadBtn" id="dpadRight" data-key="d">▶</button>
+                    <button class="dpadBtn" id="dpadLeft" data-key="a">◀</button>
+                    
+                </div>
+
+                <div id="actionBtnMbl" class="hidden">
+                    <button class="actionBtn" id="interactBtn" data-key="e">!</button>
+                    <button class="actionBtn" id="mapBtn" data-key="m">M</button>
+                </div>
+
+                <div id="vehicleBlueprint" class="vehicleBlueprint hidden">
+                    <div class="vehicleBlueprintPanel">
+                        <h2 data-i18n="partsTitle">Required Parts</h2>
+                        <div id="vehiclePartsList" class="vehiclePartsList"></div>
+                        <h5 data-i18n="closeNotice">Click anywhere to close</h5>
+                    </div>
+                </div>
+
+                <div id="mapOverlay" class="hidden">
+                    <div class="mapContent">
+                        
+                    </div>
+                </div>
+
+                <div id="cutscene" class="uiScreen cutsceneOverlay hidden">
+                    <h1 id="cutsceneTitle" class="cutsceneTitle">ENDING</h1>
+                    <button id="cutsceneContBtn" class="topNavBtn cutsceneBtn">
+                        Continue
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </body>
+</html>

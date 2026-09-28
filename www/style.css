@@ -1,55 +1,42 @@
-* 
-{
+* {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
     user-select: none;
 }
 
-html, body
-{
+html, body {
     margin: 0;
     padding: 0;
     width: 100dvw;
     height: 100dvh;
     overflow: hidden;
-    background-color: black;
+    background-color: #1e1a15;
 }
 
-body
-{
-    background-color: black;
-    color: white;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+body {
+    background-color: #1e1a15;
+    color: #2e241a;
+    font-family: 'Courier New', 'Times New Roman', serif;
     display: flex;
     justify-content: safe center;
     align-items: safe center;
     min-height: 100dvh;
     overflow: hidden;
-
 }
 
-.gameContainer
-{
+.gameContainer {
     position: relative;
     width: 100vw;
     height: 100dvh;
-    background-color: black;
-
-    /** Background Image if already present, just uncomment this
-    background-image: url('assets/bg/mainMenuBG.png');
-    background-size: cover;
-    background-position: safe center;
-    **/
-
-    border: 4px solid black;
-    border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    background-color: #f3ecd8;
+    border: 4px solid #7a5c3a;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), inset 0 0 0 1px #b8a88a;
     overflow: hidden;
 }
 
-#gameCanvas
-{
+#gameCanvas {
     position: absolute;
     top: 0;
     left: 0;
@@ -58,28 +45,25 @@ body
     z-index: 1;
 }
 
-#uiOverlay
-{
+#uiOverlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     pointer-events: none;
-
     display: flex;
     justify-content: safe center;
     align-items: safe center;
 }
 
-.uiScreen
-{
+.uiScreen {
     position: absolute;
     top: 0;
     left: 0;
     width: 100dvw;
     height: 100dvh;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(243, 236, 216, 0.95);
     backdrop-filter: blur(4px);
     display: flex;
     flex-direction: column;
@@ -88,19 +72,16 @@ body
     pointer-events: auto;
     transition: opacity 0.2s ease-in-out;
     z-index: 10;
-
     padding: 2rem 1rem;
     max-height: 100dvh;
     overflow-y: auto;
 }
 
-.hidden
-{
-    display: none !important; /*!important makes it well... the most important thing*/
+.hidden {
+    display: none !important;
 }
 
-.topNavLinks
-{
+.topNavLinks {
     position: absolute;
     top: 12px;
     left: 12px;
@@ -112,206 +93,187 @@ body
     pointer-events: auto;
 }
 
-.navRight
-{
+.navRight {
     display: flex;
     gap: 8px;
 }
 
-.topNavBtn
-{
-    background: rgba(0, 0, 0, 0.6);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+.topNavBtn {
+    background: #e6d8bc;
+    color: #2e241a;
+    border: 2px solid #9b8b72;
     padding: 6px 12px;
     font-size: 12px;
     text-decoration: none;
     border-radius: 4px;
-    transition: background 0.2s ease, border-color 0.2s ease;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    font-weight: bold;
 }
 
-.topNavBtn:hover
-{
-    background: rgba(255, 255, 255, 0.2);
-    border-color: white;
-    color: snow;
+.topNavBtn:hover {
+    background: #dac9a8;
+    border-color: #7a5c3a;
+    transform: translateY(-1px);
 }
 
-.msgPopup
-{
+.msgPopup {
     position: absolute;
     bottom: 100px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
+    background: #e6d8bc;
+    color: #2e241a;
     padding: 0.6rem 1.2rem;
+    border: 2px solid #9b8b72;
     border-radius: 8px;
     font-size: 1rem;
     z-index: 200;
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
+    font-weight: bold;
 }
 
-.msgPopup.visible
-{
+.msgPopup.visible {
     opacity: 1;
 }
 
-h1
-{
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    color: white;
+h1, h2 {
+    color: #4a2e1b;
     text-transform: uppercase;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    border-bottom: 2px double #a0845e;
+    padding-bottom: 0.5rem;
     margin-bottom: 2rem;
-    text-shadow: 0 0 15px rgba(78, 168, 222, 0.4);
-    text-align: center;
+    text-shadow: none;
 }
 
-h2
-{
+h2 {
     font-size: clamp(1.5rem, 4vw, 2.2rem);
-    color: white;
     margin-bottom: 1.5rem;
-    text-align: center;
 }
 
-h5
-{
+h5 {
     text-align: center;
+    color: #6f5a44;
 }
 
-.menuButtons
-{
+.menuButtons {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     width: min(90vw, 280px);
 }
 
-button
-{
-    background: grey;
-    color: white;
-    border: 2px solid black;
+button {
+    background: #e6d8bc;
+    color: #2e241a;
+    border: 2px solid #9b8b72;
     padding: 0.85rem 1.5rem;
     font-size: 1.1rem;
-    font-weight: 600;
-    border-radius: 6px;
+    font-weight: bold;
+    border-radius: 30px;
     cursor: pointer;
-    transition: all 0.15s ease-in-out;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    box-shadow: 0 4px 0 #7a5c3a;
+    margin-top: 0.5rem;
 }
 
-button:hover
-{
-    background: darkgrey;
-    color: black;
+button:hover {
+    background: #dac9a8;
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(72, 202, 228, 0.4);
+    box-shadow: 0 6px 0 #7a5c3a;
 }
 
-button:active
-{
-    transform: translateY(0);
+button:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #7a5c3a;
 }
 
-.btnWarn
-{
-    border-color: red;
-    background: maroon;
+.btnWarn {
+    border-color: #a0845e;
+    background: #f3ecd8;
+    color: maroon;
 }
 
-.btnWarn:hover
-{
-    background: brown;
-    color: white;
-    box-shadow: 0 5px 15px rgba(230, 57, 70, 0.4);
+.btnWarn:hover {
+    background: #e6d8bc;
+    color: darkred;
 }
 
-#saveScreen
-{
-    gap: 0.5rem;
-}
-
-.saveSlotContainer
-{
+.saveSlotContainer {
     width: min(90vw, 550px);
     margin-bottom: 0.5rem;
 }
 
-.saveSlot
-{
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+.saveSlot {
+    background: #f3ecd8;
+    border: 1px solid #b09b7e;
     border-radius: 8px;
     padding: 1rem 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: safe center;
+    box-shadow: inset 0 0 0 1px #e6d8bc, 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.saveSlotInfo h3
-{
-    color: lightblue;
+.saveSlotInfo h3 {
+    color: #4a2e1b;
     font-size: 1.2rem;
 }
 
-
-.saveSlotWrapper
-{
+.saveSlotWrapper {
     display: flex;
     flex-direction: column;
     align-items: safe center;
     width: 100%;
 }
 
-.slotDetails
-{
-    color: lightgray;
+.slotDetails {
+    color: #6f5a44;
     font-size: 0.9rem;
     margin-top: 0.2rem;
+    font-style: italic;
 }
 
-.slotActions
-{
+.slotActions {
     display: flex;
     gap: 0.5rem;
 }
 
-#confirmDelete
-{
+#confirmDelete {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 100;
     pointer-events: auto;
-
-    background: #212121;
-    border: 1px solid #6b6b6b;
+    background: #fcf7e8;
+    border: 2px solid #b09b7e;
     border-radius: 8px;
     padding: 24px 32px;
-
     max-width: 400px;
     text-align: safe center;
-
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
 
-#confirmDelete h2
-{
+#confirmDelete h2 {
     margin: 12px 0 20px;
 }
 
-#btnSaveBack, #btnSettingsBack, #btnCreditsBack
-{
+#btnSaveBack, #btnSettingsBack, #btnCreditsBack {
     margin-top: 1.5rem;
     width: min(90vw, 200px);
 }
 
-.settingsPanel
-{
+.settingsPanel {
     display: flex;
     flex-direction: column;
     align-items: safe center;
@@ -319,11 +281,9 @@ button:active
     width: min(90vw, 500px);
     max-height: 85dvh;
     text-align: safe center;
-
 }
 
-.settingTabs
-{
+.settingTabs {
     display: flex;
     gap: 0.5rem;
     width: 100%;
@@ -331,34 +291,35 @@ button:active
     flex-shrink: 0;
 }
 
-.settingsPanel
-{
-    display: flex;
-    flex-direction: column;
-}
-
-.tabBtn
-{
+.tabBtn {
     flex: 1 1 0px;
     background: transparent;
     border: none;
     border-bottom: 3px solid transparent;
     border-radius: 0;
     padding: 0.5rem;
-    color: lightgray;
+    color: #6f5a44;
     text-align: safe center;
     white-space: nowrap;
+    box-shadow: none;
+    font-family: inherit;
 }
 
-.tabBtn.active
-{
-    color: skyblue;
-    border-bottom-color: skyblue;
+.tabBtn:hover {
+    transform: none;
+    box-shadow: none;
+    background: rgba(176, 155, 126, 0.2);
 }
 
-.settingContent
-{
-    background: rgba(0, 0, 0, 0.25);
+.tabBtn.active {
+    color: #4a2e1b;
+    border-bottom-color: #4a2e1b;
+    font-weight: bold;
+}
+
+.settingContent {
+    background: #fcf7e8;
+    border: 1px solid #b09b7e;
     border-radius: 8px;
     padding: 1.5rem;
     width: 100%;
@@ -366,15 +327,14 @@ button:active
     overflow-y: auto;
     box-sizing: border-box;
     margin-bottom: 1.5rem;
+    box-shadow: inset 0 0 0 1px #e6d8bc;
 }
 
-.tabPanel
-{
+.tabPanel {
     width: 100%;
 }
 
-.settingRow
-{
+.settingRow {
     display: flex;
     justify-content: space-between;
     align-items: safe center;
@@ -382,74 +342,63 @@ button:active
     gap: 1rem;
 }
 
-.settingRowCenterOverride
-{
+.settingRowCenterOverride {
     justify-content: safe center;
 }
 
-#settingsScreen > button:last-child
-{
+#settingsScreen > button:last-child {
     flex-shrink: 0;
     width: 100%;
 }
 
-input[type="range"]
-{
+input[type="range"] {
     width: 200px;
-    accent-color: skyblue;
+    accent-color: #7a5c3a;
     cursor: pointer;
 }
 
-.controlsOverview
-{
+.controlsOverview {
     width: 260px;
     margin: 0 auto;
 }
 
-.controlsOverview p
-{
+.controlsOverview p {
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.5rem;
-    color: white;
+    color: #2e241a;
 }
 
-.controlsOverview p strong
-{
-    color: white;
+.controlsOverview p strong {
+    color: #4a2e1b;
 }
 
-.controlsOverview p span
-{
-    color: lightgray;
+.controlsOverview p span {
+    color: #6f5a44;
 }
 
-.creditsContent
-{
+.creditsContent {
     width: min(90vw, 500px);
     margin: 0 auto;
     line-height: 2rem;
     margin-bottom: 1rem;
 }
 
-.creditsContent p
-{
+.creditsContent p {
     display: flex;
     justify-content: space-between;
+    color: #2e241a;
 }
 
-.creditsContent strong
-{
-    color: skyblue;
+.creditsContent strong {
+    color: #4a2e1b;
 }
 
-.creditsContent span
-{
-    color: lightgray;
+.creditsContent span {
+    color: #6f5a44;
 }
 
-#dpad
-{
+#dpad {
     position: absolute;
     bottom: 30px;
     left: 30px;
@@ -462,52 +411,53 @@ input[type="range"]
     pointer-events: auto;
 }
 
-.dpadBtn
-{
-    background: rgba(255, 255, 255, 0.15);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    color: white;
+.dpadBtn {
+    background: #e6d8bc;
+    border: 2px solid #9b8b72;
+    color: #4a2e1b;
     font-size: 1.5rem;
     border-radius: 8px;
     touch-action: none;
+    box-shadow: none;
+    padding: 0;
 }
 
-#dpadUp
-{
+.dpadBtn:hover {
+    transform: none;
+    box-shadow: none;
+    background: #dac9a8;
+}
+
+#dpadUp {
     grid-column: 2;
     grid-row: 1;
 }
 
-#dpadDown
-{
+#dpadDown {
     grid-column: 2;
     grid-row: 3;
 }
 
-#dpadRight
-{
+#dpadRight {
     grid-column: 3;
     grid-row: 2;
 }
 
-#dpadLeft
-{
+#dpadLeft {
     grid-column: 1;
     grid-row: 2;
 }
 
-.pauseBtnMobile
-{
+.pauseBtnMobile {
     position: absolute;
     top: 25px;
     right: 30px;
     width: 50px;
     height: 50px;
     font-size: 15px;
-    background: rgba(0, 0, 0, 0.1);
-    align-items: safe center;
-    color: white;
-    border: 2px solid white;
+    background: #e6d8bc;
+    color: #4a2e1b;
+    border: 2px solid #9b8b72;
     border-radius: 8px;
     z-index: 100;
     cursor: pointer;
@@ -515,44 +465,37 @@ input[type="range"]
     pointer-events: auto;
     text-align: center;
     justify-content: center;
+    box-shadow: none;
 }
 
-.pauseBtnMobile:active
-{
-    background: rgba(225, 225, 225, 0.3);
+.pauseBtnMobile:active {
+    background: #dac9a8;
 }
 
-.pauseBtnMobile.inMinigame
-{
-    background-color: #c70902;
-    color: white;
-}
-
-.vehicleTimerDisplay
-{
+.vehicleTimerDisplay {
     position: absolute;
     top: 15px;
     left: 50%;
     transform: translateX(-50%);
-    color: white;
+    color: #4a2e1b;
+    background: #f3ecd8;
+    border: 1px solid #b09b7e;
     padding: 0.5rem 1rem;
     border-radius: 8px;
     font-size: 1.2rem;
     font-weight: 600;
-    font-size: large;
     z-index: 30;
     pointer-events: none;
+    font-family: inherit;
 }
 
-.vehicleBlueprint
-{
+.vehicleBlueprint {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(243, 236, 216, 0.9);
     display: flex;
     justify-content: safe center;
     align-items: safe center;
@@ -560,20 +503,19 @@ input[type="range"]
     pointer-events: auto;
 }
 
-.vehicleBlueprintPanel
-{
-    background: rgba(57, 55, 55, 0.9);
+.vehicleBlueprintPanel {
+    background: #fcf7e8;
+    border: 1px solid #b09b7e;
     border-radius: 10px;
     padding: 1.5rem 2rem;
     width: min(90vw, 400px);
     max-height: 80dvh;
     overflow-y: auto;
     text-align: safe center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
 
-}   
-
-.vehiclePartsList
-{
+.vehiclePartsList {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -581,152 +523,127 @@ input[type="range"]
     text-align: left;
 }
 
-.vehiclePartRow
-{
+.vehiclePartRow {
     display: flex;
     justify-content: space-between;
     padding: 0.4rem 0.6rem;
     border-radius: 6px;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(176, 155, 126, 0.1);
+    border-bottom: 1px dotted #d6c6aa;
 }
 
-.vehiclePartRow.done
-{
-    background: rgba(0, 255, 0, 0.1);
+.vehiclePartRow.done {
+    background: rgba(50, 200, 50, 0.1);
 }
 
-#mapOverlay
-{
+#mapOverlay {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-
     width: 75%;
     height: 75%;
-
-    background: rgba(248, 245, 60, 0.681);
-
+    background: rgba(243, 236, 216, 0.95);
+    border: 2px solid #b09b7e;
+    border-radius: 8px;
     z-index: 500;
     pointer-events: auto;
-
-    
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
 
-#actionBtnMbl
-{
+#actionBtnMbl {
     position: absolute;
     bottom: 30px;
     right: 30px;
     width: 150px;
     height: 150px;
-
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
-
     z-index: 20;
     pointer-events: auto;
 }
 
-.actionBtn
-{
+.actionBtn {
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.15);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-
-    color: white;
+    background: #e6d8bc;
+    border: 2px solid #9b8b72;
+    color: #4a2e1b;
     font-size: 1.3rem;
     font-weight: 700;
     touch-action: manipulation;
+    box-shadow: none;
+    padding: 0;
 }
 
-#interactBtn
-{
+.actionBtn:hover {
+    transform: none;
+    box-shadow: none;
+    background: #dac9a8;
+}
+
+#interactBtn {
     grid-column: 1;
     grid-row: 1;
 }
 
-#mapBtn
-{
+#mapBtn {
     grid-column: 2;
     grid-row: 2;
 }
 
-
-@media(max-height: 500px)
-{
-    .saveSlotWrapper
-    {
+@media(max-height: 500px) {
+    .saveSlotWrapper {
         flex-direction: row;
         gap: 1rem;
         width: min(95vw, 900px);
         justify-content: safe center;
     }
-
-    .saveSlotContainer
-    {
+    .saveSlotContainer {
         flex: 1 1 0;
         min-width: 0;
         width: auto;
         margin-bottom: 0;
     }
-
-    .saveSlot
-    {
+    .saveSlot {
         flex-direction: column;
         align-items: safe center;
         text-align: center;
         gap: 0.5rem;
         padding: 0.75rem 1rem;
     }
-
-    .slotActions
-    {
+    .slotActions {
         width: 100%;
     }
-
-    .slotActions button
-    {
+    .slotActions button {
         flex: 1;
         font-size: 0.9rem;
         padding: 0.5rem 0.75rem;
     }
-
-    #saveScreen h2
-    {
+    #saveScreen h2 {
         margin-bottom: 1rem;
     }
 }
 
-@media(max-height: 500px), (max-width: 900px)
-{
-    button
-    {
+@media(max-height: 500px), (max-width: 900px) {
+    button {
         padding: 0.5rem 1rem;
         font-size: 0.9rem;
         border-width: 1px;
     }
-
-    .menuButtons
-    {
+    .menuButtons {
         gap: 0.5rem;
     }
-
-    h1
-    {
+    h1 {
         margin-bottom: 1rem;
     }
-
-    h2
-    {
+    h2 {
         margin-bottom: 0.75rem;
     }
 }
 
-.cutsceneOverlay
-{
-    background-color: rgba(0, 0, 0, 0.95);
+.cutsceneOverlay {
+    background-color: rgba(30, 26, 21, 0.98);
     display: flex;
     flex-direction: column;
     align-items: column;
@@ -734,24 +651,19 @@ input[type="range"]
     z-index: 1000;
 }
 
-.cutsceneTitle
-{
-    color: white;
+.cutsceneTitle {
+    color: #f3ecd8;
     font-size: 3rem;
     margin-bottom: 2rem;
 }
 
-.cutsceneBtn
-{
+.cutsceneBtn {
     padding: 12px 32px;
     font-size: 1.2rem;
     cursor: pointer;
 }
 
-/*achievement stuff below*/
-
-.achievementsGrid
-{
+.achievementsGrid {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
@@ -759,8 +671,7 @@ input[type="range"]
     padding: 1.5rem 0;
 }
 
-.achievementCard
-{
+.achievementCard {
     width: 64px;
     height: 64px;
     display: flex;
@@ -768,83 +679,74 @@ input[type="range"]
     justify-content: center;
     font-size: 2rem;
     border-radius: 12px;
-    background: #2a2a2a;
+    background: #e6d8bc;
+    border: 2px solid #b09b7e;
     cursor: pointer;
     transition: transform 0.2s ease, filter 0.2s ease;
+    box-shadow: inset 0 0 0 1px #fcf7e8;
 }
 
-.achievementCard:hover
-{
+.achievementCard:hover {
     transform: scale(1.08);
 }
 
-.achievementCard.locked
-{
-    opacity: 0.5;
-    filter: grayscale(1);
+.achievementCard.locked {
+    opacity: 0.6;
+    filter: grayscale(1) sepia(0.5);
 }
 
-.achievementCard.unlocked
-{
-    border-color: lightgreen;
-    background: rgba(76, 175, 80, 0.15);
+.achievementCard.unlocked {
+    border-color: #7a5c3a;
+    background: rgba(176, 155, 126, 0.4);
 }
 
-.achievementPopup
-{
-    border: 1px solid rgba(0, 0, 0, 0.2);
+.achievementPopup {
+    border: 2px solid #b09b7e;
     border-radius: 12px;
-    background: #1e1e1e;
-    color: white;
+    background: #fcf7e8;
+    color: #2e241a;
     padding: 1.5rem;
     text-align: center;
     width: min(90vw, 320px);
-
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     margin: 0;
-
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
 
-.achievementPopup::backdrop
-{
-    background: rgba(0,0,0,0.6);
+.achievementPopup::backdrop {
+    background: rgba(30, 26, 21, 0.8);
     backdrop-filter: blur(3px);
 }
 
-.popupIcon
-{
+.popupIcon {
     font-size: 3rem;
     display: block;
     margin-bottom: 0.5rem;
 }
 
-.popupContent
-{
+.popupContent {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.75rem;
 }
 
-.popupContent p
-{
-    color: #ccc;
+.popupContent p {
+    color: #6f5a44;
     font-size: 0.9rem;
     line-height: 1.4;
     margin-bottom: 0.5rem;
 }
 
-.achievementPopup button
-{
+.achievementPopup button {
     width: auto;
     min-width: 100px;
     padding: 0.4rem 1.2rem;
     font-size: 0.9rem;
     margin-top: 0.5rem;
-    border-radius: 6px;
+    border-radius: 30px;
     cursor: pointer;
 }

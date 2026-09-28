@@ -1,0 +1,850 @@
+* 
+{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+}
+
+html, body
+{
+    margin: 0;
+    padding: 0;
+    width: 100dvw;
+    height: 100dvh;
+    overflow: hidden;
+    background-color: black;
+}
+
+body
+{
+    background-color: black;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: safe center;
+    align-items: safe center;
+    min-height: 100dvh;
+    overflow: hidden;
+
+}
+
+.gameContainer
+{
+    position: relative;
+    width: 100vw;
+    height: 100dvh;
+    background-color: black;
+
+    /** Background Image if already present, just uncomment this
+    background-image: url('assets/bg/mainMenuBG.png');
+    background-size: cover;
+    background-position: safe center;
+    **/
+
+    border: 4px solid black;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+}
+
+#gameCanvas
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+#uiOverlay
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+
+    display: flex;
+    justify-content: safe center;
+    align-items: safe center;
+}
+
+.uiScreen
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100dvw;
+    height: 100dvh;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    flex-direction: column;
+    justify-content: safe center;
+    align-items: safe center;
+    pointer-events: auto;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 10;
+
+    padding: 2rem 1rem;
+    max-height: 100dvh;
+    overflow-y: auto;
+}
+
+.hidden
+{
+    display: none !important; /*!important makes it well... the most important thing*/
+}
+
+.topNavLinks
+{
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    pointer-events: auto;
+}
+
+.navRight
+{
+    display: flex;
+    gap: 8px;
+}
+
+.topNavBtn
+{
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 6px 12px;
+    font-size: 12px;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.topNavBtn:hover
+{
+    background: rgba(255, 255, 255, 0.2);
+    border-color: white;
+    color: snow;
+}
+
+.msgPopup
+{
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    z-index: 200;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.msgPopup.visible
+{
+    opacity: 1;
+}
+
+h1
+{
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 15px rgba(78, 168, 222, 0.4);
+    text-align: center;
+}
+
+h2
+{
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    color: white;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+h5
+{
+    text-align: center;
+}
+
+.menuButtons
+{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: min(90vw, 280px);
+}
+
+button
+{
+    background: grey;
+    color: white;
+    border: 2px solid black;
+    padding: 0.85rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+
+button:hover
+{
+    background: darkgrey;
+    color: black;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(72, 202, 228, 0.4);
+}
+
+button:active
+{
+    transform: translateY(0);
+}
+
+.btnWarn
+{
+    border-color: red;
+    background: maroon;
+}
+
+.btnWarn:hover
+{
+    background: brown;
+    color: white;
+    box-shadow: 0 5px 15px rgba(230, 57, 70, 0.4);
+}
+
+#saveScreen
+{
+    gap: 0.5rem;
+}
+
+.saveSlotContainer
+{
+    width: min(90vw, 550px);
+    margin-bottom: 0.5rem;
+}
+
+.saveSlot
+{
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: safe center;
+}
+
+.saveSlotInfo h3
+{
+    color: lightblue;
+    font-size: 1.2rem;
+}
+
+
+.saveSlotWrapper
+{
+    display: flex;
+    flex-direction: column;
+    align-items: safe center;
+    width: 100%;
+}
+
+.slotDetails
+{
+    color: lightgray;
+    font-size: 0.9rem;
+    margin-top: 0.2rem;
+}
+
+.slotActions
+{
+    display: flex;
+    gap: 0.5rem;
+}
+
+#confirmDelete
+{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    pointer-events: auto;
+
+    background: #212121;
+    border: 1px solid #6b6b6b;
+    border-radius: 8px;
+    padding: 24px 32px;
+
+    max-width: 400px;
+    text-align: safe center;
+
+}
+
+#confirmDelete h2
+{
+    margin: 12px 0 20px;
+}
+
+#btnSaveBack, #btnSettingsBack, #btnCreditsBack
+{
+    margin-top: 1.5rem;
+    width: min(90vw, 200px);
+}
+
+.settingsPanel
+{
+    display: flex;
+    flex-direction: column;
+    align-items: safe center;
+    justify-content: center;
+    width: min(90vw, 500px);
+    max-height: 85dvh;
+    text-align: safe center;
+
+}
+
+.settingTabs
+{
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+    margin-bottom: 1rem;
+    flex-shrink: 0;
+}
+
+.settingsPanel
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.tabBtn
+{
+    flex: 1 1 0px;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    border-radius: 0;
+    padding: 0.5rem;
+    color: lightgray;
+    text-align: safe center;
+    white-space: nowrap;
+}
+
+.tabBtn.active
+{
+    color: skyblue;
+    border-bottom-color: skyblue;
+}
+
+.settingContent
+{
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+    padding: 1.5rem;
+    width: 100%;
+    height: 220px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    margin-bottom: 1.5rem;
+}
+
+.tabPanel
+{
+    width: 100%;
+}
+
+.settingRow
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: safe center;
+    width: 100%;
+    gap: 1rem;
+}
+
+.settingRowCenterOverride
+{
+    justify-content: safe center;
+}
+
+#settingsScreen > button:last-child
+{
+    flex-shrink: 0;
+    width: 100%;
+}
+
+input[type="range"]
+{
+    width: 200px;
+    accent-color: skyblue;
+    cursor: pointer;
+}
+
+.controlsOverview
+{
+    width: 260px;
+    margin: 0 auto;
+}
+
+.controlsOverview p
+{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.controlsOverview p strong
+{
+    color: white;
+}
+
+.controlsOverview p span
+{
+    color: lightgray;
+}
+
+.creditsContent
+{
+    width: min(90vw, 500px);
+    margin: 0 auto;
+    line-height: 2rem;
+    margin-bottom: 1rem;
+}
+
+.creditsContent p
+{
+    display: flex;
+    justify-content: space-between;
+}
+
+.creditsContent strong
+{
+    color: skyblue;
+}
+
+.creditsContent span
+{
+    color: lightgray;
+}
+
+#dpad
+{
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    width: 150px;
+    height: 150px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    z-index: 20;
+    pointer-events: auto;
+}
+
+.dpadBtn
+{
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 1.5rem;
+    border-radius: 8px;
+    touch-action: none;
+}
+
+#dpadUp
+{
+    grid-column: 2;
+    grid-row: 1;
+}
+
+#dpadDown
+{
+    grid-column: 2;
+    grid-row: 3;
+}
+
+#dpadRight
+{
+    grid-column: 3;
+    grid-row: 2;
+}
+
+#dpadLeft
+{
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.pauseBtnMobile
+{
+    position: absolute;
+    top: 25px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    font-size: 15px;
+    background: rgba(0, 0, 0, 0.1);
+    align-items: safe center;
+    color: white;
+    border: 2px solid white;
+    border-radius: 8px;
+    z-index: 100;
+    cursor: pointer;
+    touch-action: manipulation;
+    pointer-events: auto;
+    text-align: center;
+    justify-content: center;
+}
+
+.pauseBtnMobile:active
+{
+    background: rgba(225, 225, 225, 0.3);
+}
+
+.pauseBtnMobile.inMinigame
+{
+    background-color: #c70902;
+    color: white;
+}
+
+.vehicleTimerDisplay
+{
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    font-size: large;
+    z-index: 30;
+    pointer-events: none;
+}
+
+.vehicleBlueprint
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: safe center;
+    align-items: safe center;
+    z-index: 150;
+    pointer-events: auto;
+}
+
+.vehicleBlueprintPanel
+{
+    background: rgba(57, 55, 55, 0.9);
+    border-radius: 10px;
+    padding: 1.5rem 2rem;
+    width: min(90vw, 400px);
+    max-height: 80dvh;
+    overflow-y: auto;
+    text-align: safe center;
+
+}   
+
+.vehiclePartsList
+{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    text-align: left;
+}
+
+.vehiclePartRow
+{
+    display: flex;
+    justify-content: space-between;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.vehiclePartRow.done
+{
+    background: rgba(0, 255, 0, 0.1);
+}
+
+#mapOverlay
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 75%;
+    height: 75%;
+
+    background: rgba(248, 245, 60, 0.681);
+
+    z-index: 500;
+    pointer-events: auto;
+
+    
+}
+
+#actionBtnMbl
+{
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    width: 150px;
+    height: 150px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+
+    z-index: 20;
+    pointer-events: auto;
+}
+
+.actionBtn
+{
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+
+    color: white;
+    font-size: 1.3rem;
+    font-weight: 700;
+    touch-action: manipulation;
+}
+
+#interactBtn
+{
+    grid-column: 1;
+    grid-row: 1;
+}
+
+#mapBtn
+{
+    grid-column: 2;
+    grid-row: 2;
+}
+
+
+@media(max-height: 500px)
+{
+    .saveSlotWrapper
+    {
+        flex-direction: row;
+        gap: 1rem;
+        width: min(95vw, 900px);
+        justify-content: safe center;
+    }
+
+    .saveSlotContainer
+    {
+        flex: 1 1 0;
+        min-width: 0;
+        width: auto;
+        margin-bottom: 0;
+    }
+
+    .saveSlot
+    {
+        flex-direction: column;
+        align-items: safe center;
+        text-align: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+    }
+
+    .slotActions
+    {
+        width: 100%;
+    }
+
+    .slotActions button
+    {
+        flex: 1;
+        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    #saveScreen h2
+    {
+        margin-bottom: 1rem;
+    }
+}
+
+@media(max-height: 500px), (max-width: 900px)
+{
+    button
+    {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        border-width: 1px;
+    }
+
+    .menuButtons
+    {
+        gap: 0.5rem;
+    }
+
+    h1
+    {
+        margin-bottom: 1rem;
+    }
+
+    h2
+    {
+        margin-bottom: 0.75rem;
+    }
+}
+
+.cutsceneOverlay
+{
+    background-color: rgba(0, 0, 0, 0.95);
+    display: flex;
+    flex-direction: column;
+    align-items: column;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.cutsceneTitle
+{
+    color: white;
+    font-size: 3rem;
+    margin-bottom: 2rem;
+}
+
+.cutsceneBtn
+{
+    padding: 12px 32px;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+/*achievement stuff below*/
+
+.achievementsGrid
+{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    padding: 1.5rem 0;
+}
+
+.achievementCard
+{
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    border-radius: 12px;
+    background: #2a2a2a;
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.achievementCard:hover
+{
+    transform: scale(1.08);
+}
+
+.achievementCard.locked
+{
+    opacity: 0.5;
+    filter: grayscale(1);
+}
+
+.achievementCard.unlocked
+{
+    border-color: lightgreen;
+    background: rgba(76, 175, 80, 0.15);
+}
+
+.achievementPopup
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    background: #1e1e1e;
+    color: white;
+    padding: 1.5rem;
+    text-align: center;
+    width: min(90vw, 320px);
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.achievementPopup::backdrop
+{
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(3px);
+}
+
+.popupIcon
+{
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.popupContent
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.popupContent p
+{
+    color: #ccc;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+}
+
+.achievementPopup button
+{
+    width: auto;
+    min-width: 100px;
+    padding: 0.4rem 1.2rem;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
