@@ -36,6 +36,19 @@ body {
     overflow: hidden;
 }
 
+#mainMenu {
+    background: url('assets/bg/startBg.png') center/75% no-repeat rgba(243, 236, 216, 0.95);
+    justify-content: center;    
+    align-items: flex-end;      
+    padding-right: 15vw;  
+    padding-bottom: 15vh;
+}
+
+#mainMenu h1 {
+    text-align: right;
+    font-size: clamp(1.5rem, 3.7vw, 2.5rem);
+}
+
 #gameCanvas {
     position: absolute;
     top: 0;

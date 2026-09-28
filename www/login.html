@@ -14,43 +14,44 @@
     <body>
         <!--simple notice and what not-->
         <div id="mobileBlocker">
-            <h2 style="color: maroon; ">Desktop Only Page</h2>
-            <p> We apolgogize but this portal requires a wider screen. Please view on desktop or in a wider screen <br>(Translataion: I'm too lazy to set up mobile port at the moment ~ lead programmer)</p>
+            <h2>ACCESS RESTRICTED</h2>
+            <p>Please access this terminal via desktop screen size for optimal viewing.</p>
         </div>
 
-        <div class="staticPageContainer">
-            <h1>Login</h1>
-            <br>
-            
-            <form id="loginForm" onsubmit="handleLogin(event)" style="display:flex; flex-direction: column;gap: 1.25rem; align-items: center;">
-                <div style="width: 100%; max-width: 320px; text-align: left;">
-                    <label for="username" style="display: block; margin-bottom: 0.4rem; color: skyblue; font-size: 0.9rem;">Username</label>
-                    <input type="text" id="username" required style="width:100%; padding: 0.75rem; border-radius: 6px; border: 1px solid #334155; background: #121826; color: snow; font-family: inherit;">
+        <div class="indexCard">
+            <div class="page">
+                <header class="archiveHeader">
+                    <h1>LOGIN</h1>
+                    <div class="subtitle">Enter your credentials to login</div>
+                </header>
+
+                <div id="loginMessage" style="margin-bottom: 1rem; font-weight: bold; text-align: center;"></div>
+
+                <form class="authForm" id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="formGroup">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required autocomplete="username">
+                    </div>
+
+                    <div class="formGroup">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required autocomplete="current-password">
+                    </div>
+
+                    <div class="buttonWrap" style="margin-top: 1rem;">
+                        <button type="submit" class="navBtn" style="width: 100%;">LOGIN</button>
+                    </div>
+                </form>
+
+                <div class="authFooter">
+                    Don't have an account? 
+                    <a onclick="window.location.href='register.html'">REGISTER</a>
                 </div>
 
-                <div style="width: 100%; max-width: 320px; text-align: left;">
-                    <label for="password" style="display: block; margin-bottom: 0.4rem; color: skyblue; font-size: 0.9rem;">Password</label>
-                    <input type="password" id="password" required style="width:100%; padding: 0.75rem; border-radius: 6px; border: 1px solid #334155; background: #121826; color: snow; font-family: inherit;">
+                <div class="buttonWrap">
+                    <button type="button" class="navBtn" onclick="window.location.href='index.html'">BACK TO MAIN MENU</button>
                 </div>
-
-                <p id="loginMessage" style="color: #f87171; font-size: 0.9rem; min-height: 1.2rem; margin: 0;"></p>
-                
-                <div style="display: flex; gap: 1rem; margin-top: 0.5rem; justify-content: center; width: 100%;">
-
-                    <button type="button" class="navBtn" style="width: 15%; padding: 0.6rem 1.8rem; margin: 0;" onclick="window.location.href='index.html'">
-                        <span class="btnTitle">Cancel</span>
-                    </button>
-
-                    <button type="submit" class="navBtn" style="width: 15%; padding: 0.6rem 1.8rem; margin: 0;">
-                        <span class="btnTitle">Submit</span>
-                    </button>
-
-                    <button type="submit" id="registerBtn" class="navBtn" onclick="window.location.href='register.html'" style="width: 15%; padding: 0.6rem 1.8rem; margin: 0;">
-                        <span class="btnTitle">Register</span>
-                    </button>
-                    
-                </div>
-            </form>
+            </div>
         </div>
     </body>
 </html>

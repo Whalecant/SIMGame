@@ -114,6 +114,8 @@ class forestLevel2Minigame extends forestPlatformMinigame
         this.mirrors = [];
         this.seeds = [];
         this.batteries = [];
+        this.lightSensors = [];
+        this.lightSources = [];
         this.prompts = [];
         this.player.width = this.worldWidth / 50;
         this.player.height = this.worldHeight / 50 * 2;

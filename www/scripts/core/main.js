@@ -119,10 +119,10 @@ const Game =
                     interact();
                 }
 
-                if(Input.consumePress('m'))
-                {
-                    toggleMap();
-                }
+                // if(Input.consumePress('m'))
+                // {
+                //     toggleMap();
+                // }
             }
 
             if(window.Player && typeof window.Player.update === 'function' && !this.inMinigame)
@@ -234,15 +234,15 @@ function interact()
 
     if(window.Vehicle && window.Player && window.roomManager && roomManager.currRoomId === 'hub' && Vehicle.nearPlayer(Player))
     {
-        if(Vehicle.isFullyRepaired())
-        {
+        // if(Vehicle.isFullyRepaired())
+        // {
             if(confirm("All 8 parts installed! Enter final level?"))
             {
                 startMinigameInstance('redNode', null);
             }
             return;
 
-        }
+        // }
 
         openVehicleBlueprint();
         return;
@@ -323,33 +323,33 @@ function startMinigameInstance(mgId, rewardPartKey)
     }
 }
 
-function toggleMap()
-{
-    if(!(window.overworld && overworld.showActionBtn()))
-    {
-        return;
-    }
+// function toggleMap()
+// {
+//     if(!(window.overworld && overworld.showActionBtn()))
+//     {
+//         return;
+//     }
 
-    Game.mapOpen = true;
+//     Game.mapOpen = true;
 
-    const mapOverlay = document.getElementById('mapOverlay')
+//     const mapOverlay = document.getElementById('mapOverlay')
 
-    if(mapOverlay)
-    {
-        mapOverlay.classList.remove('hidden');
-    }
+//     if(mapOverlay)
+//     {
+//         mapOverlay.classList.remove('hidden');
+//     }
 
-    showMobileControls(false);
-    showActionBtn(false);
+//     showMobileControls(false);
+//     showActionBtn(false);
 
-    //this overly added shit is just to make sure its safe
+//     //this overly added shit is just to make sure its safe
 
-    document.removeEventListener('click', closeMap)
-    setTimeout(() =>
-    {
-        document.addEventListener('click', closeMap);
-    }, 0);
-}
+//     document.removeEventListener('click', closeMap)
+//     setTimeout(() =>
+//     {
+//         document.addEventListener('click', closeMap);
+//     }, 0);
+// }
 
 function closeMap()
 {

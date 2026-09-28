@@ -16,7 +16,7 @@ class forestLevel1Minigame extends forestPlatformMinigame
                 [14, 34, 17, 34], [19, 37, 22, 37], [24, 40, 27, 40],
                 [29, 43, 32, 43], [1, 48, 50, 48]
             ]),
-            boxes: [],
+            boxes: [ { ...this.cellRect(21, 21), name: '箱子' }],
             keys: [{ ...this.cellRect(5, 27), color: 'orange', name: '钥匙1' }],
             locks: [{ ...this.cellRect(29, 10), color: 'blue', name: '机关2' }],
             doors: [

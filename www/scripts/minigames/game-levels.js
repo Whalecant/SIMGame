@@ -9,7 +9,7 @@ class forestPlatformMinigame extends baseMinigame
         this.spriteLoaded = false;
         this.sprite.onload = () => { this.spriteLoaded = true; };
         this.mapImages = {};
-        for(const imageName of ['background1', 'wall', 'key', 'destination', 'lock', 'door', 'trap'])
+        for(const imageName of ['background1', 'wall', 'key', 'destination', 'lock', 'door', 'Door 11', 'trap'])
         {
             const image = new Image();
             image.src = `./assets/map/${imageName}.png`;
@@ -27,7 +27,7 @@ class forestPlatformMinigame extends baseMinigame
         this.itemUnit = this.wallUnit;
         this.gravity = 1800;
         this.runSpeed = 150;
-        this.jumpHeight = this.wallUnit * 4;
+        this.jumpHeight = 96;
         this.jumpSpeed = Math.sqrt(2 * this.gravity * this.jumpHeight);
         this.spawn = { x: 120, y: 592 };
         this.isComplete = false;
@@ -65,9 +65,6 @@ class forestPlatformMinigame extends baseMinigame
         this.doors = [];
         this.hiddenDoors = [];
         this.pressurePlates = [];
-        this.photosensitiveSwitches = [];
-        this.movingBlocks = [];
-        this.lightSources = [];
         this.traps = [];
         this.fragileWalls = [];
         this.machines = [];
@@ -75,6 +72,8 @@ class forestPlatformMinigame extends baseMinigame
         this.mirrors = [];
         this.seeds = [];
         this.batteries = [];
+        this.lightSensors = [];
+        this.lightSources = [];
 
         this.goal = { x: 1130, y: this.worldHeight - this.wallUnit * 2, width: this.itemUnit, height: this.itemUnit * 2 };
         this.player =
@@ -98,7 +97,6 @@ class forestPlatformMinigame extends baseMinigame
         this.normalPlayerHeight = this.player.height;
 
         this.machine = null;
-        this.lightSources = [];
         this.beamSegments = [];
     }
 
@@ -142,9 +140,7 @@ class forestPlatformMinigame extends baseMinigame
         this.updateBoxes(dt);
         this.updateKeys(dt);
         this.updatePressurePlates();
-        this.updatePhotosensitiveSwitches();
-        this.updateBrickSwitches();
-        this.updateMovingBlocks(dt);
+        this.updateMovableBoxes(dt);
 
         if(movingLeft)
         {
@@ -166,8 +162,7 @@ class forestPlatformMinigame extends baseMinigame
         }
 
         player.velocityY += this.gravity * dt;
-        const pushFactor = this.isPushing(player, player.velocityX) ? 0.5 : 1;
-        this.moveHorizontal(player, player.velocityX * pushFactor * dt);
+        this.moveHorizontal(player, player.velocityX * dt);
         this.moveVertical(player, player.velocityY * dt);
         this.updateAnimation(player, dt);
 
@@ -191,7 +186,6 @@ class forestPlatformMinigame extends baseMinigame
         }
 
         this.updateBeam();
-        this.updatePhotosensitiveSwitches();
 
         if(player.y > this.worldHeight + player.height)
         {
@@ -217,7 +211,7 @@ class forestPlatformMinigame extends baseMinigame
     {
         player.x += distance;
 
-        for(const platform of [...this.platforms, ...this.walls, ...this.fragileWalls, ...this.doors.filter(door => door.active !== false), ...this.hiddenDoors.filter(door => door.opened), ...this.movingBlocks])
+        for(const platform of [...this.platforms, ...this.walls, ...this.fragileWalls, ...this.doors.filter(door => door.active !== false), ...this.hiddenDoors.filter(door => door.opened)])
         {
             if(!this.intersects(player, platform))
             {
@@ -237,7 +231,7 @@ class forestPlatformMinigame extends baseMinigame
 
         for(const box of this.boxes)
         {
-            if(!this.intersects(player, box))
+            if(distance === 0 || !this.intersects(player, box))
             {
                 continue;
             }
@@ -299,8 +293,7 @@ class forestPlatformMinigame extends baseMinigame
     {
         const openedHiddenDoors = this.hiddenDoors.filter(door => door.opened);
         const openDoors = this.doors.filter(door => door.active !== false);
-        const movingBlocks = this.movingBlocks.filter(block => block.activeCollision !== false);
-        return [...this.platforms, ...this.walls, ...this.fragileWalls, ...openDoors, ...openedHiddenDoors, ...this.boxes, ...movingBlocks, ...(this.machine ? [this.machine] : [])];
+        return [...this.platforms, ...this.walls, ...this.fragileWalls, ...openDoors, ...openedHiddenDoors, ...this.boxes];
     }
 
     handleControlInteractions()
@@ -354,15 +347,21 @@ class forestPlatformMinigame extends baseMinigame
     updateBeam()
     {
         this.beamSegments = [];
+        this.resetLightActivations();
+
         if(!this.machine)
         {
+            for(const source of this.lightSources)
+            {
+                this.traceBeam(source.x + source.width / 2, source.y + source.height / 2, source.angle, 0);
+            }
             return;
         }
 
-        const sources = this.machine ? [this.machine] : this.lightSources;
-        for(const source of sources)
+        this.traceBeam(this.machine.x + this.machine.width / 2, this.machine.y + this.machine.height / 2, this.machine.angle, 0);
+        for(const source of this.lightSources)
         {
-            this.traceBeam(source.x + source.width / 2, source.y + source.height / 2, source.angle || 0, 0);
+            this.traceBeam(source.x + source.width / 2, source.y + source.height / 2, source.angle, 0);
         }
     }
 
@@ -385,7 +384,7 @@ class forestPlatformMinigame extends baseMinigame
                 break;
             }
 
-            const blocker = [...this.walls, ...this.fragileWalls, ...this.movingBlocks, ...this.doors.filter(door => door.active !== false), ...this.hiddenDoors.filter(door => door.opened)].find(item => this.pointInRect(point, item));
+            const blocker = [...this.walls, ...this.fragileWalls, ...this.doors.filter(door => door.active !== false), ...this.hiddenDoors.filter(door => door.opened), ...this.boxes].filter(item => item.blocksLight !== false).find(item => this.pointInRect(point, item));
             if(blocker)
             {
                 break;
@@ -428,15 +427,79 @@ class forestPlatformMinigame extends baseMinigame
             if(this.pointInRect(point, battery) && battery.color)
             {
                 battery.active = true;
-                this.doors.forEach(door =>
-                {
-                    if(door.color === battery.color)
-                    {
-                        door.active = true;
-                    }
-                });
+                this.activateLightLinkedObjects(battery.channel || battery.color);
             }
         }
+
+        for(const sensor of this.lightSensors)
+        {
+            if(this.pointInRect(point, sensor) && sensor.color)
+            {
+                sensor.active = true;
+                this.activateLightLinkedObjects(sensor.channel || sensor.color);
+            }
+        }
+    }
+
+    resetLightActivations()
+    {
+        this.batteries.forEach(battery => { battery.active = false; });
+        this.lightSensors.forEach(sensor => { sensor.active = false; });
+        this.doors.forEach(door =>
+        {
+            if(door.controlSource === 'light' || door.lightChannel)
+            {
+                door.active = door.lockOpened === true ? false : door.lightOpens === true;
+            }
+        });
+        this.hiddenDoors.forEach(door =>
+        {
+            if(door.controlSource === 'light' || door.lightChannel)
+            {
+                door.opened = false;
+            }
+        });
+        this.boxes.forEach(box =>
+        {
+            if(box.controlSource === 'light')
+            {
+                box.active = !!box.pressureActive;
+                box.lightActive = false;
+                box.activated = false;
+            }
+        });
+    }
+
+    activateLightLinkedObjects(channel)
+    {
+        this.doors.forEach(door =>
+        {
+            if((door.controlSource === 'light' || door.lightChannel === channel) && (door.lightChannel || door.channel || door.color) === channel)
+            {
+                door.active = door.lockOpened === true || door.lightOpens === true ? false : true;
+            }
+            else if(door.lightChannel === channel)
+            {
+                door.active = true;
+            }
+        });
+        this.hiddenDoors.forEach(door =>
+        {
+            if((door.controlSource === 'light' || door.lightChannel === channel) && (door.lightChannel || door.channel || door.color) === channel)
+            {
+                door.opened = true;
+            }
+        });
+        this.boxes.forEach(box =>
+        {
+            if(box.controlSource === 'light' && (box.channel || box.color) === channel)
+            {
+                box.lightActive = true;
+                box.active = true;
+                box.activated = true;
+                box.movementTriggered = true;
+            }
+        });
     }
 
     updateSeedsAndBatteries()
@@ -458,23 +521,69 @@ class forestPlatformMinigame extends baseMinigame
 
     updateBoxes(deltaTime)
     {
+        const colliders = [
+            ...this.platforms,
+            ...this.walls,
+            ...this.fragileWalls,
+            ...this.doors.filter(door => door.active !== false),
+            ...this.hiddenDoors.filter(door => door.opened)
+        ];
+
         for(const box of this.boxes)
         {
-            box.velocityY = (box.velocityY || 0) + this.gravity * deltaTime;
-            box.y += box.velocityY * deltaTime;
-
-            for(const collider of [...this.platforms, ...this.walls, ...this.doors.filter(door => door.active !== false), ...this.hiddenDoors.filter(door => door.opened)])
+            if(box.isMovable)
             {
-                if(!this.intersectsRect(box, collider))
-                {
-                    continue;
-                }
+                continue;
+            }
 
-                if(box.velocityY > 0)
-                {
-                    box.y = collider.y - box.height;
-                    box.velocityY = 0;
-                }
+            box.velocityY = (box.velocityY || 0) + this.gravity * deltaTime;
+            const nextBox = { ...box, y: box.y + box.velocityY * deltaTime };
+            const blockingCollider = [...colliders, ...this.boxes].find(collider =>
+                collider !== box && this.intersectsRect(nextBox, collider)
+            );
+
+            if(blockingCollider && box.velocityY > 0)
+            {
+                box.y = blockingCollider.y - box.height;
+                box.velocityY = 0;
+            }
+            else
+            {
+                box.y = nextBox.y;
+            }
+        }
+    }
+
+    updateMovableBoxes(deltaTime)
+    {
+        const distance = 100 * deltaTime;
+
+        for(const box of this.boxes)
+        {
+            if(!box.isMovable || !box.movementTriggered || box.targetX === undefined || box.targetY === undefined)
+            {
+                continue;
+            }
+
+            const deltaX = box.targetX - box.x;
+            const deltaY = box.targetY - box.y;
+            const length = Math.hypot(deltaX, deltaY);
+            if(length === 0)
+            {
+                continue;
+            }
+
+            const step = Math.min(distance, length);
+            const nextBox = {
+                ...box,
+                x: box.x + deltaX / length * step,
+                y: box.y + deltaY / length * step
+            };
+
+            if(!this.getColliders().some(collider => collider !== box && !collider.isGlass && this.intersectsRect(nextBox, collider)))
+            {
+                box.x = nextBox.x;
+                box.y = nextBox.y;
             }
         }
     }
@@ -483,21 +592,6 @@ class forestPlatformMinigame extends baseMinigame
     {
         const nextBox = { ...box, x: box.x + distance };
         return !this.getColliders().some(collider => collider !== box && this.intersectsRect(nextBox, collider));
-    }
-
-    isPushing(player, velocityX)
-    {
-        if(velocityX === 0)
-        {
-            return false;
-        }
-
-        return this.boxes.some(box =>
-        {
-            const touching = this.intersects(player, box);
-            const inDirection = velocityX > 0 ? player.x < box.x : player.x > box.x;
-            return touching && inDirection;
-        });
     }
 
     updateKeys(deltaTime)
@@ -533,6 +627,14 @@ class forestPlatformMinigame extends baseMinigame
         }
 
         this.heldKey = this.keys[keyIndex].color;
+        const keyChannel = this.keys[keyIndex].channel || this.heldKey;
+        this.doors.forEach(door =>
+        {
+            if(door.controlSource === 'key' && (door.keyChannel || door.color) === keyChannel)
+            {
+                door.active = false;
+            }
+        });
         this.keys.splice(keyIndex, 1);
     }
 
@@ -540,7 +642,13 @@ class forestPlatformMinigame extends baseMinigame
     {
         const lockRange = Math.max(this.wallUnit, this.worldWidth / 50 * 2);
         const doorRange = this.wallUnit * 3;
-        const nearLock = this.locks.find(lock => this.isWithinRange(lock, lockRange));
+        const nearbyLocks = this.locks.filter(lock => this.isWithinRange(lock, lockRange));
+        const nearLock = nearbyLocks.sort((first, second) =>
+        {
+            const firstDistance = Math.hypot(this.player.x - (first.x + first.width / 2), this.player.y - (first.y + first.height / 2));
+            const secondDistance = Math.hypot(this.player.x - (second.x + second.width / 2), this.player.y - (second.y + second.height / 2));
+            return firstDistance - secondDistance;
+        })[0];
         const nearDoor = this.doors.find(door => door.active !== false && this.isWithinRange(door, doorRange));
         const target = nearLock || nearDoor;
 
@@ -568,8 +676,9 @@ class forestPlatformMinigame extends baseMinigame
     {
         this.doors.forEach(door =>
         {
-            if(door.controlSource === 'lock' && (door.channel || door.color) === channel)
+            if((door.controlSource === 'lock' || door.lockChannel === channel) && (door.lockChannel || door.channel || door.color) === channel)
             {
+                door.lockOpened = true;
                 door.active = false;
             }
         });
@@ -580,6 +689,15 @@ class forestPlatformMinigame extends baseMinigame
                 door.opened = true;
             }
         });
+        this.boxes.forEach(box =>
+        {
+            if(box.lockChannel === channel)
+            {
+                box.active = true;
+                box.activated = true;
+                box.movementTriggered = true;
+            }
+        });
     }
 
     updatePressurePlates()
@@ -587,15 +705,19 @@ class forestPlatformMinigame extends baseMinigame
         for(const plate of this.pressurePlates)
         {
             const playerOnPlate = this.intersectsRect(this.playerBounds(), plate);
-            const heavyObjectOnPlate = this.boxes.some(box => this.isObjectOnPlate(box, plate));
-            plate.active = playerOnPlate || heavyObjectOnPlate;
+            const heavyObjectOnPlate = !plate.playerOnly && this.boxes.some(box => this.isObjectOnPlate(box, plate));
+            if(plate.latch && playerOnPlate)
+            {
+                plate.latched = true;
+            }
+            plate.active = playerOnPlate || heavyObjectOnPlate || !!plate.latched;
 
             const channel = plate.channel || plate.color;
             this.doors.forEach(door =>
             {
                 if(door.controlSource === 'pressure' && (door.channel || door.color) === channel)
                 {
-                    door.active = plate.active;
+                    door.active = !plate.active;
                 }
             });
             this.hiddenDoors.forEach(door =>
@@ -605,89 +727,20 @@ class forestPlatformMinigame extends baseMinigame
                     door.opened = plate.active;
                 }
             });
-        }
-    }
-
-    updatePhotosensitiveSwitches()
-    {
-        for(const switchObject of this.photosensitiveSwitches)
-        {
-            switchObject.active = this.beamSegments.some(segment => this.segmentIntersectsRect(segment, switchObject));
-            this.updateSwitchTargets(switchObject);
-        }
-    }
-
-    updateSwitchTargets(switchObject)
-    {
-        const channel = switchObject.channel || switchObject.color;
-        for(const door of this.doors)
-        {
-            if(door.controlSource === 'photosensitive' && (door.channel || door.color) === channel)
+            this.boxes.forEach(box =>
             {
-                door.active = switchObject.active;
-            }
-        }
-        for(const hiddenDoor of this.hiddenDoors)
-        {
-            if(hiddenDoor.controlSource === 'photosensitive' && (hiddenDoor.channel || hiddenDoor.color) === channel)
-            {
-                hiddenDoor.opened = switchObject.active;
-            }
-        }
-    }
-
-    updateMovingBlocks(deltaTime)
-    {
-        for(const block of this.movingBlocks)
-        {
-            const target = block.active ? block.target : block.origin;
-            const dx = target.x - block.x;
-            const dy = target.y - block.y;
-            const distance = Math.hypot(dx, dy);
-
-            if(distance <= block.speed * deltaTime)
-            {
-                block.x = target.x;
-                block.y = target.y;
-                continue;
-            }
-
-            block.x += dx / distance * block.speed * deltaTime;
-            block.y += dy / distance * block.speed * deltaTime;
-        }
-    }
-
-    updateBrickSwitches()
-    {
-        for(const switchObject of this.brickSwitches || [])
-        {
-            switchObject.active = this.intersectsRect(this.playerBounds(), switchObject);
-            for(const block of this.movingBlocks)
-            {
-                if((block.channel || block.color) === switchObject.channel)
+                if((box.controlSource === 'pressure' && (box.channel || box.color) === channel) || box.pressureChannel === channel)
                 {
-                    block.active = switchObject.active;
+                    box.pressureActive = plate.active;
+                    box.active = plate.active || !!box.lightActive;
+                    box.activated = box.active;
+                    if(plate.active)
+                    {
+                        box.movementTriggered = true;
+                    }
                 }
-            }
+            });
         }
-    }
-
-    segmentIntersectsRect(segment, rectangle)
-    {
-        const steps = Math.max(1, Math.ceil(Math.hypot(segment.endX - segment.startX, segment.endY - segment.startY) / 4));
-        for(let index = 0; index <= steps; index++)
-        {
-            const ratio = index / steps;
-            const point = {
-                x: segment.startX + (segment.endX - segment.startX) * ratio,
-                y: segment.startY + (segment.endY - segment.startY) * ratio
-            };
-            if(this.pointInRect(point, rectangle))
-            {
-                return true;
-            }
-        }
-        return false;
     }
 
     isObjectOnPlate(object, plate)
@@ -715,7 +768,14 @@ class forestPlatformMinigame extends baseMinigame
             width: trap.width,
             height: trap.height / 2
         };
-        return this.intersectsRect(this.playerBoundsFor(player), activeTrapArea);
+        const playerBounds = this.playerBoundsFor(player);
+        const playerFeet = {
+            x: playerBounds.x,
+            y: playerBounds.y + playerBounds.height - 2,
+            width: playerBounds.width,
+            height: 2
+        };
+        return this.intersectsRect(playerFeet, activeTrapArea);
     }
 
     playerBoundsFor(player)
@@ -748,6 +808,8 @@ class forestPlatformMinigame extends baseMinigame
             ...this.mirrors,
             ...this.seeds,
             ...this.batteries,
+            ...this.lightSensors,
+            ...this.lightSources,
             this.goal
         ];
         const range = this.wallUnit * 3;
@@ -857,7 +919,13 @@ class forestPlatformMinigame extends baseMinigame
 
         for(const box of this.boxes)
         {
-            ctx.fillStyle = '#a86f3d';
+            if(box.isMovable)
+            {
+                this.drawWallTiles(box);
+                continue;
+            }
+
+            ctx.fillStyle = box.active ? '#d6a84f' : '#a86f3d';
             ctx.fillRect(box.x, box.y, box.width, box.height);
             ctx.strokeStyle = '#5b3928';
             ctx.lineWidth = 3;
@@ -882,7 +950,7 @@ class forestPlatformMinigame extends baseMinigame
 
         for(const door of this.doors.filter(door => door.active !== false))
         {
-            this.drawMapTiles('door', door);
+            this.drawMapTiles(door.imageName || 'door', door);
         }
 
         for(const door of this.hiddenDoors)
@@ -902,19 +970,6 @@ class forestPlatformMinigame extends baseMinigame
             ctx.strokeStyle = '#fff3a6';
             ctx.lineWidth = 2;
             ctx.strokeRect(plate.x, plate.y, plate.width, plate.height);
-        }
-
-        for(const switchObject of this.photosensitiveSwitches)
-        {
-            ctx.fillStyle = switchObject.active ? '#f6df5b' : '#765f24';
-            ctx.fillRect(switchObject.x, switchObject.y, switchObject.width, switchObject.height);
-            ctx.strokeStyle = '#fff4a3';
-            ctx.strokeRect(switchObject.x, switchObject.y, switchObject.width, switchObject.height);
-        }
-
-        for(const block of this.movingBlocks)
-        {
-            this.drawWallTiles(block);
         }
 
         for(const trap of this.traps)
@@ -957,6 +1012,14 @@ class forestPlatformMinigame extends baseMinigame
             ctx.strokeRect(battery.x, battery.y, battery.width, battery.height);
         }
 
+        for(const sensor of this.lightSensors)
+        {
+            ctx.fillStyle = sensor.active ? sensor.color : '#68727a';
+            ctx.fillRect(sensor.x, sensor.y, sensor.width, sensor.height);
+            ctx.strokeStyle = '#fff4a3';
+            ctx.strokeRect(sensor.x, sensor.y, sensor.width, sensor.height);
+        }
+
         for(const consoleObject of this.consoles)
         {
             ctx.fillStyle = '#1b2d35';
@@ -985,7 +1048,7 @@ class forestPlatformMinigame extends baseMinigame
 
         for(const source of this.lightSources)
         {
-            ctx.fillStyle = '#f6df5b';
+            ctx.fillStyle = '#75828b';
             ctx.fillRect(source.x, source.y, source.width, source.height);
             ctx.strokeStyle = '#fff4a3';
             ctx.strokeRect(source.x, source.y, source.width, source.height);

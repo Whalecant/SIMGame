@@ -9,7 +9,7 @@ const rooms =
     hub:
     {
         id: 'hub',
-        color: '#4f8ce7',
+        color: '#e69552',
         minX: 200,
         maxX: 1080,
         minY: 180,
@@ -18,8 +18,8 @@ const rooms =
         [
             {
                 edge: 'top', 
-                rangeStart: 560, 
-                rangeEnd: 720, 
+                rangeStart: 620, 
+                rangeEnd: 650, 
                 targetRoom: 'northWing',
                 length: 220,
                 thickness: 90,
@@ -27,8 +27,8 @@ const rooms =
             
             {
                 edge: 'bot', 
-                rangeStart: 560, 
-                rangeEnd: 720, 
+                rangeStart: 620, 
+                rangeEnd: 670, 
                 targetRoom: 'southWing',
                 length: 150,
                 thickness: 90,
@@ -36,8 +36,8 @@ const rooms =
 
             {
                 edge: 'right', 
-                rangeStart: 350, 
-                rangeEnd: 600, 
+                rangeStart: 360, 
+                rangeEnd: 410, 
                 targetRoom: 'eastWing',
                 length: 250,
                 thickness: 90,
@@ -45,8 +45,8 @@ const rooms =
             
             {
                 edge: 'left', 
-                rangeStart: 350, 
-                rangeEnd: 600, 
+                rangeStart: 360, 
+                rangeEnd: 410, 
                 targetRoom: 'westWing',
                 length: 250,
                 thickness: 90,
@@ -69,18 +69,18 @@ const rooms =
     northWing:
     {
         id: 'northWing',
-        color: '#4f8ce7',
+        color: '#e69552',
 
         minX: 180,
         maxX: 1100,
-        minY: 340,
+        minY: 400,
         maxY: 720,
         exits:
         [
             {
                 edge: 'bot',
-                rangeStart: 560,
-                rangeEnd: 720,
+                rangeStart: 620,
+                rangeEnd: 670,
                 targetRoom: 'hub',
                 length: 50,
                 thickness: 90,
@@ -102,17 +102,17 @@ const rooms =
     southWing:
     {
         id: 'southWing',
-        color: '#4f8ce7',
-        minX: 180,
-        maxX: 1100,
-        minY: 0,
-        maxY: 380,
+        color: '#e69552',
+        minX: 300,
+        maxX: 1000,
+        minY: 50,
+        maxY: 320,
         exits:
         [
             {
                 edge: 'top',
-                rangeStart: 560,
-                rangeEnd: 720,
+                rangeStart: 620,
+                rangeEnd: 670,
                 targetRoom: 'hub',
                 length: 100,
                 thickness: 90,
@@ -134,18 +134,18 @@ const rooms =
     eastWing:
     {
         id: 'eastWing',
-        color: '#4f8ce7',
-        minX: 0,
+        color: '#e69552',
+        minX: 50,
         maxX: 600,
-        minY: 120,
-        maxY: 600,
+        minY: 220,
+        maxY: 500,
 
         exits:
         [
             {
                 edge: 'left',
-                rangeStart: 350,
-                rangeEnd: 600,
+                rangeStart: 360,
+                rangeEnd: 410,
                 targetRoom: 'hub',
                 length: 100,
                 thickness: 90,
@@ -168,17 +168,17 @@ const rooms =
     westWing:
     {
         id: 'westWing',
-        color: '#4f8ce7',
+        color: '#e69552',
         minX: 680,
-        maxX: 1280,
-        minY: 120,
-        maxY: 600,
+        maxX: 1230,
+        minY: 220,
+        maxY: 500,
         exits:
         [
             {
                 edge: 'right',
-                rangeStart: 350,
-                rangeEnd: 600,
+                rangeStart: 360,
+                rangeEnd: 410,
                 targetRoom: 'hub',
                 length: 100,
                 thickness: 90,

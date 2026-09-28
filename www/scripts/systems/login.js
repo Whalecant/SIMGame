@@ -65,6 +65,7 @@ function handleLogin(event)
         if(messageElem)
         {
             messageElem.textContent = "Invalid password. Try Again";
+            messageElem.style.color = '#f87171';
         }
 
         return;
