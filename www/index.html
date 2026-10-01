@@ -11,6 +11,7 @@
         <script src="scripts/core/input.js"></script>
         <script src="scripts/core/audio.js"></script>
         <script src="scripts/core/strings.js"></script>
+        <script src="scripts/core/confirm.js"></script>
         
         <script src="scripts/systems/gameTimer.js"></script>
         <script src="scripts/systems/player.js"></script>
@@ -25,6 +26,8 @@
         <script src="scripts/systems/achievementManager.js"></script>
         <script src="scripts/systems/login.js"></script>
 
+        <script src="scripts/systems/journalManager.js"></script>
+        <script src="scripts/systems/eggManager.js"></script>
 
         <script src="scripts/minigames/baseMG.js"></script>
         <!--insert all the minigames files here using <script src="scripts/minigames/fileName.js"></script>-->
@@ -249,6 +252,17 @@
                 <div id="mapOverlay" class="hidden">
                     <div class="mapContent">
                         
+                    </div>
+                </div>
+
+                <div id="gameConfirm" class="uiScreen confirmOverlay hidden">
+                    <div class="confirmBox">
+                        <h2 id="gameConfirmTitle"></h2>
+                        <p id="gameConfirmText"></p>
+                        <div class="menuButtons">
+                            <button id="gameConfirmYes"></button>
+                            <button id="gameConfirmNo"></button>
+                        </div>
                     </div>
                 </div>
 

@@ -178,9 +178,14 @@ class stationManager
 
     }
 
-    markLevelComplete(levelIdx)
+    markLevelComplete(mgId)
     {
-        this.completedLevels.add(levelIdx);
+        this.completedLevels.add(mgId);
+    }
+
+    isLevelComplete(mgId)
+    {
+        return this.completedLevels.has(mgId);
     }
 
     getNearbyStation(player, roomId)
@@ -212,7 +217,7 @@ class stationManager
 
         for(const node of nodes)
         {
-            const isCompleted = this.completedLevels.has(node.levelIdx);
+            const isCompleted = this.completedLevels.has(node.currentMgId);
             ctx.fillStyle = isCompleted ? '#e74c3c' : this.nodeColors[node.currentMgId];
             ctx.fillRect(node.x - node.width/2, node.y - node.height/2, node.width, node.height);
 

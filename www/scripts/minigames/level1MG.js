@@ -39,7 +39,10 @@ class forestLevel1Minigame extends forestPlatformMinigame
                 { ...this.cellRect(17, 33, 5, 2), text: '你已经是运动细胞发达的人类了' },
                 { ...this.cellRect(4, 43, 6, 2), text: '试试按A、D左右移动' },
                 { ...this.cellRect(30, 44, 6, 2), text: '现在用W跳跃' }
-            ]
+            ],
+            papers: [
+                {...this.cellRect(9, 47), category: 'setting'},
+            ],
         };
         this.applyLevelData();
     }

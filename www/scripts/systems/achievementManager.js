@@ -5,8 +5,7 @@ const achievementManager=
         badEnd: false,
         neutEnd: false,
         goodEnd: false,
-        twentyVeh: false,
-        secretAchievement: false
+        egg: false,
     },
 
     init()
@@ -87,18 +86,15 @@ function openAchievementPopup(cardElement)
 
     const icon = cardElement.querySelector('.achievementIcon').innerText;
 
-    let title = cardElement.dataset.title;
-    let desc = cardElement.dataset.desc;
+    const title = unlocked ? cardElement.dataset.title : (cardElement.dataset.lockedTitle ?? '???');
+    const desc = unlocked ? cardElement.dataset.desc : (cardElement.dataset.lockedDesc ?? 'Not yet unlocked.');
 
-    if(unlocked && cardElement.dataset.unlockedTitle)
-    {
-        title = cardElement.dataset.unlockedTitle;
-        desc = cardElement.dataset.unlockedDesc;
-    }
 
     document.getElementById('popupIcon').innerText = icon;
     document.getElementById('popupTitle').innerText = title;
     document.getElementById('popupDesc').innerText = desc;
+
+    popup.classList.toggle('locked', !unlocked);
 
     popup.showModal()
 }

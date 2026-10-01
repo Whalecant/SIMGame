@@ -96,7 +96,7 @@ const Game =
     //obvious i don't need to fucking explain what the 2 functions below do me (yes i'm talking to myself for future reference)
     update(deltaTime)
     {
-        if(this.mapOpen || this.vehicleBlueprintOpen)
+        if(this.mapOpen || this.vehicleBlueprintOpen || (window.gameConfirm && gameConfirm.isOpen))
         {
             return;
         }
@@ -104,31 +104,21 @@ const Game =
         if(this.inMinigame && window.overworld && overworld.activeMg)
         {
             overworld.activeMg.tick(deltaTime);
+            return;
         }
-        else
+
+        if(window.Input && !this.inMinigame && Input.consumePress('e'))
         {
-            if(window.overworld && window.Player)
-            {
-                overworld.update(Player, deltaTime);
-            }
+            interact();
+        }
 
-            if(window.Input && !this.inMinigame)
-            {
-                if(Input.consumePress('e'))
-                {
-                    interact();
-                }
-
-                // if(Input.consumePress('m'))
-                // {
-                //     toggleMap();
-                // }
-            }
-
-            if(window.Player && typeof window.Player.update === 'function' && !this.inMinigame)
-            {
-                window.Player.update(deltaTime);
-            }
+        if(window.Player && typeof window.Player.update === 'function' && !this.inMinigame)
+        {
+            window.Player.update(deltaTime);
+        }
+        else if(window.overworld && window.Player)
+        {
+            overworld.update(Player, deltaTime);
         }
     },
 
@@ -234,17 +224,28 @@ function interact()
 
     if(window.Vehicle && window.Player && window.roomManager && roomManager.currRoomId === 'hub' && Vehicle.nearPlayer(Player))
     {
-        // if(Vehicle.isFullyRepaired())
-        // {
-            if(confirm("All 8 parts installed! Enter final level?"))
+        if(allPartsInstalled())
+        {
+            gameConfirm.open(
             {
-                startMinigameInstance('redNode', null);
-            }
+                title: 'Final Level',
+                text: 'All 8 parts installed! Enter final level?',
+                yes: 'Enter',
+                no: 'Not yet',
+                onYes: () => startMinigameInstance('redNode', null)
+            });
             return;
+        }
 
-        // }
-
-        openVehicleBlueprint();
+        gameConfirm.open(
+        {
+            title: 'Final Level',
+            text: 'Not all parts are installed. Enter the final level anyway?',
+            yes: 'Enter anyway',
+            no: 'View blueprint',
+            onYes: () => startMinigameInstance('redNode', null),
+            onNo: () => openVehicleBlueprint()
+        });
         return;
 
     }
@@ -267,6 +268,11 @@ function interact()
 
     }
 
+}
+
+function allPartsInstalled()
+{
+    return !!(window.Vehicle && Vehicle.installedParts.size >= 8);
 }
 
 function startMinigameInstance(mgId, rewardPartKey)
@@ -414,7 +420,19 @@ function completeMiniGame(mgId, success, rewardPartKey)
     {
         if(mgId === 'redNode')
         {
-            showCutscene('GOOD');
+            const ending = getEndingType();
+            const achId = {
+                BAD: 'badEnd',
+                NEUTRAL: 'neutEnd',
+                GOOD: 'goodEnd',
+            }
+
+            if (typeof achievementManager !== 'undefined')
+            {
+                achievementManager.unlock(achId[ending]);
+            }
+
+            showCutscene(ending);
             return;
         }
 
@@ -429,6 +447,20 @@ function completeMiniGame(mgId, success, rewardPartKey)
             window.stationManager.markLevelComplete(mgId);
         }
     }
+}
+
+function getEndingType()
+{
+    const allLevelDone = window.Vehicle && Vehicle.installedParts.size >= 8;
+
+    if(!allLevelDone)
+    {
+        return 'BAD';
+    }
+
+    const allJournals = window.journalManager && journalManager.allJournalsCollected();
+
+    return allJournals ? 'GOOD' : 'NEUTRAL';
 }
 
 function openVehicleBlueprint()
@@ -580,11 +612,11 @@ function resetNewGame()
     }
 }
 
-function loadSave(slotNumber)
+function loadSave(slotNumber, overrideData = null)
 {
     Game.currentSaveSlot = slotNumber;
 
-    const data = window.saveManager ? saveManager.load(slotNumber): null;
+    const data = overrideData || (window.saveManager ? saveManager.load(slotNumber) : null);    
     
     if(data)
     {
@@ -600,14 +632,24 @@ function loadSave(slotNumber)
             roomManager.currRoomId = data.roomId;
         }
 
-        if(window.vehicleManager && data.vehicle)
+        // if(window.Vehicle && data.installedParts)
+        // {
+        //     window.Vehicle.installedParts = new Set(data.installedParts);
+        // }
+
+        // if(window.stationManager && data.completedLevels)
+        // {
+        //     window.stationManager.completedLevels = new Set(data.completedLevels)
+        // }
+
+        if(window.Vehicle)
         {
-            window.Vehicle.installedParts = new Set(data.installedParts);
+            window.Vehicle.installedParts = new Set(data.installedParts || []);
         }
 
-        if(window.stationManager && data.completedLevels)
+        if(window.stationManager)
         {
-            window.stationManager.completedLevels = new Set(data.completedLevels)
+            window.stationManager.completedLevels = new Set(data.completedLevels || []);
         }
         
     }
@@ -638,6 +680,11 @@ function deleteSave(slotNumber)
 
 function confirmDeleteSave()
 {
+    if(window.eggManager)
+    {
+        eggManager.clearSlot(pendingDeleteSlot);
+    }
+
     if(pendingDeleteSlot === null)
     {
         return;
@@ -722,6 +769,11 @@ function showMsgPopup(message, duration = 2000)
 function togglePause()
 {
 
+    if(window.gameConfirm && gameConfirm.isOpen)
+    {
+        return;
+    }
+    
     if(Game.inMinigame && window.overworld && overworld.activeMg)
     {
         overworld.activeMg.stop(false);

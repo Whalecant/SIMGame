@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <title data-i18n="title"> Egg </title>
+        <style>
+            html, body 
+            { 
+                margin: 0; 
+                height: 100%; 
+                background: #000; 
+                overflow: hidden; 
+                touch-action: none; 
+            }
+            
+            #c 
+            { 
+                position: absolute; 
+                top: 50%; 
+                left: 50%; 
+                transform: 
+                translate(-50%, -50%);
+                width: min(100vw, 177.78vh); 
+                height: min(56.25vw, 100vh); 
+                image-rendering: pixelated; 
+            }
+            
+            #msgPopup
+            {
+                position: absolute;
+                bottom: 12%;
+                left: 50%;
+                transform: translateX(-50%);
+                color: #fff;
+                font: 22px monospace;
+                background: rgba(0, 0, 0, .75);
+                padding: 8px 18px;
+                pointer-events: none;
+                opacity: 0;
+                transition: opacity 0.3s ease-in-out;
+                z-index: 10;
+            }
+
+            #msgPopup.visible
+            {
+                opacity: 1;
+            }
+            
+            .t 
+            { 
+                position: absolute; 
+                bottom: 16px; 
+                width: 60px; 
+                height: 60px; 
+                font-size: 24px; 
+                opacity: .45;
+                border-radius: 50%; 
+                border: 2px solid #fff; 
+                background: #000; 
+                color: #fff; 
+                user-select: none; 
+            }
+    </style>
+    </head>
+    
+    <body>
+        <canvas id="c" width="1280" height="720"></canvas>
+        <div id="msgPopup"></div>
+
+        <button class="t" data-k="a" style="left:16px;display:none">◀</button>
+        <button class="t" data-k="d" style="left:146px;display:none">▶</button>
+        <button class="t" data-k="w" style="left:81px;bottom:80px;display:none">▲</button>
+        <button class="t" data-k="s" style="left:81px;display:none">▼</button>
+        <button class="t" data-k="e" style="right:16px;display:none">E</button>
+    
+        <script src="scripts/systems/achievementManager.js"></script>
+        <script src="scripts/systems/eggRoom.js"></script>
+    </body>

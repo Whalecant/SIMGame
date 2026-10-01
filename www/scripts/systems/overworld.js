@@ -47,6 +47,7 @@ const overworld =
 
         if(this.mode === 'room')
         {
+            
             roomManager.roomClamp(pos);
             const exit = roomManager.checkExits(pos);
             if(exit)
@@ -221,6 +222,7 @@ const overworld =
         const exit = this.pendingExit;
         const dir = this.transDir;
         const bounds = roomManager.margin;
+        const fromRoom = roomManager.currRoomId;
 
         roomManager.currRoomId = exit.targetRoom;
 
@@ -239,6 +241,11 @@ const overworld =
         if(dir === 'right')
         {
             pos.x = bounds + pos.width;
+        }
+
+        if(window.eggManager)
+        {
+            eggManager.onRoomSwap(fromRoom, exit.targetRoom);
         }
     },
 

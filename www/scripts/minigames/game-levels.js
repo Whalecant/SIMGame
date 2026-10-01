@@ -34,13 +34,14 @@ class forestPlatformMinigame extends baseMinigame
         this.goalStayTime = 0;
         this.heldKey = null;
         this.controlMode = 'player';
-        this.growth = 0;
+        // this.growth = 0;
         this.namedObjects = new Set();
         this.nameNotice = '';
         this.nameNoticeTimer = 0;
         this.promptNotice = '';
         this.promptNoticeTimer = 0;
         this.prompts = [];
+        this.collectedPapers = new Set();
 
         this.platforms = [
             { x: 0, y: this.worldHeight - this.wallUnit * 2, width: this.worldWidth, height: this.wallUnit * 2 },
@@ -167,6 +168,7 @@ class forestPlatformMinigame extends baseMinigame
         this.updateAnimation(player, dt);
 
         this.collectNearbyKey();
+        this.collectPapers();
         this.handleInteractions();
         this.handleControlInteractions();
         this.updateSeedsAndBatteries();
@@ -204,6 +206,31 @@ class forestPlatformMinigame extends baseMinigame
         else
         {
             this.goalStayTime = 0;
+        }
+    }
+
+    collectPapers()
+    {
+        const papers = (this.levelData && this.levelData.papers) || [];
+
+        for(const paper of papers)
+        {
+            if(this.collectedPapers.has(paper) || !this.isWithinRange(paper, this.wallUnit * 2))
+            {
+                continue;
+            }
+
+            if(!window.Input || !Input.consumePress('e'))
+            {
+                continue;
+            }
+
+            this.collectedPapers.add(paper);
+
+            if(typeof journalManager !== 'undefined')
+            {
+                journalManager.unlock(paper.category);
+            }
         }
     }
 
@@ -417,7 +444,7 @@ class forestPlatformMinigame extends baseMinigame
                 if(!seed.germinated)
                 {
                     seed.germinated = true;
-                    this.growth += 1;
+                    // this.growth += 1;
                 }
             }
         }
@@ -998,10 +1025,22 @@ class forestPlatformMinigame extends baseMinigame
             ctx.strokeRect(mirror.x, mirror.y, mirror.width, mirror.height);
         }
 
-        for(const seed of this.seeds)
+        // for(const seed of this.seeds)
+        // {
+        //     ctx.fillStyle = seed.germinated ? '#72d572' : '#c4a06a';
+        //     ctx.fillRect(seed.x, seed.y, seed.width, seed.height);
+        // }
+
+        for(const paper of ((this.levelData && this.levelData.papers) || []))
         {
-            ctx.fillStyle = seed.germinated ? '#72d572' : '#c4a06a';
-            ctx.fillRect(seed.x, seed.y, seed.width, seed.height);
+            if(!this.collectedPapers.has(paper))
+            {
+                ctx.save();
+                ctx.font = '20px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('📄', paper.x + paper.width / 2, paper.y + paper.height - 2);
+                ctx.restore();
+            }
         }
 
         for(const battery of this.batteries)
@@ -1077,7 +1116,7 @@ class forestPlatformMinigame extends baseMinigame
         ctx.textAlign = 'left';
         ctx.fillText('A/D 跑动  W/空格 跳跃  E 交互  Q 退出', 24, 34);
         ctx.fillText(`钥匙：${this.heldKey || '无'}`, 24, this.worldHeight - 24);
-        ctx.fillText(`萌发值：${this.growth}`, 150, this.worldHeight - 24);
+        // ctx.fillText(`萌发值：${this.growth}`, 150, this.worldHeight - 24);
         ctx.fillText(`控制：${this.controlMode}`, 300, 34);
 
         if(this.nameNoticeTimer > 0)

@@ -71,8 +71,8 @@ const rooms =
         id: 'northWing',
         color: '#e69552',
 
-        minX: 180,
-        maxX: 1100,
+        minX: 300,
+        maxX: 1000,
         minY: 400,
         maxY: 720,
         exits:

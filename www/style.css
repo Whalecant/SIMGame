@@ -272,8 +272,11 @@ button:active {
     border: 2px solid #b09b7e;
     border-radius: 8px;
     padding: 24px 32px;
-    max-width: 400px;
-    text-align: safe center;
+    width: min(90vw, 400px);   
+    display: flex;
+    flex-direction: column;
+    align-items: center;       
+    text-align: center;        
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
 
@@ -729,6 +732,12 @@ input[type="range"] {
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
 
+.achievementPopup.locked
+{
+    filter: grayscale(1) sepia(0.85);
+    opacity: 0.85;
+}
+
 .achievementPopup::backdrop {
     background: rgba(30, 26, 21, 0.8);
     backdrop-filter: blur(3px);
@@ -762,4 +771,28 @@ input[type="range"] {
     margin-top: 0.5rem;
     border-radius: 30px;
     cursor: pointer;
+}
+
+.confirmOverlay {
+    background: rgba(30, 26, 21, 0.7);
+    z-index: 600;
+}
+
+.confirmBox {
+    background: #fcf7e8;
+    border: 2px solid #b09b7e;
+    border-radius: 8px;
+    padding: 24px 32px;
+    width: min(90vw, 400px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.confirmBox p {
+    color: #6f5a44;
+    margin-bottom: 1rem;
+    line-height: 1.4;
 }

@@ -10,14 +10,9 @@ const saveManager =
         return localStorage.getItem(this.keyFor(slot)) !== null;
     },
 
-    save(slot)
+    buildData()
     {
-        if(!slot)
-        {
-            return;
-        }
-
-        const data = 
+        const data =
         {
             playerX: window.Player ? Player.x : 640,
             playerY: window.Player ? Player.y : 400,
@@ -31,17 +26,24 @@ const saveManager =
                 endingType: window.vehicleManager.endingType || null,
             },
 
-            timer:
-            {
-                currDay: window.gameTimer.currDay,
-                elapsedSec: window.gameTimer.elapsedSec
-            }
+            timer: window.gameTimer ? { currDay: window.gameTimer.currDay, elapsedSec: window.gameTimer.elapsedSec } : null,
+
+            installedParts: window.Vehicle ? [...window.Vehicle.installedParts] : [],
+            completedLevels: window.stationManager ? [...window.stationManager.completedLevels] : [],
         };
 
-        localStorage.setItem(this.keyFor(slot), JSON.stringify(data)); //JSON.stringifyt just conversts data in ajvascript into a JSON sting
+        return data;
+    },
+
+    save(slot)
+    {
+        if(!slot)
+        {
+            return;
+        }
+
+        localStorage.setItem(this.keyFor(slot), JSON.stringify(this.buildData()));
         refreshSaveSlotDisplay(slot);
-
-
     },
 
     load(slot)

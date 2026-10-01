@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Shipwright's Countdown · Journal</title>
     <link rel="stylesheet" href="subPage.css">
+
+    <script src="scripts/systems/journalManager.js"></script>
 </head>
 <body>
 
@@ -219,5 +221,18 @@
         }
     </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () =>
+        {
+            journalManager.categories.forEach(id =>
+            {
+                if(journalManager.data[id])
+                {
+                    unlockCategory(id);
+                }
+            });
+        });
+    </script>
+    
 </body>
 </html>

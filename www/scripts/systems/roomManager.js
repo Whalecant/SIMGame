@@ -73,26 +73,69 @@ const roomManager =
         const minY = room.minY ?? 180;
         const maxY = room.maxY ?? 540;
 
-        const topExit = room.exits?.find(e => e.edge === 'top' && this.inExitRange(pos, e));
-        const botExit = room.exits?.find(e => e.edge === 'bot' && this.inExitRange(pos, e));
-        const leftExit = room.exits?.find(e => e.edge === 'left' && this.inExitRange(pos, e));
-        const rightExit = room.exits?.find(e => e.edge === 'right' && this.inExitRange(pos, e));
+        const doorway = 16;
 
-        if (pos.y - halfHeight < minY && !topExit) 
+        const exits = room.exits || [];
+        const topExit = exits.find(e => e.edge === 'top');
+        const botExit = exits.find(e => e.edge === 'bot');
+        const leftExit = exits.find(e => e.edge === 'left');
+        const rightExit = exits.find(e => e.edge === 'right');
+
+        const lane = (value, exit) =>
         {
-            pos.y = minY + halfHeight;
+            return Math.max(exit.rangeStart, Math.min(exit.rangeEnd, value));
+        };
+
+        const overTop = minY - (pos.y - halfHeight);
+        if(overTop > 0)
+        {
+            if(topExit && (overTop > doorway || this.inExitRange(pos, topExit)))
+            {
+                pos.x = lane(pos.x, topExit, halfWidth);
+            }
+            else
+            {
+                pos.y = minY + halfHeight;
+            }
         }
-        if (pos.y + halfHeight > maxY && !botExit) 
+
+        const overBot = (pos.y + halfHeight) - maxY;
+        if(overBot > 0)
         {
-            pos.y = maxY - halfHeight;
+            if(botExit && (overBot > doorway || this.inExitRange(pos, botExit)))
+            {
+                pos.x = lane(pos.x, botExit, halfWidth);
+            }
+            else
+            {
+                pos.y = maxY - halfHeight;
+            }
         }
-        if (pos.x - halfWidth < minX && !leftExit) 
+
+        const overLeft = minX - (pos.x - halfWidth);
+        if(overLeft > 0)
         {
-            pos.x = minX + halfWidth;
+            if(leftExit && (overLeft > doorway || this.inExitRange(pos, leftExit)))
+            {
+                pos.y = lane(pos.y, leftExit, halfHeight);
+            }
+            else
+            {
+                pos.x = minX + halfWidth;
+            }
         }
-        if (pos.x + halfWidth > maxX && !rightExit) 
+
+        const overRight = (pos.x + halfWidth) - maxX;
+        if(overRight > 0)
         {
-            pos.x = maxX - halfWidth;
+            if(rightExit && (overRight > doorway || this.inExitRange(pos, rightExit)))
+            {
+                pos.y = lane(pos.y, rightExit, halfHeight);
+            }
+            else
+            {
+                pos.x = maxX - halfWidth;
+            }
         }
     },
 
