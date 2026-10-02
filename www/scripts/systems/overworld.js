@@ -5,7 +5,7 @@ const overworld =
     isTrans: false,
     transType: 'pan', // pan means the camera pans over, fade is for fadeout and fade in transition
     transAct: null,  //either roomToRoom, roomToMg, or MgToRoom
-    activeTransFrames: 45,
+    activeTransFrames: 30,
     framesElapsed: 0,
     transDir: null,
     fadeColor: '#000000',
@@ -97,7 +97,7 @@ const overworld =
         this.pendingExit = exit;
         this.transDir = exit.edge;
         this.fadeColor = '#000000';
-        this.activeTransFrames = 45;
+        this.activeTransFrames = 30;
 
         if(exit.targetMg)
         {

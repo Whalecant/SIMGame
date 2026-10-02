@@ -23,6 +23,7 @@
         <script src="scripts/systems/vehicleManager.js"></script>
         <script src="scripts/systems/saveManager.js"></script>
         <script src="scripts/systems/savePoint.js"></script>
+        <script src="scripts/systems/accountSync.js"></script>
         <script src="scripts/systems/achievementManager.js"></script>
         <script src="scripts/systems/login.js"></script>
 
@@ -71,7 +72,7 @@
                     </button>
 
                     <div class="navRight">
-                        <button class="menuBtn" data-i18n="login" onclick="window.location.href='login.html'">
+                        <button id="authBtn" class="menuBtn" data-i18n="login" onclick="onAuthButtonClick()">
                             Login
                         </button>
                     </div>

@@ -73,16 +73,64 @@ function handleLogin(event)
 
     localStorage.setItem('currentUser', usernameInput);
 
-    if(userAcc.achievements)
-    {
-        localStorage.setItem('SCCFAchievement', JSON.stringify(userAcc.achievements));
-    }
-
-    if(userAcc.saves)
-    {
-        localStorage.setItem('SCCFSaves', JSON.stringify(userAcc.saves));
-    }
+    accountSync.pull(usernameInput);
+    accountSync.push();
 
     window.location.href = 'index.html';
 
 }
+
+function getCurrentuser()
+{
+    return localStorage.getItem('currentUser');
+}
+
+function refreshAutoButton()
+{
+    const btn = document.getElementById('authBtn');
+
+    if(!btn)
+        return;
+
+    const user = getCurrentuser();
+
+    if(user)
+    {
+        btn.removeAttribute('data-i18n');
+        btn.textContent = user;
+    }
+    else
+    {
+        btn.setAttribute('data-i18n', 'login');
+        btn.textContent = (typeof getText === 'function') ? getText('login') : 'login';
+    }
+}
+
+function onAuthButtonClick()
+{
+    if(!getCurrentuser())
+    {
+        window.location.href = 'login.html';
+        return;
+    }
+
+    gameConfirm.open(
+        {
+            title: 'Log out',
+            text: `Log out of ${getCurrentuser()}?`,
+            yes: 'Log out',
+            no: 'Cancel',
+            onYes: logout,
+        }
+    );
+}
+
+function logout()
+{
+    accountSync.push();
+    accountSync.clearLocal();
+    localStorage.removeItem('currentUser');
+    window.location.reload();
+}
+
+document.addEventListener('DOMContentLoaded', refreshAutoButton);

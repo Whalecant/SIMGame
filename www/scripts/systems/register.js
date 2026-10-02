@@ -31,7 +31,7 @@ function handleRegister(event)
 
     const usernameInput = document.getElementById('username').value.trim();
     const passwordInput = document.getElementById('password').value;
-    const messageElem = document.getElementById('registerMessage');
+    const msgElem = document.getElementById('registerMessage');
 
     const userDB = JSON.parse(localStorage.getItem('userDB') || '{}');
 
@@ -46,19 +46,15 @@ function handleRegister(event)
         return;
     }
 
-    const currLocalAchievemnts = JSON.parse(localStorage.getItem('SCCFAchievements') || '{}');
-    const currLocalSave = JSON.parse(localStorage.getItem('SCCFSaves') || '{}');
-
     userDB[usernameInput] = 
     {
         password: passwordInput,
-        achievements: currLocalAchievemnts,
-        saves: currLocalAchievemnts
+        data: null,
     };
 
 
     localStorage.setItem('userDB', JSON.stringify(userDB));
 
-    window.location.href = `login.html?username=${encodeURIComponent(usernameInput)}&msg=regisred`;
+    window.location.href = `login.html?username=${encodeURIComponent(usernameInput)}&msg=registered`;
 
 }
