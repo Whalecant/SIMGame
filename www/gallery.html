@@ -40,6 +40,10 @@
         <div class="sectionTitle">Soundtrack Archive</div>
         <div class="galleryGrid">
             <div class="galleryCard">
+                <div class="galleryLabel">Hub BGM</div>
+                <audio controls class="audioPlayer" src="assets/audio/bgm/hubBgm.wav"></audio>
+            </div>
+            <div class="galleryCard">
                 <div class="galleryLabel">Gold BGM</div>
                 <audio controls class="audioPlayer" src="assets/audio/bgm/goldBgm.wav"></audio>
             </div>
@@ -92,9 +96,9 @@
     <script>
         const audioPlayers = document.querySelectorAll('.audioPlayer')
 
-        audioPlayers.forEach(play =>
+        audioPlayers.forEach(player =>
         {
-            player.addEventListener('player', () => {
+            player.addEventListener('play', () => {
                 audioPlayers.forEach(otherPlayer => {
                     if(otherPlayer !== player)
                     {
