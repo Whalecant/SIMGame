@@ -30,6 +30,7 @@ const saveManager =
 
             installedParts: window.Vehicle ? [...window.Vehicle.installedParts] : [],
             completedLevels: window.stationManager ? [...window.stationManager.completedLevels] : [],
+            journal: window.journalManager ? {...window.journalManager.slotData} : {},
         };
 
         return data;

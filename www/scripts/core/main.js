@@ -247,9 +247,9 @@ function interact()
         return;
     }
 
-    if(window.Vehicle && window.Player && window.roomManager && roomManager.currRoomId === 'hub' && Vehicle.nearPlayer(Player))
+    if(window.Vehicle && window.Player && window.roomManager && roomManager.currRoomId === 'hub' && Vehicle.nearPlayer(Player) && window.journalManager)
     {
-        if(allPartsInstalled())
+        if(allPartsInstalled() && journalManager.allJournalsCollected())
         {
             gameConfirm.open(
             {
@@ -277,20 +277,13 @@ function interact()
 
     if(window.stationManager && window.Player && window.roomManager)
     {
-        const station = window.stationManager.getNearbyStation(window.Player, roomManager.currRoomId)
-        
+        const station = window.stationManager.getNearbyStation(Player, roomManager.currRoomId);
+
         if(station)
         {
-            if(window.stationManager.isLevelComplete && window.stationManager.isLevelComplete(station.currentMgId))
-            {
-                showMsgPopup("Level already completed")
-                return;
-            }
-
             startMinigameInstance(station.currentMgId, station.rewardPartKey);
-            return;
         }
-
+        return;
     }
 
 }
@@ -468,15 +461,40 @@ function completeMiniGame(mgId, success, rewardPartKey)
             return;
         }
 
-        if(rewardPartKey && window.Vehicle)
+        let msg = '';
+
+        if(rewardPartKey && window.Vehicle && !window.Vehicle.installedParts.has(rewardPartKey))
         {
             window.Vehicle.installPart(rewardPartKey);
-            showMsgPopup(`${rewardPartKey} installed! (${window.Vehicle.installedParts.size}/8)`);
+            msg = `${rewardPartKey} installed! (${window.Vehicle.installedParts.size}/8)`;
+        }
+
+        const newLogs = window.journalManager ? journalManager.takeNewlyBanked() : 0;
+
+        if(newLogs > 0)
+        {
+            const logText = 'Journal Entry Unlocked';
+            msg = msg ? `${msg} .   ${logText}` : logText;
+        }
+
+        if(msg)
+        {
+            showMsgPopup(msg, 3000);
         }
 
         if(window.stationManager)
         {
             window.stationManager.markLevelComplete(mgId);
+        }
+    }
+
+    if(mgId !== 'redNode' && window.saveManager && Game.currentSaveSlot)
+    {
+        saveManager.save(Game.currentSaveSlot);
+
+        if(!success)
+        {
+            showMsgPopup(getText('saveMsg'));
         }
     }
 }
@@ -513,11 +531,30 @@ function openVehicleBlueprint()
         const row = document.createElement('div');
         const isInstalled = window.Vehicle.installedParts.has(partKey);
 
-        row.className = 'vehiclePartRow' + (isInstalled ? 'done' : '');
-        row.textContent = isInstalled ? `${partKey} - Installed` : `${partKey} - Missing`
+        row.className = 'vehiclePartRow' + (isInstalled ? ' done' : '');
+        row.textContent = isInstalled ? `${partKey} - Installed` : `${partKey} - Missing`;
         list.appendChild(row);
+    });
+
+    const journalList = document.getElementById('vehicleJournalList');
+    const journalTitle = document.getElementById('vehicleJournalTitle');
+
+    if(journalList && window.journalManager)
+    {
+        journalList.innerHTML = '';
+        journalTitle.textContent = `Journal Logs (${journalManager.slotCount()}/${journalManager.categories.length})`;
+
+        journalManager.categories.forEach(id =>
+        {
+            const row = document.createElement('div');
+            const found = journalManager.slotHas(id);
+            const label = id.charAt(0).toUpperCase() + id.slice(1);
+
+            row.className = 'vehiclePartRow' + (found ? ' done' : '');
+            row.textContent = found ? `${label} - Collected` : `${label} - Missing`;
+            journalList.appendChild(row);
+        });
     }
-    );
 
     overlay.classList.remove('hidden');
     Game.vehicleBlueprintOpen = true;
@@ -640,6 +677,11 @@ function resetNewGame()
         window.Vehicle.installedParts.clear();
     }
 
+    if(window.journalManager)
+    {
+        journalManager.resetSlot();
+    }
+
     if(window.stationManager)
     {
         window.stationManager.completedLevels.clear();
@@ -679,6 +721,11 @@ function loadSave(slotNumber, overrideData = null)
         if(window.Vehicle)
         {
             window.Vehicle.installedParts = new Set(data.installedParts || []);
+        }
+
+        if(window.journalManager)
+        {
+            journalManager.loadSlot(data.journal);
         }
 
         if(window.stationManager)

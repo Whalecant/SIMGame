@@ -18,14 +18,17 @@ const oldMan =
     {
         start:
         [
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod lorem sit amet tempor iaculis.',
-            'Vestibulum luctus feugiat urna vel pharetra. Fusce pretium urna diam, sed semper diam tincidunt ac.'
+            'This is your first day but remember that the job remains the same, we are responsible for repairing the essential airship machinery, and today as the one taking over I will be supervising YOU take hold of the situation.',
+            'Despite my protests you insist on acquiring the parts we lack from inventory yourself to take advantage of your temporary maneuverability and cost efficiency but I say your just being a reckless little runt, so do us all a favor and be careful or I will lock you in the workshop myself from here on out.',
+
         ],
 
         end:
         [
-            'Nulla id massa lacus. Quisque gravida turpis eget odio elementum tristique.' ,
-            'Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.'
+            'I, I do not believe it, despite all the challenges and sabotage that has arisen you have managed to finish none the less,',
+            'however we are not across the finish line yet we just managed to stand before the door despite all the traps along the path,',
+            'now as hands off as it may seem, you have proven to take lead where ever I have fallen short, and I believe it should be you who knocks on the palace doors, take responsibility for your vision and all your reckless plans and finish this yourself for all those who trust you myself included,',
+            'bring an end to their crimes and bring them into the light, stand on the stage yourself and change these folks minds, I know you can',
         ],
     },
 

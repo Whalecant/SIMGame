@@ -193,6 +193,7 @@ class forestPlatformMinigame extends baseMinigame
             if(this.goalStayTime >= 1)
             {
                 this.isComplete = true;
+                this.bankPapers();
                 this.stop(true, this.rewardPartKey);
             }
         }
@@ -202,13 +203,28 @@ class forestPlatformMinigame extends baseMinigame
         }
     }
 
+    paperAvailable(paper)
+    {
+        if(this.collectedPapers.has(paper))
+        {
+            return false;
+        }
+
+        if(typeof journalManager !== 'undefined' && journalManager.slotHas(paper.category))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     collectPapers()
     {
         const papers = (this.levelData && this.levelData.papers) || [];
 
         for(const paper of papers)
         {
-            if(this.collectedPapers.has(paper) || !this.isWithinRange(paper, this.wallUnit * 2))
+            if(!this.paperAvailable(paper) || !this.paperInRange(paper))
             {
                 continue;
             }
@@ -220,9 +236,9 @@ class forestPlatformMinigame extends baseMinigame
 
             this.collectedPapers.add(paper);
 
-            if(typeof journalManager !== 'undefined')
+            if(typeof showMsgPopup === 'function')
             {
-                journalManager.unlock(paper.category);
+                showMsgPopup('Journal Entry found! Reach the exit to keep it', 3000);
             }
         }
     }
@@ -250,6 +266,16 @@ class forestPlatformMinigame extends baseMinigame
                 journalManager.unlock(paper.category);
             }
         }
+    }
+
+    bankPapers()
+    {
+        if(typeof journalManager === 'undefined')
+        {
+            return;
+        }
+
+        this.collectedPapers.forEach(paper => journalManager.collect(paper.category));
     }
 
     moveHorizontal(player, distance)
@@ -925,7 +951,14 @@ class forestPlatformMinigame extends baseMinigame
 
     die()
     {
+        const lost = this.collectPapers.size;
+
         this.init();
+
+        if(lost > 0 && typeof showMsgPopup === 'function')
+        {
+            showMsgPopup('Journal Entry Lost.');
+        }
     }
 
     updateAnimation(player, deltaTime)
@@ -1061,7 +1094,7 @@ class forestPlatformMinigame extends baseMinigame
 
         for(const paper of ((this.levelData && this.levelData.papers) || []))
         {
-            if(this.collectedPapers.has(paper))
+            if(!this.paperAvailable(paper))
             {
                 continue;
             }
