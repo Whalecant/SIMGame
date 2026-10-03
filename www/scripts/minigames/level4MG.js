@@ -73,7 +73,10 @@ class forestLevel4Minigame extends forestLevel2Minigame
             batteries: [],
             lightSensors: [],
             lightSources: [{ ...this.cellRect(37, 4), angle: Math.PI / 2, name: '光源向下' }],
-            prompts: []
+            prompts: [],
+            papers: [
+                {...this.cellRect(33, 4), category: 'characters'},
+            ],
         };
         this.applyLevelData();
     }

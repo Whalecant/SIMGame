@@ -61,7 +61,10 @@ class forestLevel3Minigame extends forestLevel2Minigame
             batteries: [],
             lightSensors: [{ ...this.cellRect(15, 38), color: 'yellow', channel: 'light5', name: '光敏开关2' }],
             lightSources: [{ ...this.cellRect(1, 38), angle: 0, name: '光源' }],
-            prompts: []
+            prompts: [],
+            papers: [
+                {...this.cellRect(48, 22), category: 'factions'},
+            ],
         };
         this.applyLevelData();
     }

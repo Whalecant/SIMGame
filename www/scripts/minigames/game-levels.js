@@ -867,7 +867,7 @@ class forestPlatformMinigame extends baseMinigame
 
     paperInRange(paper)
     {
-        return this.isWithinRange(paper, this.wallUnit * 2);
+        return this.isWithinRange(paper, this.wallUnit * 1.5);
     }
 
     updateNearbyNames()

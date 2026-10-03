@@ -41,7 +41,7 @@ class forestLevel1Minigame extends forestPlatformMinigame
                 { ...this.cellRect(30, 44, 6, 2), text: '现在用W跳跃' }
             ],
             papers: [
-                {...this.cellRect(9, 47), category: 'setting'},
+                {...this.cellRect(38, 47), category: 'setting'},
             ],
         };
         this.applyLevelData();

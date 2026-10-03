@@ -63,7 +63,10 @@ class forestLevel5Minigame extends forestLevel2Minigame
             mirrors: [],
             seeds: [],
             batteries: [],
-            prompts: []
+            prompts: [],
+            papers: [
+                {...this.cellRect(37, 37), category: 'religions'},
+            ],
         };
         this.applyLevelData();
     }

@@ -261,16 +261,47 @@ function interact()
             });
             return;
         }
-
-        gameConfirm.open(
+        else if(!allPartsInstalled() && journalManager.allJournalsCollected())
         {
-            title: 'Final Level',
-            text: 'Not all parts are installed. Enter the final level anyway?',
-            yes: 'Enter anyway',
-            no: 'View blueprint',
-            onYes: () => startMinigameInstance('redNode', null),
-            onNo: () => openVehicleBlueprint()
-        });
+            gameConfirm.open(
+            {
+                title: 'Final Level',
+                text: 'Not all parts are installed. Enter the final level anyway?',
+                yes: 'Enter anyway',
+                no: 'View blueprint',
+                onYes: () => startMinigameInstance('redNode', null),
+                onNo: () => openVehicleBlueprint()
+            });
+            return;
+            return;
+        }
+        else if(allPartsInstalled() && !journalManager.allJournalsCollected())
+        {
+            gameConfirm.open(
+            {
+                title: 'Final Level',
+                text: 'Some journal entries are still scattered. Enter the final level anyway?',
+                yes: 'Enter anyway',
+                no: 'view blueprint',
+                onYes: () => startMinigameInstance('redNode', null),
+                onNo: () => openVehicleBlueprint()
+
+            }    
+            );
+
+            return;
+        }
+        
+        gameConfirm.open(
+            {
+                title: 'Final Level',
+                text: 'A lot of important things are still missing. Enter the final level anyway?',
+                yes: 'Enter anyway',
+                no: 'view blueprint',
+                onYes: () => startMinigameInstance('redNode', null),
+                onNo: () => openVehicleBlueprint()
+            }
+        );
         return;
 
     }
@@ -474,7 +505,7 @@ function completeMiniGame(mgId, success, rewardPartKey)
         if(newLogs > 0)
         {
             const logText = 'Journal Entry Unlocked';
-            msg = msg ? `${msg} .   ${logText}` : logText;
+            msg = msg ? `${msg}. ${logText}` : logText;
         }
 
         if(msg)

@@ -54,7 +54,10 @@ class forestLevel2Minigame extends forestPlatformMinigame
             mirrors: [],
             seeds: [],
             batteries: [],
-            prompts: []
+            prompts: [],
+            papers: [
+                {...this.cellRect(24, 20), category: 'history'},
+            ],
         };
         this.applyLevelData();
     }

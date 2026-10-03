@@ -67,7 +67,10 @@ class forestLevel8Minigame extends forestLevel2Minigame
                 { ...this.cellRect(12, 45), color: 'yellow', channel: 'light2', name: '光敏开关2' }
             ],
             lightSources: [],
-            prompts: []
+            prompts: [],
+            papers: [
+                {...this.cellRect(10, 20), category: 'ending'},
+            ],
         };
         this.applyLevelData();
     }
