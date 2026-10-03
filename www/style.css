@@ -673,6 +673,32 @@ input[type="range"] {
     margin-bottom: 2rem;
 }
 
+.cutsceneText
+{
+    width: min(800px, 90vw);
+    margin: 0 auto 2rem;
+    text-align: center;
+    font-size: 1.3rem;
+    line-height: 1.8;
+    color: #f3ecd8;
+}
+
+.cutsceneText p
+{
+    margin: 0 0 1rem;
+}
+
+.cutsceneText .caret::after
+{
+    content: '▌';
+    animation: cutsceneBlink 0.8s steps(1) infinite;
+}
+
+@keyframes cutsceneBlink
+{
+    50% { opacity: 0; }
+}
+
 .cutsceneBtn {
     padding: 12px 32px;
     font-size: 1.2rem;

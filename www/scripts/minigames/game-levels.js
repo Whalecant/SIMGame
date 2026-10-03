@@ -103,16 +103,9 @@ class forestPlatformMinigame extends baseMinigame
 
     update(deltaTime)
     {
-        if(window.Input && Input.consumePress('q'))
+        if(window.Input && Input.consumePress('q') && this.controlMode === 'machine')
         {
-            if(this.controlMode === 'machine')
-            {
-                this.controlMode = 'player';
-            }
-            else
-            {
-                this.stop(false);
-            }
+            this.controlMode = 'player';
             return;
         }
 
@@ -177,7 +170,7 @@ class forestPlatformMinigame extends baseMinigame
 
         if(this.controlMode !== 'combined' && this.traps.some(trap => this.intersectsTrap(player, trap)))
         {
-            this.stop(false);
+            this.resetPlayer();
             return;
         }
 
@@ -1038,7 +1031,7 @@ class forestPlatformMinigame extends baseMinigame
                 ctx.save();
                 ctx.font = '20px sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('📄', paper.x + paper.width / 2, paper.y + paper.height - 2);
+                ctx.fillText('📃', paper.x + paper.width / 2, paper.y + paper.height - 2);
                 ctx.restore();
             }
         }
@@ -1114,7 +1107,7 @@ class forestPlatformMinigame extends baseMinigame
         ctx.fillStyle = '#ffffff';
         ctx.font = '18px sans-serif';
         ctx.textAlign = 'left';
-        ctx.fillText('A/D 跑动  W/空格 跳跃  E 交互  Q 退出', 24, 34);
+        ctx.fillText('A/D 跑动  W/空格 跳跃  E 交互  ESC 菜单', 24, 34);
         ctx.fillText(`钥匙：${this.heldKey || '无'}`, 24, this.worldHeight - 24);
         // ctx.fillText(`萌发值：${this.growth}`, 150, this.worldHeight - 24);
         ctx.fillText(`控制：${this.controlMode}`, 300, 34);

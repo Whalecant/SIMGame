@@ -27,6 +27,8 @@
         <script src="scripts/systems/achievementManager.js"></script>
         <script src="scripts/systems/login.js"></script>
 
+        <script src="scripts/systems/endingText.js"></script>
+
         <script src="scripts/systems/journalManager.js"></script>
         <script src="scripts/systems/eggManager.js"></script>
 
@@ -228,6 +230,16 @@
                     </div>
                 </div>
 
+                <div id="mgPauseScreen" class="uiScreen hidden">
+                    <h2 data-i18n="paused">Paused</h2>
+
+                    <div class="menuButtons">
+                        <button onclick="togglePause()" data-i18n="resume">Resume</button>
+                        <button onclick="openMenu('settingsScreen')" data-i18n="settings">Settings</button>
+                        <button onclick="returnToHub()">Return to Hub</button>
+                    </div>
+                </div>
+
                 <div id="dpad" class="hidden">
                     <!--all unicode symbols can be found here https://www.compart.com/en/unicode/U+25C0-->
                     <button class="dpadBtn" id="dpadUp" data-key="w">▲</button>
@@ -268,8 +280,9 @@
                 </div>
 
                 <div id="cutscene" class="uiScreen cutsceneOverlay hidden">
-                    <h1 id="cutsceneTitle" class="cutsceneTitle">ENDING</h1>
-                    <button id="cutsceneContBtn" class="topNavBtn cutsceneBtn">
+                    <div id="cutsceneText" class="cutsceneText"></div>
+                    <h1 id="cutsceneTitle" class="cutsceneTitle hidden">ENDING</h1>
+                    <button id="cutsceneContBtn" class="topNavBtn cutsceneBtn hidden">
                         Continue
                     </button>
                 </div>

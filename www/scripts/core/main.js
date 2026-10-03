@@ -37,6 +37,25 @@ const Game =
 
         this.pause = new pauseManager();
 
+        const savedVolume = localStorage.getItem('SCCFVolume');
+
+        if(savedVolume !== null)
+        {
+            this.settings.volume = parseInt(savedVolume, 10);
+        }
+
+        const slider = document.getElementById('audioSlider');
+
+        if(slider)
+        {
+            slider.value = this.settings.volume;
+        }
+
+        if(window.audioManager)
+        {
+            window.audioManager.setVolume(this.settings.volume / 100);
+        }
+
         if(window.overworld)
         {
             overworld.init(this.canvas, this.ctx);
@@ -291,7 +310,7 @@ function startMinigameInstance(mgId, rewardPartKey)
 
     if(pauseBtn)
     {
-        pauseBtn.textContent = 'X';
+        pauseBtn.textContent = '||';
         pauseBtn.classList.add('inMinigame');
     }
 
@@ -399,7 +418,14 @@ function completeMiniGame(mgId, success, rewardPartKey)
 
     if(window.audioManager)
     {
-        window.audioManager.stopBgm();
+        if(mgId === 'redNode' && success)
+        {
+            window.audioManager.stopBgm();
+        }
+        else
+        {
+            window.audioManager.playHub();
+        }
     }
 
     const pauseBtn = document.getElementById('pauseBtnMobile');
@@ -542,7 +568,7 @@ function closeSettings()
 {
     if(Game.previousState === 'PAUSED')
     {
-        Game.showScreen('pauseScreen');
+        Game.showScreen(Game.inMinigame ? 'mgPauseScreen' : 'pauseScreen');
     }
     else
     {
@@ -570,7 +596,9 @@ function switchTabSettings(tabId, btnElement)
 function updateAudioVolume(val)
 {
     Game.settings.volume = parseInt(val, 10);
-    if(window.audioManager && typeof window.audioManager.setVolume === 'function')
+    localStorage.setItem('SCCFVolume', Game.settings.volume);
+
+    if(window.audioManager)
     {
         window.audioManager.setVolume(Game.settings.volume / 100);
     }
@@ -661,6 +689,11 @@ function loadSave(slotNumber, overrideData = null)
     Game.currentState = 'PLAYING';
     Game.showScreen(null);
     Game.startGameLoop();
+
+    if(window.audioManager)
+    {
+        window.audioManager.playHub();
+    }
 
     showMobileControls(true);
 }
@@ -776,19 +809,25 @@ function togglePause()
     
     if(Game.inMinigame && window.overworld && overworld.activeMg)
     {
-        overworld.activeMg.stop(false);
-        Game.inMinigame = false;
-
-        if(window.audioManager)
+        if(Game.currentState === 'PLAYING')
         {
-            window.audioManager.stopBgm();
+            Game.currentState = 'PAUSED';
+            Game.showScreen('mgPauseScreen');
+
+            if(window.audioManager)
+            {
+                window.audioManager.pauseBgm();
+            }
         }
-
-        const pauseBtn = document.getElementById('pauseBtnMobile');
-        if(pauseBtn)
+        else if(Game.currentState === 'PAUSED')
         {
-            pauseBtn.textContent = '||';
-            pauseBtn.classList.remove('inMinigame');
+            Game.currentState = 'PLAYING';
+            Game.showScreen(null);
+
+            if(window.audioManager)
+            {
+                window.audioManager.resumeBgm();
+            }
         }
 
         return;
@@ -809,6 +848,11 @@ function togglePause()
         Game.currentState = 'PAUSED';
         Game.showScreen('pauseScreen');
 
+        if(window.audioManager)
+        {
+            window.audioManager.pauseBgm();
+        }
+
         showMobileControls(false);
         showActionBtn(false);
 
@@ -817,6 +861,11 @@ function togglePause()
     {
         Game.currentState = 'PLAYING';
         Game.showScreen(null);
+        
+        if(window.audioManager)
+        {
+            window.audioManager.resumeBgm();
+        }
 
         showMobileControls(true);
         showActionBtn(true);
@@ -824,35 +873,167 @@ function togglePause()
     }
 }
 
+const cutsceneTyper = 
+{
+    charDelay: 35,
+    linePause: 700,
+    endPause: 1200,
+
+    lines: [],
+    ending: '',
+    lineIdx: 0,
+    charIdx: 0,
+    timer: null,
+    phase: 'done',
+    paragraph: null,
+    startedAt: 0,
+
+    start(endingType)
+    {
+        this.stop();
+
+        this.lines = (window.endingText && window.endingText[endingType]) || [];        this.ending = endingType;
+        this.lineIdx = 0;
+        this.startedAt = performance.now();
+
+        document.getElementById('cutsceneText').textContent = '';
+        document.getElementById('cutsceneTitle').classList.add('hidden');
+        document.getElementById('cutsceneContBtn').classList.add('hidden');
+
+        this.nextLine();
+    },
+
+    nextLine()
+    {
+        if(this.lineIdx >= this.lines.length)
+        {
+            this.showEnding();
+            return;
+        }
+
+        this.paragraph = document.createElement('p');
+        this.paragraph.classList.add('caret');
+        document.getElementById('cutsceneText').appendChild(this.paragraph);
+
+        this.charIdx = 0;
+        this.phase = 'typing';
+        this.typeChar();
+    },
+
+    typeChar()
+    {
+        const line = this.lines[this.lineIdx];
+
+        if(this.charIdx < line.length)
+        {
+            this.charIdx++;
+            this.paragraph.textContent = line.slice(0, this.charIdx);
+            this.timer = setTimeout(() => this.typeChar(), this.charDelay);
+            return;
+        }
+
+        this.finishLine();
+    },
+
+    finishLine()
+    {
+        this.paragraph.textContent = this.lines[this.lineIdx];
+        this.paragraph.classList.remove('caret');
+        this.lineIdx++;
+        this.phase = 'pause';
+
+        const isLast = this.lineIdx >= this.lines.length;
+        this.timer = setTimeout(() => this.nextLine(), isLast ? this.endPause : this.linePause);
+    },
+
+    skip()
+    {
+        if(this.phase === 'done' || performance.now() - this.startedAt < 400)
+        {
+            return;
+        }
+
+        clearTimeout(this.timer)
+
+        if(this.phase === 'typing')
+        {
+            this.finishLine()
+        }
+        else
+        {
+            this.nextLine();
+        }
+    
+    },
+
+    showEnding()
+    {
+        this.phase = 'done';
+        
+        const title = document.getElementById('cutsceneTitle');
+        title.textContent = `${this.ending} ENDING`;
+        title.classList.remove('hidden');
+
+        document.getElementById('cutsceneContBtn').classList.remove('hidden');
+    },
+
+    stop()
+    {
+        clearTimeout(this.timer);
+        this.phase = 'done';
+    }
+};
+
+
 function showCutscene(endingType)
 {
+    Game.currentState = 'END';
     showMobileControls(false);
-
     Game.showScreen('cutscene');
 
-    const titleElem = document.getElementById('cutsceneTitle');
-    if(titleElem)
-    {
-        titleElem.textContent = `${endingType} ENDING`;
-    }
-
-    // if(endingType === 'GOOD' && window.vehicleManager)
-    // {
-    //     window.vehicleManager.endlessModeUnlock = true;
-    //     window.vehicleManager.endlessMode = true;
-    // }
-
     const continueBtn = document.getElementById('cutsceneContBtn');
+
     if(continueBtn)
     {
         continueBtn.onclick = () =>
         {
+            cutsceneTyper.stop();
             quitToMainMenu();
-        }
+        };
     }
+
+    cutsceneTyper.start(endingType);
     
 }
 
+document.addEventListener('DOMContentLoaded', () => 
+{
+    const overlay = document.getElementById('cutscene');
+
+    if(overlay)
+    {
+        overlay.addEventListener('pointerdown', () => cutsceneTyper.skip());
+    }
+});
+
+document.addEventListener('keydown', (e) =>
+{
+    if(Game.currentState === 'END' && (e.key === ' ' || e.key === 'Enter'))
+    {
+        cutsceneTyper.skip();
+    }
+})
+
+function returnToHub()
+{
+    Game.currentState = 'PLAYING';
+    Game.showScreen(null);
+
+    if(window.overworld && overworld.activeMg)
+    {
+        overworld.activeMg.stop(false);
+    }
+}
 
 //I am in fact not tripping, Yes there is two different __ToMainMenu functions... I'm sorry me
 function quitToMainMenu()
