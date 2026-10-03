@@ -78,6 +78,11 @@ const player =
                 this.y = prevY;
             }
 
+            if(window.roomManager && roomManager.currRoomId === 'hub' && window.oldMan && oldMan.boxCollider(this, this.x, this.y))
+            {
+                this.y = prevY;
+            }
+
             if(Input.isDown('a'))
             {
                 this.x -= this.speed;
@@ -101,6 +106,12 @@ const player =
             {
                 this.x = prevX;
             }
+
+            if(window.roomManager && roomManager.currRoomId === 'hub' && window.oldMan && oldMan.boxCollider(this, this.x, this.y))
+            {
+                this.x = prevX;
+            }
+            
             
             if(this.isMoving)
             {

@@ -206,6 +206,16 @@ class stationManager
         return null;
     }
 
+    toGray(hex)
+    {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        const gray = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
+
+        return Math.round(90 + gray * 0.4);
+    }
+
     renderRoom(ctx, roomId)
     {
         const nodes = this.roomNodes[roomId];
@@ -216,12 +226,29 @@ class stationManager
         ctx.textAlign = 'center';
 
         for(const node of nodes)
-        {
+        {      
             const isCompleted = this.completedLevels.has(node.currentMgId);
-            ctx.fillStyle = isCompleted ? '#e74c3c' : this.nodeColors[node.currentMgId];
+            let textColor = '#ffffff';
+
+            if(isCompleted)
+            {
+                const value = this.toGray(this.nodeColors[node.currentMgId]);
+                ctx.fillStyle = `rgb(${value}, ${value}, ${value})`;
+                textColor = value > 150 ? '#000000' : '#ffffff';
+            }
+            else
+            {
+                ctx.fillStyle = this.nodeColors[node.currentMgId];
+
+                if(node.currentMgId === 'whiteNode' || node.currentMgId === 'goldNode')
+                {
+                    textColor = '#000000';
+                }
+            }
+
             ctx.fillRect(node.x - node.width/2, node.y - node.height/2, node.width, node.height);
 
-            ctx.fillStyle = ((node.currentMgId === 'whiteNode' && !isCompleted) || (node.currentMgId === 'goldNode' && !isCompleted)) ? '#000000' : '#ffffff';
+            ctx.fillStyle = textColor;
             ctx.fillText(`Lvl ${node.levelIdx}`, node.x, node.y + 5);
         }
     }

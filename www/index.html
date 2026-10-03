@@ -12,6 +12,7 @@
         <script src="scripts/core/audio.js"></script>
         <script src="scripts/core/strings.js"></script>
         <script src="scripts/core/confirm.js"></script>
+        <script src="scripts/core/dialogue.js"></script>
         
         <script src="scripts/systems/gameTimer.js"></script>
         <script src="scripts/systems/player.js"></script>
@@ -27,6 +28,7 @@
         <script src="scripts/systems/achievementManager.js"></script>
         <script src="scripts/systems/login.js"></script>
 
+        <script src="scripts/systems/oldMan.js"></script>
         <script src="scripts/systems/endingText.js"></script>
 
         <script src="scripts/systems/journalManager.js"></script>
@@ -276,6 +278,14 @@
                             <button id="gameConfirmYes"></button>
                             <button id="gameConfirmNo"></button>
                         </div>
+                    </div>
+                </div>
+
+                <div id="dialogueBox" class="dialogueOverlay hidden">
+                    <div class="dialoguePanel">
+                        <div id="dialogueName" class="dialogueName"></div>
+                        <p id="dialogueText" class="dialogueText"></p>
+                        <div class="dialogueHint">E / click</div>
                     </div>
                 </div>
 

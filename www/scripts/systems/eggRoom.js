@@ -7,6 +7,33 @@ let taken = localStorage.getItem(takenKey) === '1';
 const msgQueue = [];
 let msgBusy = false;
 
+//sorry toby, i'm too lazy to recreate it
+const eggBgm = new Audio('assets/audio/bgm/eggRoom.mp3');
+eggBgm.loop = true;
+
+const savedVol = localStorage.getItem('SCCFVolume');
+eggBgm.volume = savedVol !== null ? parseInt(savedVol / 10) / 100 : 0.5;
+
+function startEggMusic()
+{
+    eggBgm.play().catch(() =>
+    {
+        const retry = () =>
+        {
+            removeEventListener('keydown', retry);
+            removeEventListener('pointerdown', retry);
+            eggBgm.play().catch(() => {});
+        };
+
+        addEventListener('keydown', retry);
+        addEventListener('pointerdown', retry);
+    })
+}
+
+startEggMusic();
+
+
+
 
 const door = 
 {

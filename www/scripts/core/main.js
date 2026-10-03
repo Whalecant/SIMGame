@@ -115,7 +115,7 @@ const Game =
     //obvious i don't need to fucking explain what the 2 functions below do me (yes i'm talking to myself for future reference)
     update(deltaTime)
     {
-        if(this.mapOpen || this.vehicleBlueprintOpen || (window.gameConfirm && gameConfirm.isOpen))
+        if(this.mapOpen || this.vehicleBlueprintOpen || (window.gameConfirm && gameConfirm.isOpen) || (window.dialogue && dialogue.isOpen))
         {
             return;
         }
@@ -229,6 +229,12 @@ function interact()
 {
     if(!(window.overworld && overworld.showActionBtn()) || Game.inMinigame)
     {
+        return;
+    }
+
+    if(window.oldMan && window.Player && window.roomManager && roomManager.currRoomId === 'hub' && oldMan.nearPlayer(Player))
+    {
+        oldMan.talk();
         return;
     }
 
@@ -801,6 +807,10 @@ function showMsgPopup(message, duration = 2000)
 
 function togglePause()
 {
+    if(window.dialogue && dialogue.isOpen)
+    {
+        return;
+    }
 
     if(window.gameConfirm && gameConfirm.isOpen)
     {

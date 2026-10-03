@@ -274,6 +274,11 @@ const overworld =
             savePoint.render(ctx);
         }
 
+        if(window.oldMan && roomManager.currRoomId === 'hub')
+        {
+            oldMan.render(ctx);
+        }
+
         if(window.stationManager && window.roomManager)
         {
             window.stationManager.renderRoom(ctx, roomManager.currRoomId);

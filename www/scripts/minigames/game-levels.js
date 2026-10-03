@@ -170,7 +170,7 @@ class forestPlatformMinigame extends baseMinigame
 
         if(this.controlMode !== 'combined' && this.traps.some(trap => this.intersectsTrap(player, trap)))
         {
-            this.resetPlayer();
+            this.die();
             return;
         }
 
@@ -209,6 +209,31 @@ class forestPlatformMinigame extends baseMinigame
         for(const paper of papers)
         {
             if(this.collectedPapers.has(paper) || !this.isWithinRange(paper, this.wallUnit * 2))
+            {
+                continue;
+            }
+
+            if(!window.Input || !Input.consumePress('e'))
+            {
+                continue;
+            }
+
+            this.collectedPapers.add(paper);
+
+            if(typeof journalManager !== 'undefined')
+            {
+                journalManager.unlock(paper.category);
+            }
+        }
+    }
+    
+    collectPapers()
+    {
+        const papers = (this.levelData && this.levelData.papers) || [];
+
+        for(const paper of papers)
+        {
+            if(this.collectedPapers.has(paper) || !this.paperInRange(paper))
             {
                 continue;
             }
@@ -814,6 +839,11 @@ class forestPlatformMinigame extends baseMinigame
             Math.abs(this.player.y - (rectangle.y + rectangle.height / 2)) <= range;
     }
 
+    paperInRange(paper)
+    {
+        return this.isWithinRange(paper, this.wallUnit * 2);
+    }
+
     updateNearbyNames()
     {
         const objects = [
@@ -891,6 +921,11 @@ class forestPlatformMinigame extends baseMinigame
         this.player.velocityX = 0;
         this.player.velocityY = 0;
         this.player.grounded = false;
+    }
+
+    die()
+    {
+        this.init();
     }
 
     updateAnimation(player, deltaTime)
@@ -1026,14 +1061,29 @@ class forestPlatformMinigame extends baseMinigame
 
         for(const paper of ((this.levelData && this.levelData.papers) || []))
         {
-            if(!this.collectedPapers.has(paper))
+            if(this.collectedPapers.has(paper))
             {
-                ctx.save();
-                ctx.font = '20px sans-serif';
-                ctx.textAlign = 'center';
-                ctx.fillText('📃', paper.x + paper.width / 2, paper.y + paper.height - 2);
-                ctx.restore();
+                continue;
             }
+
+            const centerX = paper.x + paper.width / 2;
+
+            ctx.save();
+            ctx.textAlign = 'center';
+            ctx.font = '20px sans-serif';
+            ctx.fillText('📄', centerX, paper.y + paper.height - 2);
+
+            if(this.paperInRange(paper))
+            {
+                ctx.font = '14px sans-serif';
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+                ctx.fillStyle = '#ffffff';
+                ctx.strokeText('[E] to pick up', centerX, paper.y - 15);
+                ctx.fillText('[E] to pick up', centerX, paper.y - 15);
+            }
+
+            ctx.restore();
         }
 
         for(const battery of this.batteries)
