@@ -3,14 +3,16 @@ const oldMan =
     name: 'Old Man',
 
     x: 520,
-    y: 330,
+    y: 300,
     width: 48,
     height: 48,
     radius: 90,
     color: '#fcef00',
 
-    colliderWidth: 40,
+    colliderWidth: 0,
     colliderHeight: 20,
+    colliderOffsetX: 0,
+    colliderOffsetY: -10,
 
     sprite: new Image(),
 
@@ -54,10 +56,13 @@ const oldMan =
         const top = nextY - pos.height / 2;
         const bot = nextY + pos.height / 2;
 
-        const omLeft = this.x - this.colliderWidth / 2;
-        const omRight = this.x + this.colliderWidth / 2;
-        const omBot = this.y + this.colliderHeight / 2;
-        const omTop = this.y - this.colliderHeight / 2;
+        const cx = this.x + this.colliderOffsetX;
+        const cy = this.y + this.colliderOffsetY;
+
+        const omLeft = cx - this.colliderWidth / 2;
+        const omRight = cx + this.colliderWidth / 2;
+        const omTop = cy - this.colliderHeight / 2;
+        const omBot = cy + this.colliderHeight / 2;
 
         return left < omRight && right > omLeft && top < omBot && bot > omTop;
     },
@@ -68,7 +73,7 @@ const oldMan =
         
         if(this.sprite.complete && this.sprite.naturalWidth !== 0)
         {
-            ctx.drawImage(this.sprite, this.x - this.widt / 2, this.y - this.height / 2);
+            ctx.drawImage(this.sprite, this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
         }
         else
         {
@@ -83,11 +88,12 @@ const oldMan =
             ctx.fillStyle = 'black';
             ctx.font = '12px sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('[E] Talk', this.x, this.y - this.height / 2 - 30);
+            ctx.fillText('[E] Talk', this.x, this.y - this.height / 2 - 15);
         }
 
         ctx.restore();
     }
 };
 
-window.oldMan = oldMan
+oldMan.sprite.src = 'assets/character/oldMan.png';
+window.oldMan = oldMan;
