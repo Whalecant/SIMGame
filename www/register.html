@@ -7,47 +7,50 @@
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="subPage.css">
 
+        <script src="scripts/core/lang.js"></script>
+        <script src="scripts/core/strings.js"></script>
+
         <script src="scripts/systems/register.js" defer></script>
     </head>
 
     <body>
         <!--simple notice and what not-->
         <div id="mobileBlocker">
-            <h2>ACCESS RESTRICTED</h2>
-            <p>Please access this terminal via desktop screen size for optimal viewing.</p>
+            <h2 data-i18n="restrictedTitle">ACCESS RESTRICTED</h2>
+            <p data-i18n="restrictedText">Please access this terminal via desktop screen size for optimal viewing.</p>
         </div>
 
         <div class="indexCard">
             <div class="page">
                 <header class="archiveHeader">
-                    <h1>REGISTER</h1>
-                    <div class="subtitle">Create a new account</div>
+                    <h1 data-i18n="registerHeading">REGISTER</h1>
+                    <div class="subtitle" data-i18n="registerSubtitle">Create a new account</div>
                 </header>
 
                 <div id="registerMessage" style="margin-bottom: 1rem; font-weight: bold; text-align: center;"></div>
 
                 <form class="authForm" id="registerForm" onsubmit="handleRegister(event)">
                     <div class="formGroup">
-                        <label for="username">Username</label>
+                        <label for="username" data-i18n="usernameLabel">Username</label>
                         <input type="text" id="username" name="username" required autocomplete="username">
                     </div>
 
                     <div class="formGroup">
-                        <label for="password">Password</label>
+                        <label for="password" data-i18n="passwordLabel">Password</label>
                         <input type="password" id="password" name="password" required autocomplete="new-password">
                     </div>
 
                     <div class="buttonWrap" style="margin-top: 1rem;">
-                        <button type="submit" class="navBtn" style="width: 100%;">REGISTER</button>
+                        <button type="submit" class="navBtn" style="width: 100%;" data-i18n="registerBtn">REGISTER</button>
                     </div>
                 </form>
 
                 <div class="authFooter">
-                    Already registered? <a href="login.html">LOGIN</a>
+                    <span data-i18n="alreadyRegistered">Already registered?</span> <a href="login.html" data-i18n="loginBtn">LOGIN</a>
                 </div>
 
                 <div class="buttonWrap">
-                    <button type="button" class="navBtn" onclick="window.location.href='index.html'">BACK TO MAIN MENU</button>
+                    <button type="button" class="navBtn" onclick="window.location.href='index.html'" data-i18n="backToMenu">BACK TO MAIN MENU</button>
                 </div>
             </div>
         </div>

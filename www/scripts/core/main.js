@@ -253,10 +253,10 @@ function interact()
         {
             gameConfirm.open(
             {
-                title: 'Final Level',
-                text: 'All 8 parts installed! Enter final level?',
-                yes: 'Enter',
-                no: 'Not yet',
+                title: getText('finalTitle'),
+                text: getText('finalReady'),
+                yes: getText('btnEnter'), 
+                no: getText('btnNotYet'),
                 onYes: () => startMinigameInstance('redNode', null)
             });
             return;
@@ -265,24 +265,23 @@ function interact()
         {
             gameConfirm.open(
             {
-                title: 'Final Level',
-                text: 'Not all parts are installed. Enter the final level anyway?',
-                yes: 'Enter anyway',
-                no: 'View blueprint',
+                title: getText('finalTitle'),
+                text: getText('finalNoParts'),                
+                yes: getText('btnEnterAnyway'), 
+                no: getText('btnViewBlueprint'),
                 onYes: () => startMinigameInstance('redNode', null),
                 onNo: () => openVehicleBlueprint()
             });
-            return;
             return;
         }
         else if(allPartsInstalled() && !journalManager.allJournalsCollected())
         {
             gameConfirm.open(
             {
-                title: 'Final Level',
-                text: 'Some journal entries are still scattered. Enter the final level anyway?',
-                yes: 'Enter anyway',
-                no: 'view blueprint',
+                title: getText('finalTitle'),
+                text: getText('finalNoLogs'),  
+                yes: getText('btnEnterAnyway'), 
+                no: getText('btnViewBlueprint'),
                 onYes: () => startMinigameInstance('redNode', null),
                 onNo: () => openVehicleBlueprint()
 
@@ -294,10 +293,10 @@ function interact()
         
         gameConfirm.open(
             {
-                title: 'Final Level',
-                text: 'A lot of important things are still missing. Enter the final level anyway?',
-                yes: 'Enter anyway',
-                no: 'view blueprint',
+                title: getText('finalTitle'),
+                text: getText('finalMissingBoth'), 
+                yes: getText('btnEnterAnyway'), 
+                no: getText('btnViewBlueprint'),
                 onYes: () => startMinigameInstance('redNode', null),
                 onNo: () => openVehicleBlueprint()
             }
@@ -497,14 +496,14 @@ function completeMiniGame(mgId, success, rewardPartKey)
         if(rewardPartKey && window.Vehicle && !window.Vehicle.installedParts.has(rewardPartKey))
         {
             window.Vehicle.installPart(rewardPartKey);
-            msg = `${rewardPartKey} installed! (${window.Vehicle.installedParts.size}/8)`;
+            msg = getText('partInstalled', { part: rewardPartKey, count: window.Vehicle.installedParts.size, total: 8 });
         }
 
         const newLogs = window.journalManager ? journalManager.takeNewlyBanked() : 0;
 
         if(newLogs > 0)
         {
-            const logText = 'Journal Entry Unlocked';
+            const logText = getText('journalUnlocked');
             msg = msg ? `${msg}. ${logText}` : logText;
         }
 
@@ -563,8 +562,7 @@ function openVehicleBlueprint()
         const isInstalled = window.Vehicle.installedParts.has(partKey);
 
         row.className = 'vehiclePartRow' + (isInstalled ? ' done' : '');
-        row.textContent = isInstalled ? `${partKey} - Installed` : `${partKey} - Missing`;
-        list.appendChild(row);
+        row.textContent = `${partKey} - ${getText(isInstalled ? 'partDone' : 'partMissing')}`;        list.appendChild(row);
     });
 
     const journalList = document.getElementById('vehicleJournalList');
@@ -573,16 +571,17 @@ function openVehicleBlueprint()
     if(journalList && window.journalManager)
     {
         journalList.innerHTML = '';
-        journalTitle.textContent = `Journal Logs (${journalManager.slotCount()}/${journalManager.categories.length})`;
+        journalTitle.textContent = getText('journalLogsTitle', { count: journalManager.slotCount(), total: journalManager.categories.length });
 
         journalManager.categories.forEach(id =>
         {
             const row = document.createElement('div');
             const found = journalManager.slotHas(id);
-            const label = id.charAt(0).toUpperCase() + id.slice(1);
+            const catKey = 'cat_' + id;
+            const label = getText(catKey) !== catKey ? getText(catKey) : id.charAt(0).toUpperCase() + id.slice(1);
 
             row.className = 'vehiclePartRow' + (found ? ' done' : '');
-            row.textContent = found ? `${label} - Collected` : `${label} - Missing`;
+            row.textContent = `${label} - ${getText(found ? 'journalCollected' : 'journalMissing')}`;
             journalList.appendChild(row);
         });
     }
@@ -680,14 +679,7 @@ function updateAudioVolume(val)
 
 function toggleLanguage()
 {
-    Game.settings.currLang = Game.settings.currLang === 'en' ? 'zh' : 'en';
-
-    const langBtn = document.getElementById('languageButton');
-
-    if(langBtn)
-    {
-        langBtn.textContent = Game.settings.currLang === 'en' ? 'English' : '中文简体'
-    }
+    lang.set(lang.current() === 'en' ? 'zh' : 'en');
 }
 
 function resetNewGame()
@@ -844,24 +836,45 @@ function refreshSaveSlotDisplay(slot)
     }
 
     const data = window.saveManager ? saveManager.load(slot) : null;
+    const slotBox = slotText.closest('.saveSlot');
+
 
     if(data)
     {
-        const vehicleNum = (data.vehicle && typeof data.vehicle.currentVehicleIdx === 'number') ? data.vehicle.currentVehicleIdx + 1 : 1;
-        const dayNum = (data.timer && typeof data.timer.currDay === 'number') ? data.timer.currDay : 1;
+        const TOTAL_LEVELS = 8;
+        const totalJournal = (window.journalManager && journalManager.categories) ? journalManager.categories.length : 8;
 
-        slotText.textContent = `Day ${dayNum} | Vehicle ${vehicleNum}`;
+        const levelCount = Array.isArray(data.completedLevels) ? data.completedLevels.length : 0;
+        const journalCount = data.journal ? Object.values(data.journal).filter(Boolean).length : 0;
+
+        slotText.textContent = getText('slotInfo',
+        {
+            levels: levelCount,
+            totalLevels: TOTAL_LEVELS,
+            journal: journalCount,
+            totalJournal: totalJournal
+        });
     }
     else
     {
-        slotText.textContent = 'Empty';
+        slotText.textContent = getText('slotEmpty');
+    }
+    
+    if(slotBox)
+    {
+        const hasEgg = !!data && window.eggManager && eggManager.isTaken(slot);
+        slotBox.classList.toggle('hasEgg', hasEgg);
     }
 }
+
+    
 
 function refreshAllSaveSlots()
 {
     [1, 2, 3].forEach(refreshSaveSlotDisplay);
 }
+
+window.addEventListener('langchange', refreshAllSaveSlots);
 
 let msgPopupTimeout = null;
 
@@ -1013,7 +1026,7 @@ const cutsceneTyper =
         this.stop();
         
 
-        this.lines = (window.endingText && window.endingText[endingType]) || [];        
+        this.lines = getEndingLines(endingType);       
         this.ending = endingType;
         this.lineIdx = 0;
         this.startedAt = performance.now();
@@ -1096,7 +1109,7 @@ const cutsceneTyper =
         this.phase = 'done';
         
         const title = document.getElementById('cutsceneTitle');
-        title.textContent = `${this.ending} ENDING`;
+        title.textContent = getText('endingTitle' + this.ending);
         title.classList.remove('hidden');
 
         document.getElementById('cutsceneContBtn').classList.remove('hidden');

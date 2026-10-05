@@ -330,7 +330,7 @@ function drawTree(fade)
     ctx.fillStyle = '#5a3b22';
     ctx.fillRect(trunk.x, trunk.y, trunk.w, trunk.h);
 
-    ctx.globalAlpha = fade ? 0.55 : 1;
+    // ctx.globalAlpha = fade ? 0.55 : 1;
     ctx.fillStyle = '#dc3248';
     ctx.beginPath();
     ctx.arc(CANOPY.x, CANOPY.y, CANOPY.r, 0, Math.PI * 2);

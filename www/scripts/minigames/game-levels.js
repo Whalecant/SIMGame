@@ -238,7 +238,7 @@ class forestPlatformMinigame extends baseMinigame
 
             if(typeof showMsgPopup === 'function')
             {
-                showMsgPopup('Journal Entry found! Reach the exit to keep it', 3000);
+                showMsgPopup(getText('journalFound'), 3000);
             }
         }
     }
@@ -957,7 +957,7 @@ class forestPlatformMinigame extends baseMinigame
 
         if(lost > 0 && typeof showMsgPopup === 'function')
         {
-            showMsgPopup('Journal Entry Lost.');
+            showMsgPopup(getText('journalLost'));
         }
     }
 
@@ -1112,8 +1112,8 @@ class forestPlatformMinigame extends baseMinigame
                 ctx.lineWidth = 3;
                 ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
                 ctx.fillStyle = '#ffffff';
-                ctx.strokeText('[E] to pick up', centerX, paper.y - 15);
-                ctx.fillText('[E] to pick up', centerX, paper.y - 15);
+                ctx.strokeText(getText('pickupPrompt'), centerX, paper.y - 15);
+                ctx.fillText(getText('pickupPrompt'), centerX, paper.y - 15);
             }
 
             ctx.restore();
@@ -1149,7 +1149,7 @@ class forestPlatformMinigame extends baseMinigame
             if(this.isWithinRange(consoleObject, this.wallUnit))
             {
                 ctx.font = '12px sans-serif';
-                ctx.fillText('E 操作', consoleObject.x + consoleObject.width / 2, consoleObject.y - 8);
+                ctx.fillText(getText('hudConsole'), consoleObject.x + consoleObject.width / 2, consoleObject.y - 8);
             }
         }
 
@@ -1183,17 +1183,19 @@ class forestPlatformMinigame extends baseMinigame
         ctx.fillStyle = '#ffffff';
         ctx.font = '18px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(`出口 ${Math.min(1, this.goalStayTime).toFixed(1)}s`, this.goal.x + this.goal.width / 2, this.goal.y - 6);
+        ctx.fillText(getText('hudExit', { sec: Math.min(1, this.goalStayTime).toFixed(1) }), this.goal.x + this.goal.width / 2, this.goal.y - 6);
 
         this.drawPlayer();
 
         ctx.fillStyle = '#ffffff';
         ctx.font = '18px sans-serif';
         ctx.textAlign = 'left';
-        ctx.fillText('A/D 跑动  W/空格 跳跃  E 交互  ESC 菜单', 24, 34);
-        ctx.fillText(`钥匙：${this.heldKey || '无'}`, 24, this.worldHeight - 24);
+        const controlsText = getText('hudControls');
+        ctx.fillText(controlsText, 24, 34);
+        ctx.fillText(getText('hudKey', { key: this.heldKey || getText('hudKeyNone') }), 24, this.worldHeight - 24);
         // ctx.fillText(`萌发值：${this.growth}`, 150, this.worldHeight - 24);
-        ctx.fillText(`控制：${this.controlMode}`, 300, 34);
+        // placed after the controls text so the longer English line doesn't overlap it
+        ctx.fillText(getText('hudMode', { mode: getText('mode_' + this.controlMode) }), 24 + ctx.measureText(controlsText).width + 40, 34);
 
         if(this.nameNoticeTimer > 0)
         {
@@ -1201,7 +1203,7 @@ class forestPlatformMinigame extends baseMinigame
             ctx.fillRect(this.worldWidth / 2 - 140, 54, 280, 34);
             ctx.fillStyle = '#ffffff';
             ctx.textAlign = 'center';
-            ctx.fillText(this.nameNotice, this.worldWidth / 2, 77);
+            ctx.fillText(translateObjectName(this.nameNotice), this.worldWidth / 2, 77);
         }
 
         if(this.promptNoticeTimer > 0)

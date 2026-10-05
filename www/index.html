@@ -28,6 +28,7 @@
         <script src="scripts/systems/achievementManager.js"></script>
         <script src="scripts/systems/login.js"></script>
 
+        <script src="scripts/systems/dialogueText.js"></script>
         <script src="scripts/systems/oldMan.js"></script>
         <script src="scripts/systems/endingText.js"></script>
 
@@ -83,7 +84,7 @@
                 </div>
 
                 <div id="mainMenu" class="uiScreen">
-                    <h1 data-i18n="title">Shipwright's Countdown:<br>Civilizations Future</h1>
+                    <h1 data-i18n="menuTitle">Shipwright's Countdown:<br>Civilizations Future</h1>
 
                     <div class="menuButtons">
                         <button onclick="openMenu('saveScreen')" data-i18n="play">Play</button>
@@ -238,7 +239,7 @@
                     <div class="menuButtons">
                         <button onclick="togglePause()" data-i18n="resume">Resume</button>
                         <button onclick="openMenu('settingsScreen')" data-i18n="settings">Settings</button>
-                        <button onclick="returnToHub()">Return to Hub</button>
+                        <button onclick="returnToHub()" data-i18n="returnToHub">Return to Hub</button>
                     </div>
                 </div>
 

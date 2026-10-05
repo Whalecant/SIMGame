@@ -1,3 +1,16 @@
+function findAccountKey(userDB, name)
+{
+    if(Object.prototype.hasOwnProperty.call(userDB, name))
+    {
+        return name;
+    }
+
+    const lower = name.toLowerCase();
+    const match = Object.keys(userDB).find(key => key.toLowerCase() === lower);
+
+    return match === undefined ? null : match;
+}
+
 document.addEventListener('DOMContentLoaded', () =>
 {
     //this shit is purely so that it cna autofill the things based on the login page :thumbsup:
@@ -19,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () =>
             if(msgElem)
             {
                 msgElem.style.color = '#f87171';
-                msgElem.textContent = "Account not found. Please create an account below.";
+                msgElem.textContent = getText('registerNotFoundMsg');
             }
         }
     }
@@ -35,18 +48,18 @@ function handleRegister(event)
 
     const userDB = JSON.parse(localStorage.getItem('userDB') || '{}');
 
-    
-    if(userDB[usernameInput])
+
+    if(findAccountKey(userDB, usernameInput) !== null)
     {
         if(msgElem)
         {
             msgElem.style.color = '#f87171';
-            msgElem.textContent = "Account already exists / Username already taken";
+            msgElem.textContent = getText('usernameTakenMsg');
         }
         return;
     }
 
-    userDB[usernameInput] = 
+    userDB[usernameInput] =
     {
         password: passwordInput,
         data: null,

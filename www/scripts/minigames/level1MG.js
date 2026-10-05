@@ -32,13 +32,13 @@ class forestLevel1Minigame extends forestPlatformMinigame
             seeds: [],
             batteries: [],
             prompts: [
-                { ...this.cellRect(32, 10, 4, 2), text: '好吧，另一种开门方式' },
-                { ...this.cellRect(44, 12, 4, 3), text: '看来这就是出口了？' },
-                { ...this.cellRect(17, 16, 6, 2), text: '居然毫不意外地出现了门呢，按E打开它吧' },
-                { ...this.cellRect(3, 24, 5, 2), text: '一把钥匙，会有什么用呢' },
-                { ...this.cellRect(17, 33, 5, 2), text: '你已经是运动细胞发达的人类了' },
-                { ...this.cellRect(4, 43, 6, 2), text: '试试按A、D左右移动' },
-                { ...this.cellRect(30, 44, 6, 2), text: '现在用W跳跃' }
+                { ...this.cellRect(32, 10, 4, 2), text: getText('lvl1Prompt1') },
+                { ...this.cellRect(44, 12, 4, 3), text: getText('lvl1Prompt2') },
+                { ...this.cellRect(17, 16, 6, 2), text: getText('lvl1Prompt3') },
+                { ...this.cellRect(3, 24, 5, 2), text: getText('lvl1Prompt4') },
+                { ...this.cellRect(17, 33, 5, 2), text: getText('lvl1Prompt5') },
+                { ...this.cellRect(4, 43, 6, 2), text: getText('lvl1Prompt6') },
+                { ...this.cellRect(30, 44, 6, 2), text: getText('lvl1Prompt7') }
             ],
             papers: [
                 {...this.cellRect(38, 47), category: 'setting'},

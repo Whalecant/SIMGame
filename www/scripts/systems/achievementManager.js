@@ -1,3 +1,21 @@
+function uiText(key, fallback)
+{
+    return (typeof getText === 'function') ? getText(key) : fallback;
+}
+
+function achText(id, part, fallback)
+{
+    if(typeof getText !== 'function')
+    {
+        return fallback;
+    }
+
+    const key = `ach_${id}_${part}`;
+    const text = getText(key);
+
+    return text !== key ? text : fallback;
+}
+
 const achievementManager=
 {
     data:
@@ -33,7 +51,7 @@ const achievementManager=
 
             if(typeof showMsgPopup === 'function')
             {
-                showMsgPopup(`Achievement Unlocked!`);
+                showMsgPopup(uiText('achievementUnlocked', 'Achievement Unlocked!'));
             }
         }
     },
@@ -61,17 +79,17 @@ const achievementManager=
 
                 if(statusElem)
                 {
-                    statusElem.innerText = 'Unlocked';
+                    statusElem.innerText = uiText('achievementUnlockedLabel', 'Unlocked');
                 }
 
-                if(achElem.dataset.title && titleElem)
+                if(titleElem && (achElem.dataset.title || achText(id, 'title', '')))
                 {
-                    titleElem.innerText = achElem.dataset.title;
+                    titleElem.innerText = achText(id, 'title', achElem.dataset.title);
                 }
 
-                if(achElem.dataset.desc && descElem)
+                if(descElem && (achElem.dataset.desc || achText(id, 'desc', '')))
                 {
-                    descElem.innerText = achElem.dataset.desc;
+                    descElem.innerText = achText(id, 'desc', achElem.dataset.desc);
                 }
             }
         }
@@ -83,11 +101,18 @@ function openAchievementPopup(cardElement)
 {
     const popup = document.getElementById('achievementPopup');
     const unlocked = cardElement.classList.contains('unlocked');
+    const id = cardElement.id;
 
     const icon = cardElement.querySelector('.achievementIcon').innerText;
 
-    const title = unlocked ? cardElement.dataset.title : (cardElement.dataset.lockedTitle ?? '???');
-    const desc = unlocked ? cardElement.dataset.desc : (cardElement.dataset.lockedDesc ?? 'Not yet unlocked.');
+    // locked title falls back to the normal title key, then to the data attribute
+    const title = unlocked
+        ? achText(id, 'title', cardElement.dataset.title)
+        : achText(id, 'lockedTitle', achText(id, 'title', cardElement.dataset.lockedTitle ?? '???'));
+
+    const desc = unlocked
+        ? achText(id, 'desc', cardElement.dataset.desc)
+        : achText(id, 'lockedDesc', cardElement.dataset.lockedDesc ?? uiText('achievementLockedDesc', 'Not yet unlocked.'));
 
 
     document.getElementById('popupIcon').innerText = icon;
@@ -103,4 +128,9 @@ function openAchievementPopup(cardElement)
 document.addEventListener('DOMContentLoaded', () =>
 {
     achievementManager.init();
+});
+
+window.addEventListener('langchange', () =>
+{
+    achievementManager.updateUI();
 });

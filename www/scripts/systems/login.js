@@ -1,3 +1,16 @@
+function findAccountKey(userDB, name)
+{
+    if(Object.prototype.hasOwnProperty.call(userDB, name))
+    {
+        return name;
+    }
+
+    const lower = name.toLowerCase();
+    const match = Object.keys(userDB).find(key => key.toLowerCase() === lower);
+
+    return match === undefined ? null : match;
+}
+
 document.addEventListener('DOMContentLoaded', () =>
 {
     const urlParam = new URLSearchParams(window.location.search);
@@ -19,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () =>
         if(messageElem)
         {
             messageElem.style.color = 'lightgreen';
-            messageElem.textContent = "Account created succesfully! Please log in";
+            messageElem.textContent = getText('registeredMsg');
         }
     }
 })
@@ -34,46 +47,48 @@ function handleLogin(event)
 
     const userDB = JSON.parse(localStorage.getItem('userDB') || '{}');
 
-    if(!userDB[usernameInput])
+    const accountKey = findAccountKey(userDB, usernameInput);
+
+    if(accountKey === null)
     {
         if(messageElem)
         {
             messageElem.style.color = '#f87171';
 
-            messageElem.textContent = "Account does not exist. Please register first.";
+            messageElem.textContent = getText('noAccountMsg');
         }
-        
+
 
         const registerBtn = document.getElementById('registerBtn');
         if(registerBtn)
         {
             const registerURL = `register.html?username=${encodeURIComponent(usernameInput)}&msg=not_found`;
-            registerBtn.onclick = () => 
+            registerBtn.onclick = () =>
             {
                 window.location.href=registerURL;
             };
         }
-        
+
         return;
     }
 
 
 
-    const userAcc = userDB[usernameInput];
+    const userAcc = userDB[accountKey];
     if(userAcc.password !== passwordInput)
     {
         if(messageElem)
         {
-            messageElem.textContent = "Invalid password. Try Again";
+            messageElem.textContent = getText('badPasswordMsg');
             messageElem.style.color = '#f87171';
         }
 
         return;
     }
 
-    localStorage.setItem('currentUser', usernameInput);
+    localStorage.setItem('currentUser', accountKey);
 
-    accountSync.pull(usernameInput);
+    accountSync.pull(accountKey);
     accountSync.push();
 
     window.location.href = 'index.html';
@@ -116,10 +131,10 @@ function onAuthButtonClick()
 
     gameConfirm.open(
         {
-            title: 'Log out',
-            text: `Log out of ${getCurrentuser()}?`,
-            yes: 'Log out',
-            no: 'Cancel',
+            title: getText('logoutTitle'),
+            text: getText('logoutText', { user: getCurrentuser() }),
+            yes: getText('logoutYes'),
+            no: getText('cancel'),
             onYes: logout,
         }
     );

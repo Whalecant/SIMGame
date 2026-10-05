@@ -5,24 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Shipwright's Countdown · Navigation</title>
     <link rel="stylesheet" href="subPage.css">
+
+    <script src="scripts/core/lang.js"></script>
+    <script src="scripts/core/strings.js"></script>
 </head>
 <body>
 
     <div id="mobileBlocker">
-        <h2>Desktop Only Page</h2>
-        <p>We apologize, but this portal requires a wider screen. Please view on desktop or in a wider screen.</p>
+        <h2 data-i18n="desktopOnlyTitle">Desktop Only Page</h2>
+        <p data-i18n="desktopOnlyText">We apologize, but this portal requires a wider screen. Please view on desktop or in a wider screen.</p>
     </div>
 
     <div class="indexCard">
-        <h1>Navigation</h1>
-        <p class="subtitle">Access team credentials, media archives, and world lore</p>
+        <h1 data-i18n="navTitle">Navigation</h1>
+        <p class="subtitle" data-i18n="navSubtitle">Access team credentials, media archives, and world lore</p>
 
         <div class="navGrid">
-            <button class="navBtn" onclick="window.location.href='memberList.html'">About Us</button>
-            <button class="navBtn" onclick="window.location.href='lore.html'">Journal</button>
-            <button class="navBtn" onclick="window.location.href='gallery.html'">Gallery</button>
-            <button class="navBtn" onclick="window.location.href='changeLog.html'">Change Notes</button>
-            <button class="navBtn" onclick="window.location.href='index.html'">Return to Game</button>
+            <button class="navBtn" onclick="window.location.href='memberList.html'" data-i18n="navAbout">About Us</button>
+            <button class="navBtn" onclick="window.location.href='lore.html'" data-i18n="navJournal">Journal</button>
+            <button class="navBtn" onclick="window.location.href='gallery.html'" data-i18n="navGallery">Gallery</button>
+            <button class="navBtn" onclick="window.location.href='changeLog.html'" data-i18n="navChangeNotes">Change Notes</button>
+            <button class="navBtn" onclick="window.location.href='index.html'" data-i18n="navReturn">Return to Game</button>
         </div>
     </div>
 

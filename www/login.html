@@ -7,6 +7,9 @@
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="subPage.css">
 
+        <script src="scripts/core/lang.js"></script>
+        <script src="scripts/core/strings.js"></script>
+
         <script src="scripts/systems/accountSync.js"></script>
         <script src="scripts/systems/login.js" defer></script> 
         <!--defer lets it so that the script runs fully in the background whielt eh page is loading, ensure no scripts run prematurely which can cause null references in the case of login pages-->
@@ -15,42 +18,42 @@
     <body>
         <!--simple notice and what not-->
         <div id="mobileBlocker">
-            <h2>ACCESS RESTRICTED</h2>
-            <p>Please access this terminal via desktop screen size for optimal viewing.</p>
+            <h2 data-i18n="restrictedTitle">ACCESS RESTRICTED</h2>
+            <p data-i18n="restrictedText">Please access this terminal via desktop screen size for optimal viewing.</p>
         </div>
 
         <div class="indexCard">
             <div class="page">
                 <header class="archiveHeader">
-                    <h1>LOGIN</h1>
-                    <div class="subtitle">Enter your credentials to login</div>
+                    <h1 data-i18n="loginHeading">LOGIN</h1>
+                    <div class="subtitle" data-i18n="loginSubtitle">Enter your credentials to login</div>
                 </header>
 
                 <div id="loginMessage" style="margin-bottom: 1rem; font-weight: bold; text-align: center;"></div>
 
                 <form class="authForm" id="loginForm" onsubmit="handleLogin(event)">
                     <div class="formGroup">
-                        <label for="username">Username</label>
+                        <label for="username" data-i18n="usernameLabel">Username</label>
                         <input type="text" id="username" name="username" required autocomplete="username">
                     </div>
 
                     <div class="formGroup">
-                        <label for="password">Password</label>
+                        <label for="password" data-i18n="passwordLabel">Password</label>
                         <input type="password" id="password" name="password" required autocomplete="current-password">
                     </div>
 
                     <div class="buttonWrap" style="margin-top: 1rem;">
-                        <button type="submit" class="navBtn" style="width: 100%;">LOGIN</button>
+                        <button type="submit" class="navBtn" style="width: 100%;" data-i18n="loginBtn">LOGIN</button>
                     </div>
                 </form>
 
                 <div class="authFooter">
-                    Don't have an account? 
-                    <a onclick="window.location.href='register.html'">REGISTER</a>
+                    <span data-i18n="noAccountYet">Don't have an account?</span> 
+                    <a onclick="window.location.href='register.html'" data-i18n="registerBtn">REGISTER</a>
                 </div>
 
                 <div class="buttonWrap">
-                    <button type="button" class="navBtn" onclick="window.location.href='index.html'">BACK TO MAIN MENU</button>
+                    <button type="button" class="navBtn" onclick="window.location.href='index.html'" data-i18n="backToMenu">BACK TO MAIN MENU</button>
                 </div>
             </div>
         </div>

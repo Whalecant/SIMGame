@@ -5,91 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Shipwright's Countdown · Gallery Archive</title>
     <link rel="stylesheet" href="subPage.css">
+
+    <script src="scripts/core/lang.js"></script>
+    <script src="scripts/core/strings.js"></script>
 </head>
 <body>
 
     <div id="mobileBlocker">
-        <h2>Desktop Only Page</h2>
-        <p>We apologize, but this portal requires a wider screen. Please view on desktop or in a wider screen.</p>
+        <h2 data-i18n="desktopOnlyTitle">Desktop Only Page</h2>
+        <p data-i18n="desktopOnlyText">We apologize, but this portal requires a wider screen. Please view on desktop or in a wider screen.</p>
     </div>
 
     <div class="archive">
         <div class="archiveHeader">
-            <h1>Gallery Archive</h1>
-            <p>All media archives, from cutscenes to images to audio</p>
+            <h1 data-i18n="galleryTitle">Gallery Archive</h1>
+            <p data-i18n="gallerySubtitle">All media archives, from cutscenes to images to audio</p>
         </div>
 
-        <div class="sectionTitle">Artwork & Visuals</div>
+        <div class="sectionTitle" data-i18n="gallerySectionArt">Artwork & Visuals</div>
         <div class="galleryGrid">
             <div class="galleryCard">
-                <div class="galleryLabel">Airship Vehicle Sprite</div>
+                <div class="galleryLabel" data-i18n="galleryAirship">Airship Vehicle Sprite</div>
                 <img src="assets/airshipAndGears/airshipModel.png" alt="Art of Airship" class="galleryImage">
             </div>
 
             <div class="galleryCard">
-                <div class="galleryLabel">Early Character Concept Art</div>
+                <div class="galleryLabel" data-i18n="galleryConcept">Early Character Concept Art</div>
                 <img src="assets/character/firstModelPrototype.png" alt="Character Concept Art" class="galleryImage">
             </div>
 
             <div class="galleryCard wideCard">
-                <div class="galleryLabel">Character Spritesheet</div>
+                <div class="galleryLabel" data-i18n="gallerySpritesheet">Character Spritesheet</div>
                 <img src="assets/character/characterAnimationSpritesheet.png" alt="Character spritesheet" class="galleryImage">
             </div>
         </div>
 
-        <div class="sectionTitle">Soundtrack Archive</div>
+        <div class="sectionTitle" data-i18n="gallerySectionMusic">Soundtrack Archive</div>
         <div class="galleryGrid">
             <div class="galleryCard">
-                <div class="galleryLabel">Hub BGM</div>
+                <div class="galleryLabel" data-i18n="bgmHub">Hub BGM</div>
                 <audio controls class="audioPlayer" src="assets/audio/bgm/hubBgm.wav"></audio>
             </div>
             <div class="galleryCard">
-                <div class="galleryLabel">Gold BGM</div>
+                <div class="galleryLabel" data-i18n="bgmGold">Gold BGM</div>
                 <audio controls class="audioPlayer" src="assets/audio/bgm/goldBgm.wav"></audio>
             </div>
 
             <div class="galleryCard">
-                <div class="galleryLabel">Black BGM</div>
+                <div class="galleryLabel" data-i18n="bgmBlack">Black BGM</div>
                 <audio controls class="audioPlayer" src="assets/audio/bgm/blackBgm.wav"></audio>
             </div>
 
             <div class="galleryCard">
-                <div class="galleryLabel">White BGM</div>
+                <div class="galleryLabel" data-i18n="bgmWhite">White BGM</div>
                 <audio controls class="audioPlayer" src="assets/audio/bgm/whiteBgm.wav"></audio>
             </div>
 
             <div class="galleryCard">
-                <div class="galleryLabel">Purple BGM</div>
+                <div class="galleryLabel" data-i18n="bgmPurple">Purple BGM</div>
                 <audio controls class="audioPlayer" src="assets/audio/bgm/purpleBgm.wav"></audio>
             </div>
 
             <div class="galleryCard">
-                <div class="galleryLabel">Pink BGM</div>
+                <div class="galleryLabel" data-i18n="bgmPink">Pink BGM</div>
                 <audio controls class="audioPlayer" src="assets/audio/bgm/pinkBgm.wav"></audio>
             </div>
 
             <div class="galleryCard">
-                <div class="galleryLabel">Azure BGM</div>
+                <div class="galleryLabel" data-i18n="bgmAzure">Azure BGM</div>
                 <audio controls class="audioPlayer" src="assets/audio/bgm/azureBgm.wav"></audio>
             </div>
 
             <div class="galleryCard">
-                <div class="galleryLabel">Emerald BGM</div>
+                <div class="galleryLabel" data-i18n="bgmEmerald">Emerald BGM</div>
                 <audio controls class="audioPlayer" src="assets/audio/bgm/emeraldBgm.wav"></audio>
             </div>
 
             <div class="galleryCard">
-                <div class="galleryLabel">Amber BGM</div>
+                <div class="galleryLabel" data-i18n="bgmAmber">Amber BGM</div>
                 <audio controls class="audioPlayer" src="assets/audio/bgm/amberBgm.wav"></audio>
             </div>
 
             <div class="galleryCard">
-                <div class="galleryLabel">Red BGM</div>
+                <div class="galleryLabel" data-i18n="bgmRed">Red BGM</div>
                 <audio controls class="audioPlayer" src="assets/audio/bgm/redBgm.wav"></audio>
             </div>
         </div>
         <div class="buttonWrap">
-            <button class="navBtn" onclick="window.location.href='navigation.html'">Back</button>
+            <button class="navBtn" onclick="window.location.href='navigation.html'" data-i18n="back">Back</button>
         </div>
     </div>
 

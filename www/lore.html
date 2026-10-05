@@ -6,221 +6,224 @@
     <title>Shipwright's Countdown · Journal</title>
     <link rel="stylesheet" href="subPage.css">
 
+    <script src="scripts/core/lang.js"></script>
+    <script src="scripts/core/strings.js"></script>
+
     <script src="scripts/systems/journalManager.js"></script>
 </head>
 <body>
 
     <div id="mobileBlocker">
-        <h2>Desktop Only Page</h2>
-        <p>We apologize, but this portal requires a wider screen. Please view on desktop or in a wider screen.</p>
+        <h2 data-i18n="desktopOnlyTitle">Desktop Only Page</h2>
+        <p data-i18n="desktopOnlyText">We apologize, but this portal requires a wider screen. Please view on desktop or in a wider screen.</p>
     </div>
 
     <div class="book">
         <div class="page">
-            <h1>Journal</h1>
-            <div class="subtitle">— from the journal of the Shipwright's Countdown —</div>
+            <h1 data-i18n="loreTitle">Journal</h1>
+            <div class="subtitle" data-i18n="loreSubtitle">— from the journal of the Shipwright's Countdown —</div>
 
             <div class="loreContent">
 
-                <div class="loreCategory" onclick="toggleCategory('setting')">🌍 Setting &amp; Atmosphere</div>
+                <div class="loreCategory" onclick="toggleCategory('setting')" data-i18n="lore_cat_setting">🌍 Setting &amp; Atmosphere</div>
                 <div id="setting" class="entryList">
                     <div class="entry">
-                        <strong>Genre</strong>
-                        <p>Diesel Corrupted Steampunk Pixel SIM Game</p>
+                        <strong data-i18n="lore_setting_1_title">Genre</strong>
+                        <p data-i18n="lore_setting_1_text">Diesel Corrupted Steampunk Pixel SIM Game</p>
                     </div>
                     <div class="entry">
-                        <strong>Central Themes</strong>
-                        <p>Conformity vs Autonomy. The tension between imposing one's will and respecting the choices of others; the cost of revolution; the weight of conviction.</p>
+                        <strong data-i18n="lore_setting_2_title">Central Themes</strong>
+                        <p data-i18n="lore_setting_2_text">Conformity vs Autonomy. The tension between imposing one's will and respecting the choices of others; the cost of revolution; the weight of conviction.</p>
                     </div>
                     <div class="entry">
-                        <strong>Atmosphere</strong>
-                        <p>Gears always turning &amp; metal clanking in a workshop ridden with the stench of oil.</p>
+                        <strong data-i18n="lore_setting_3_title">Atmosphere</strong>
+                        <p data-i18n="lore_setting_3_text">Gears always turning &amp; metal clanking in a workshop ridden with the stench of oil.</p>
                     </div>
                     <div class="entry">
-                        <strong>Core Loop</strong>
-                        <p>Dialogue → Gather Resource Minigame → Timed Repair Mini Game → Output → Repeat</p>
+                        <strong data-i18n="lore_setting_4_title">Core Loop</strong>
+                        <p data-i18n="lore_setting_4_text">Dialogue → Gather Resource Minigame → Timed Repair Mini Game → Output → Repeat</p>
                     </div>
                 </div>
-                <div class="lockedMessage">🔒 Locked — find the key in the platformer level.</div>
+                <div class="lockedMessage" data-i18n="loreLocked">🔒 Locked — find the key in the platformer level.</div>
 
-                <div class="loreCategory" onclick="toggleCategory('history')">📜 History &amp; Chronology</div>
+                <div class="loreCategory" onclick="toggleCategory('history')" data-i18n="lore_cat_history">📜 History &amp; Chronology</div>
                 <div id="history" class="entryList">
                     <div class="entry">
-                        <strong>1301 Fjorric Calendar</strong>
-                        <p>Alternate Scandinavia invents steam-centric technology; their calendar is adopted across most of the European continent, rapidly advancing centuries within one. By the 1400s the world began being recognized as a planet.</p>
+                        <strong data-i18n="lore_history_1_title">1301 Fjorric Calendar</strong>
+                        <p data-i18n="lore_history_1_text">Alternate Scandinavia invents steam-centric technology; their calendar is adopted across most of the European continent, rapidly advancing centuries within one. By the 1400s the world began being recognized as a planet.</p>
                     </div>
                     <div class="entry">
-                        <strong>1412 Fjorric Calendar</strong>
-                        <p>Alternate Italy nobility discovers Diesel Combustion, contaminating lower altitudes. Humanity pushes upward, eventually relying on airship technology to maintain everyday society — an event known as <em>"The Rise"</em>.</p>
+                        <strong data-i18n="lore_history_2_title">1412 Fjorric Calendar</strong>
+                        <p data-i18n="lore_history_2_text">Alternate Italy nobility discovers Diesel Combustion, contaminating lower altitudes. Humanity pushes upward, eventually relying on airship technology to maintain everyday society — an event known as <em>"The Rise"</em>.</p>
                     </div>
                     <div class="entry">
-                        <strong>1667</strong>
-                        <p>A wreckage from a storm is brought to the tower. The Forge Master finds a young orphan survivor and personally looks after them until authorities arrive — by then, an attachment forms.</p>
+                        <strong data-i18n="lore_history_3_title">1667</strong>
+                        <p data-i18n="lore_history_3_text">A wreckage from a storm is brought to the tower. The Forge Master finds a young orphan survivor and personally looks after them until authorities arrive — by then, an attachment forms.</p>
                     </div>
                     <div class="entry">
-                        <strong>1672</strong>
-                        <p>The orphan becomes the apprentice of the workshop, responsible for part retrieval and delivery across the Assembled super ship. Their intelligence and curiosity push them to want more.</p>
+                        <strong data-i18n="lore_history_4_title">1672</strong>
+                        <p data-i18n="lore_history_4_text">The orphan becomes the apprentice of the workshop, responsible for part retrieval and delivery across the Assembled super ship. Their intelligence and curiosity push them to want more.</p>
                     </div>
                     <div class="entry">
-                        <strong>1673</strong>
-                        <p>Current events of the story unfold.</p>
+                        <strong data-i18n="lore_history_5_title">1673</strong>
+                        <p data-i18n="lore_history_5_text">Current events of the story unfold.</p>
                     </div>
                 </div>
-                <div class="lockedMessage">🔒 Locked — find the key in the platformer level.</div>
+                <div class="lockedMessage" data-i18n="loreLocked">🔒 Locked — find the key in the platformer level.</div>
 
-                <div class="loreCategory" onclick="toggleCategory('factions')">⚔️ The Nine Factions</div>
+                <div class="loreCategory" onclick="toggleCategory('factions')" data-i18n="lore_cat_factions">⚔️ The Nine Factions</div>
                 <div id="factions" class="entryList">
                     <div class="entry">
-                        <strong>1. (Gold) Royal Familia — ALT-SWEDISH</strong>
-                        <p>The governing head of Icor-Celeste.</p>
+                        <strong data-i18n="lore_factions_1_title">1. (Gold) Royal Familia — ALT-SWEDISH</strong>
+                        <p data-i18n="lore_factions_1_text">The governing head of Icor-Celeste.</p>
                     </div>
                     <div class="entry">
-                        <strong>2. (Ebony) Inquisitors Office — ALT-RUSSIAN</strong>
-                        <p>Judicial/Enforcement Office, the Hands of Icor-Celeste. Guides and crushes all incursions of disorder or injustice — the most dangerous thorn in the side of the Sangue Familia.</p>
+                        <strong data-i18n="lore_factions_2_title">2. (Ebony) Inquisitors Office — ALT-RUSSIAN</strong>
+                        <p data-i18n="lore_factions_2_text">Judicial/Enforcement Office, the Hands of Icor-Celeste. Guides and crushes all incursions of disorder or injustice — the most dangerous thorn in the side of the Sangue Familia.</p>
                     </div>
                     <div class="entry">
-                        <strong>3. (Ruby) Sangue Familia — ALT-ITALIAN</strong>
-                        <p>Factory Clan. The blood flowing throughout Icor-Celeste; the technological monopoly of most major craftsmen and artisans who cannot handle sustainability, encouraging short-term benefit over the sustainability of the land below.</p>
+                        <strong data-i18n="lore_factions_3_title">3. (Ruby) Sangue Familia — ALT-ITALIAN</strong>
+                        <p data-i18n="lore_factions_3_text">Factory Clan. The blood flowing throughout Icor-Celeste; the technological monopoly of most major craftsmen and artisans who cannot handle sustainability, encouraging short-term benefit over the sustainability of the land below.</p>
                     </div>
                     <div class="entry">
-                        <strong>4. (Silver) Star Merchantry — ALT-POLISH</strong>
-                        <p>The bones connecting Icor-Celeste — the common folk themselves. The largest faction, uncontested in membership, accumulates so much manpower that even the most noble houses hesitate before acting out of turn. The richest group as a whole; individual executives are the poorest of leading factions, but ensuring the common folk are happy maintains their absolute unity.</p>
+                        <strong data-i18n="lore_factions_4_title">4. (Silver) Star Merchantry — ALT-POLISH</strong>
+                        <p data-i18n="lore_factions_4_text">The bones connecting Icor-Celeste — the common folk themselves. The largest faction, uncontested in membership, accumulates so much manpower that even the most noble houses hesitate before acting out of turn. The richest group as a whole; individual executives are the poorest of leading factions, but ensuring the common folk are happy maintains their absolute unity.</p>
                     </div>
                     <div class="entry">
-                        <strong>5. (Azure/Sapphire) Education &amp; Research Administration — ALT-SCANDINAVIAN</strong>
-                        <p>Known formerly as the Sapphire to the Ruby, they were the rivaling half of the clan during times of division. Those not swallowed took what they had to continue their devotion to wisdom and research. The elders believe that in a world so enclosed, knowledge must always circulate or the people will crumble from within. Second to none in records, secretarial, and administrative duties.</p>
+                        <strong data-i18n="lore_factions_5_title">5. (Azure/Sapphire) Education &amp; Research Administration — ALT-SCANDINAVIAN</strong>
+                        <p data-i18n="lore_factions_5_text">Known formerly as the Sapphire to the Ruby, they were the rivaling half of the clan during times of division. Those not swallowed took what they had to continue their devotion to wisdom and research. The elders believe that in a world so enclosed, knowledge must always circulate or the people will crumble from within. Second to none in records, secretarial, and administrative duties.</p>
                     </div>
                     <div class="entry">
-                        <strong>6. (Emerald/Verdant) Healthcare &amp; Welfare Association — ALT-GERMAN</strong>
-                        <p>Absorbed the medical clinics and secured the hospitals confused during "The Rise". Reformed the capitalistic view to focus on survival first, as they cannot be certain how much of humanity remains.</p>
+                        <strong data-i18n="lore_factions_6_title">6. (Emerald/Verdant) Healthcare &amp; Welfare Association — ALT-GERMAN</strong>
+                        <p data-i18n="lore_factions_6_text">Absorbed the medical clinics and secured the hospitals confused during "The Rise". Reformed the capitalistic view to focus on survival first, as they cannot be certain how much of humanity remains.</p>
                     </div>
                     <div class="entry">
-                        <strong>7. (Violet/Amethyst) Intelligence &amp; Espionage Society — ALT-TURKISH</strong>
-                        <p>The Shadows of Icor-Celeste, corrupted by the influence of the Sangue Familia. Repurposed after abandoning the hopes of exploration, they became agents guiding all outcomes into the clutches of the Familia. Revealed as the saboteurs only when played correctly — the first step to bringing the Familia's crimes to light. However, the Familia may be prepared to cut ties and let them take the fall.</p>
+                        <strong data-i18n="lore_factions_7_title">7. (Violet/Amethyst) Intelligence &amp; Espionage Society — ALT-TURKISH</strong>
+                        <p data-i18n="lore_factions_7_text">The Shadows of Icor-Celeste, corrupted by the influence of the Sangue Familia. Repurposed after abandoning the hopes of exploration, they became agents guiding all outcomes into the clutches of the Familia. Revealed as the saboteurs only when played correctly — the first step to bringing the Familia's crimes to light. However, the Familia may be prepared to cut ties and let them take the fall.</p>
                     </div>
                     <div class="entry">
-                        <strong>8. (Amber) Assembly Guild — ALT-DANISH</strong>
-                        <p>The organization that takes care of... (record incomplete).</p>
+                        <strong data-i18n="lore_factions_8_title">8. (Amber) Assembly Guild — ALT-DANISH</strong>
+                        <p data-i18n="lore_factions_8_text">The organization that takes care of... (record incomplete).</p>
                     </div>
                     <div class="entry">
-                        <strong>9. (Pink) Entertainment &amp; Art — ALT-FRENCH</strong>
-                        <p>Responsible for maintaining the <em>quality</em> of living rather than just survival. Retains creative expression of creators and artists of all avenues — culture, theatre, dance, music, and all forms of important life-quality features, especially handling the European union since Italy absorbed the...</p>
+                        <strong data-i18n="lore_factions_9_title">9. (Pink) Entertainment &amp; Art — ALT-FRENCH</strong>
+                        <p data-i18n="lore_factions_9_text">Responsible for maintaining the <em>quality</em> of living rather than just survival. Retains creative expression of creators and artists of all avenues — culture, theatre, dance, music, and all forms of important life-quality features, especially handling the European union since Italy absorbed the...</p>
                     </div>
                 </div>
-                <div class="lockedMessage">🔒 Locked — find the key in the platformer level.</div>
+                <div class="lockedMessage" data-i18n="loreLocked">🔒 Locked — find the key in the platformer level.</div>
 
-                <div class="loreCategory" onclick="toggleCategory('characters')">👥 Principal Characters</div>
+                <div class="loreCategory" onclick="toggleCategory('characters')" data-i18n="lore_cat_characters">👥 Principal Characters</div>
                 <div id="characters" class="entryList">
                     <div class="entry">
-                        <strong>Player Character — Sognatore/Sognatori (Amber)</strong>
-                        <p>An androgynous blonde Scandinavian orphan clad in belt-strap leather outfits and a cap, with a burn mark on one cheek and a colloquial Rural Italian accent. Became an apprentice for the old engineer Ferro Dolcer. Brings creative curiosity and an innate talent for the craft. Their fixation and skills console the mentor's worries that he may not have raised them right by raising them around only his work. Unwanted curiosity and desire to improve what does not need nor desire any is their unfortunate flaw. Believes in Radicalism. Named after their amnesia — "dreamer" in their mother tongue.</p>
+                        <strong data-i18n="lore_characters_1_title">Player Character — Sognatore/Sognatori (Amber)</strong>
+                        <p data-i18n="lore_characters_1_text">An androgynous blonde Scandinavian orphan clad in belt-strap leather outfits and a cap, with a burn mark on one cheek and a colloquial Rural Italian accent. Became an apprentice for the old engineer Ferro Dolcer. Brings creative curiosity and an innate talent for the craft. Their fixation and skills console the mentor's worries that he may not have raised them right by raising them around only his work. Unwanted curiosity and desire to improve what does not need nor desire any is their unfortunate flaw. Believes in Radicalism. Named after their amnesia — "dreamer" in their mother tongue.</p>
                     </div>
                     <div class="entry">
-                        <strong>Ferro Dolcer (Amber) — Touchstone NPC</strong>
-                        <p>Paler, older, broad-shouldered Italian engineer with a formal Southern accent. Mentors and raises the young orphan found on an investigated wreck, eventually finding the child was truly meant for this. His love and admiration may blind him sometimes, giving rise to opportunities such as the trial week. He worries the lad does not listen to warnings about letting curiosity get the better of rational judgement — for a dreamer is needed in great work, but such a volatile element if not controlled can lose control of what they are entrusted with. Acts as tutorial guide and voice of hints.</p>
+                        <strong data-i18n="lore_characters_2_title">Ferro Dolcer (Amber) — Touchstone NPC</strong>
+                        <p data-i18n="lore_characters_2_text">Paler, older, broad-shouldered Italian engineer with a formal Southern accent. Mentors and raises the young orphan found on an investigated wreck, eventually finding the child was truly meant for this. His love and admiration may blind him sometimes, giving rise to opportunities such as the trial week. He worries the lad does not listen to warnings about letting curiosity get the better of rational judgement — for a dreamer is needed in great work, but such a volatile element if not controlled can lose control of what they are entrusted with. Acts as tutorial guide and voice of hints.</p>
                     </div>
                     <div class="entry">
-                        <strong>Carrado Von Sangue (Ruby) — Antagonist NPC</strong>
-                        <p>Second Generation Head of the Sangue Dei Familia. Chief descendant of the inventors of the industrial combustion engine schematics. A pragmatic, long-red-haired man in colonial attire who took over all oil mining, farming, and production rights to hyper-specialize profits and monopolize the economy. Adamantly refuses any method that may overturn the public's dependency on oil, paying extra "Donations" to media and governing lords. Believes in Consequentialism and Idealistic Capitalism — the outcomes determine morality, not the means. Blinds the public from the objective truth: the ever-accumulating debt by the environment, a debt to be paid by children who never had a voice.</p>
+                        <strong data-i18n="lore_characters_3_title">Carrado Von Sangue (Ruby) — Antagonist NPC</strong>
+                        <p data-i18n="lore_characters_3_text">Second Generation Head of the Sangue Dei Familia. Chief descendant of the inventors of the industrial combustion engine schematics. A pragmatic, long-red-haired man in colonial attire who took over all oil mining, farming, and production rights to hyper-specialize profits and monopolize the economy. Adamantly refuses any method that may overturn the public's dependency on oil, paying extra "Donations" to media and governing lords. Believes in Consequentialism and Idealistic Capitalism — the outcomes determine morality, not the means. Blinds the public from the objective truth: the ever-accumulating debt by the environment, a debt to be paid by children who never had a voice.</p>
                     </div>
                     <div class="entry">
-                        <strong>Regina Bel Fiora (Ebony) — Authority NPC</strong>
-                        <p>4th Chief Inquisitor of the Ufficio Inquisitoriale Del Eterreto. A gothic formal madame of the absolute neutral governing body responsible for strict management of any business or group. Known for outing any noticeable corruption, including many clumsy assets of the Sangue Dei Familia, but cannot act without sufficient evidence. Deems La Bottega Del Cielo a possible asset. Believes in Deontology — duty first, foremost, because even righteousness can breed bias.</p>
+                        <strong data-i18n="lore_characters_4_title">Regina Bel Fiora (Ebony) — Authority NPC</strong>
+                        <p data-i18n="lore_characters_4_text">4th Chief Inquisitor of the Ufficio Inquisitoriale Del Eterreto. A gothic formal madame of the absolute neutral governing body responsible for strict management of any business or group. Known for outing any noticeable corruption, including many clumsy assets of the Sangue Dei Familia, but cannot act without sufficient evidence. Deems La Bottega Del Cielo a possible asset. Believes in Deontology — duty first, foremost, because even righteousness can breed bias.</p>
                     </div>
                     <div class="entry">
-                        <strong>Astolfo Vermich (Silver) — Eccentric NPC</strong>
-                        <p>3rd President of Corpadei Stella Pescatori, the revolutionary marine agriculture corporation built by former generation fisherman peasants. Massive alliances built by the people, for the people. The supreme commercial merchantry that even nobility can no longer afford to disrespect. This generation's president has peculiar albinism mutations — silver hair, purple eyes, white suits. Believes in Solipsism ironically; maintains fairness of meritocracy, making life better for all members despite them being happy puppets in his mental theatre. Truly does not care for corruption and guarantees prosperity.</p>
+                        <strong data-i18n="lore_characters_5_title">Astolfo Vermich (Silver) — Eccentric NPC</strong>
+                        <p data-i18n="lore_characters_5_text">3rd President of Corpadei Stella Pescatori, the revolutionary marine agriculture corporation built by former generation fisherman peasants. Massive alliances built by the people, for the people. The supreme commercial merchantry that even nobility can no longer afford to disrespect. This generation's president has peculiar albinism mutations — silver hair, purple eyes, white suits. Believes in Solipsism ironically; maintains fairness of meritocracy, making life better for all members despite them being happy puppets in his mental theatre. Truly does not care for corruption and guarantees prosperity.</p>
                     </div>
                     <div class="entry">
-                        <strong>Aurelios El Etere (Gold) — Endgame NPC</strong>
-                        <p>6th Generation Crown Prince of La Casa Del Etere, the house that led the lands long before they rose to become a monarchy — now possibly an outdated governing body of the current province governors and mayors.</p>
+                        <strong data-i18n="lore_characters_6_title">Aurelios El Etere (Gold) — Endgame NPC</strong>
+                        <p data-i18n="lore_characters_6_text">6th Generation Crown Prince of La Casa Del Etere, the house that led the lands long before they rose to become a monarchy — now possibly an outdated governing body of the current province governors and mayors.</p>
                     </div>
                     <div class="entry">
-                        <strong>Gustav El Etere (Gold) — Endgame Antagonist NPC</strong>
-                        <p>Believes in hedonistic tyranny and that birthright is the divine-given talent of people. Might of those above makes right their decisions upon those below. Aligned with the faction with the most apparent power and measures to implement actions others would approve of. Less willing to concede second-hand command to one who proves their worth, understanding their place and obedience. He stands as the replacement for his older brother, Crown Prince Aurelios, who he knows with his recklessness would take the bait for a last-stand scheme before days of coronation within the end of the week.</p>
+                        <strong data-i18n="lore_characters_7_title">Gustav El Etere (Gold) — Endgame Antagonist NPC</strong>
+                        <p data-i18n="lore_characters_7_text">Believes in hedonistic tyranny and that birthright is the divine-given talent of people. Might of those above makes right their decisions upon those below. Aligned with the faction with the most apparent power and measures to implement actions others would approve of. Less willing to concede second-hand command to one who proves their worth, understanding their place and obedience. He stands as the replacement for his older brother, Crown Prince Aurelios, who he knows with his recklessness would take the bait for a last-stand scheme before days of coronation within the end of the week.</p>
                     </div>
                 </div>
-                <div class="lockedMessage">🔒 Locked — find the key in the platformer level.</div>
+                <div class="lockedMessage" data-i18n="loreLocked">🔒 Locked — find the key in the platformer level.</div>
 
-                <div class="loreCategory" onclick="toggleCategory(religions)">🕯️ Religions</div>
+                <div class="loreCategory" onclick="toggleCategory('religions')" data-i18n="lore_cat_religions">🕯️ Religions</div>
                 <div id="religions" class="entryList">
                     <div class="entry">
-                        <strong>Faith in the Enclosed City</strong>
-                        <p>Religion is a common occurrence wherever people gather. The city is enclosed, with no accessible way to leave, and holds many nationalities and ethnicities. Religions have not been oppressed. They have moved out of general and official spaces and are practiced in people's homes.</p>
+                        <strong data-i18n="lore_religions_1_title">Faith in the Enclosed City</strong>
+                        <p data-i18n="lore_religions_1_text">Religion is a common occurrence wherever people gather. The city is enclosed, with no accessible way to leave, and holds many nationalities and ethnicities. Religions have not been oppressed. They have moved out of general and official spaces and are practiced in people's homes.</p>
                     </div>
                     <div class="entry">
-                        <strong>A Neutral Gray Space</strong>
-                        <p>The society is built on the absolute necessity of advancing engineering, with limited resource recycling. It cannot afford to devote attention or space to religious buildings. This has become an awkwardly silent agreement: religion is neutral gray space in the artificial super city.</p>
+                        <strong data-i18n="lore_religions_2_title">A Neutral Gray Space</strong>
+                        <p data-i18n="lore_religions_2_text">The society is built on the absolute necessity of advancing engineering, with limited resource recycling. It cannot afford to devote attention or space to religious buildings. This has become an awkwardly silent agreement: religion is neutral gray space in the artificial super city.</p>
                     </div>
                     <div class="entry">
-                        <strong>Languages &amp; Culture</strong>
-                        <p>Differing languages overlap, with English and Italian as the classic universals, due to the groups that ruled thus far. Concerns of history, culture, religion and linguistics are handled by the Pink faction, comprised primarily of the French.</p>
+                        <strong data-i18n="lore_religions_3_title">Languages &amp; Culture</strong>
+                        <p data-i18n="lore_religions_3_text">Differing languages overlap, with English and Italian as the classic universals, due to the groups that ruled thus far. Concerns of history, culture, religion and linguistics are handled by the Pink faction, comprised primarily of the French.</p>
                     </div>
                 </div>
-                <div class="lockedMessage">🔒 Locked — find the key in the platformer level.</div>
+                <div class="lockedMessage" data-i18n="loreLocked">🔒 Locked — find the key in the platformer level.</div>
 
-                <div class="loreCategory" onclick="toggleCategory('technology')">⚙️ Technology &amp; Parts</div>
+                <div class="loreCategory" onclick="toggleCategory('technology')" data-i18n="lore_cat_technology">⚙️ Technology &amp; Parts</div>
                 <div id="technology" class="entryList">
                     <div class="entry">
-                        <strong>Steampunk — Filtration</strong>
-                        <p>Heat push &amp; pull move gaseous particles through 16th-century mesh. The naturally high moisture content of steam can separate contaminants with condensation, trapping oils and airborne compounds while the heat dries the system's chassis — sustainable compared to real-world electricity, especially for thinner air altitudes with moist pulls.</p>
+                        <strong data-i18n="lore_technology_1_title">Steampunk — Filtration</strong>
+                        <p data-i18n="lore_technology_1_text">Heat push &amp; pull move gaseous particles through 16th-century mesh. The naturally high moisture content of steam can separate contaminants with condensation, trapping oils and airborne compounds while the heat dries the system's chassis — sustainable compared to real-world electricity, especially for thinner air altitudes with moist pulls.</p>
                     </div>
                     <div class="entry">
-                        <strong>Steampunk — Fundamentals</strong>
-                        <p>Boilers naturally by circulation generate mechanical motion, heat, and pressure.</p>
+                        <strong data-i18n="lore_technology_2_title">Steampunk — Fundamentals</strong>
+                        <p data-i18n="lore_technology_2_text">Boilers naturally by circulation generate mechanical motion, heat, and pressure.</p>
                     </div>
                     <div class="entry">
-                        <strong>Steampunk — Aeronautics</strong>
-                        <p>Steam pumps regulate ballast bladders and buoyancy for ideal altitude control, with naturally mechanical onboard fans regulating air quality as well as managing any necessary extra propulsion.</p>
+                        <strong data-i18n="lore_technology_3_title">Steampunk — Aeronautics</strong>
+                        <p data-i18n="lore_technology_3_text">Steam pumps regulate ballast bladders and buoyancy for ideal altitude control, with naturally mechanical onboard fans regulating air quality as well as managing any necessary extra propulsion.</p>
                     </div>
                     <div class="entry">
-                        <strong>Steampunk — Heat</strong>
-                        <p>Heating critical parts of the system despite the cold environmental cooling of high altitudes, yet running radiators to diverge heat from enclosed spaces.</p>
+                        <strong data-i18n="lore_technology_4_title">Steampunk — Heat</strong>
+                        <p data-i18n="lore_technology_4_text">Heating critical parts of the system despite the cold environmental cooling of high altitudes, yet running radiators to diverge heat from enclosed spaces.</p>
                     </div>
                     <div class="entry">
-                        <strong>Diesel — Ground</strong>
-                        <p>Exhaust fumes with particular nitrogen oxide-based pollutants concentrate on lower atmospheric stagnant air levels, localizing at lower levels without being as potent at higher altitudes.</p>
+                        <strong data-i18n="lore_technology_5_title">Diesel — Ground</strong>
+                        <p data-i18n="lore_technology_5_text">Exhaust fumes with particular nitrogen oxide-based pollutants concentrate on lower atmospheric stagnant air levels, localizing at lower levels without being as potent at higher altitudes.</p>
                     </div>
                     <div class="entry">
-                        <strong>Parts List</strong>
-                        <p>1. Piston Engine · 2. Gas Valves · 3. Boiler Engine · 4. Gears &amp; Cogs · 5. Propellor Fans · 6. Gas Pumps · 7. Metal Mesh · 8. Chemical Catalysts · 9. Gyroscope Dial · 10. Diesel Engine · 11. Humidity Oscillator</p>
+                        <strong data-i18n="lore_technology_6_title">Parts List</strong>
+                        <p data-i18n="lore_technology_6_text">1. Piston Engine · 2. Gas Valves · 3. Boiler Engine · 4. Gears &amp; Cogs · 5. Propellor Fans · 6. Gas Pumps · 7. Metal Mesh · 8. Chemical Catalysts · 9. Gyroscope Dial · 10. Diesel Engine · 11. Humidity Oscillator</p>
                     </div>
                     <div class="entry">
-                        <strong>Setting Aesthetic</strong>
-                        <p>Victorian English Aesthetic Variant of Italian Renaissance Era (14th – 16th Century).</p>
+                        <strong data-i18n="lore_technology_7_title">Setting Aesthetic</strong>
+                        <p data-i18n="lore_technology_7_text">Victorian English Aesthetic Variant of Italian Renaissance Era (14th – 16th Century).</p>
                     </div>
                 </div>
-                <div class="lockedMessage">🔒 Locked — find the key in the platformer level.</div>
+                <div class="lockedMessage" data-i18n="loreLocked">🔒 Locked — find the key in the platformer level.</div>
 
-                <div class="loreCategory" onclick="toggleCategory('ship')">🚢 The Assembled Super Ship &amp; Society</div>
+                <div class="loreCategory" onclick="toggleCategory('ship')" data-i18n="lore_cat_ship">🚢 The Assembled Super Ship &amp; Society</div>
                 <div id="ship" class="entryList">
                     <div class="entry">
-                        <strong>La Bottega Del Cielo</strong>
-                        <p>The best of the best for repairing the sections of the super city. Reserves only the highest of reservations due to limited supply unable to meet weekly demands. Trusted by all walks of life; clues of the system's controlling monopoly begin to pile up for the few who can see the overlap.</p>
+                        <strong data-i18n="lore_ship_1_title">La Bottega Del Cielo</strong>
+                        <p data-i18n="lore_ship_1_text">The best of the best for repairing the sections of the super city. Reserves only the highest of reservations due to limited supply unable to meet weekly demands. Trusted by all walks of life; clues of the system's controlling monopoly begin to pile up for the few who can see the overlap.</p>
                     </div>
                     <div class="entry">
-                        <strong>The Rise &amp; The Airship</strong>
-                        <p>Ships of various Organizations and Colors assembled with the best technology Europe could muster to create a slow floating artificial super nation to avoid the consequences of reckless Diesel. Their paths converge at La Bottega Del Cielo before splitting off into their proverbial horizons.</p>
+                        <strong data-i18n="lore_ship_2_title">The Rise &amp; The Airship</strong>
+                        <p data-i18n="lore_ship_2_text">Ships of various Organizations and Colors assembled with the best technology Europe could muster to create a slow floating artificial super nation to avoid the consequences of reckless Diesel. Their paths converge at La Bottega Del Cielo before splitting off into their proverbial horizons.</p>
                     </div>
                     <div class="entry">
-                        <strong>Resolution &amp; Conclusion</strong>
-                        <p>The trial is a post-game sequence that tallies the invisible score applied by how well the player has performed. Good ending: the Familia is destroyed, you rally your connections, living a happier grander life as a new pillar of the nation. Bad ending: you fail and are executed for dying rather than serving the Familia and their chosen prince, even if tortured. True Ending: entrusting you with power and influence, you become the forerunning spearhead — the face of the future. Post-ending screen: a variant of the opening menu with a memento of the Mentor and a sunrise instead of a sunset.</p>
+                        <strong data-i18n="lore_ship_3_title">Resolution &amp; Conclusion</strong>
+                        <p data-i18n="lore_ship_3_text">The trial is a post-game sequence that tallies the invisible score applied by how well the player has performed. Good ending: the Familia is destroyed, you rally your connections, living a happier grander life as a new pillar of the nation. Bad ending: you fail and are executed for dying rather than serving the Familia and their chosen prince, even if tortured. True Ending: entrusting you with power and influence, you become the forerunning spearhead — the face of the future. Post-ending screen: a variant of the opening menu with a memento of the Mentor and a sunrise instead of a sunset.</p>
                     </div>
                 </div>
-                <div class="lockedMessage">🔒 Locked — find the key in the platformer level.</div>
+                <div class="lockedMessage" data-i18n="loreLocked">🔒 Locked — find the key in the platformer level.</div>
 
-                <div class="loreCategory" onclick="toggleCategory('ending')">🌅 The Ending</div>
+                <div class="loreCategory" onclick="toggleCategory('ending')" data-i18n="lore_cat_ending">🌅 The Ending</div>
                 <div id="ending" class="entryList">
                     <div class="entry">
-                        <p>Approaches the fact that the airship had to be very slow in order to handle its work, and the magnetic fields of the changing world further decelerated the advances. But now it was time to resume the exploration, the hope they abandoned, the search through what remains of the other continents and the mainlands of what the other nations may have become...</p>
+                        <p data-i18n="lore_ending_1_text">Approaches the fact that the airship had to be very slow in order to handle its work, and the magnetic fields of the changing world further decelerated the advances. But now it was time to resume the exploration, the hope they abandoned, the search through what remains of the other continents and the mainlands of what the other nations may have become...</p>
                     </div>
                 </div>
-                <div class="lockedMessage">🔒 Locked — find the key in the platformer level.</div>
+                <div class="lockedMessage" data-i18n="loreLocked">🔒 Locked — find the key in the platformer level.</div>
 
             </div>
 
             <div class="buttonWrap">
-                <button class="navBtn" onclick="window.location.href='navigation.html'">Return to Menu</button>
+                <button class="navBtn" onclick="window.location.href='navigation.html'" data-i18n="loreReturn">Return to Menu</button>
             </div>
 
         </div>

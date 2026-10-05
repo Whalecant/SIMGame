@@ -69,7 +69,7 @@ const journalManager =
 
             if(!quiet && typeof showMsgPopup === 'function')
             {
-                showMsgPopup('Journal Entry Unlocked');
+                showMsgPopup(getText('journalUnlocked'));
             }
         }
     },
