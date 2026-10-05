@@ -3,8 +3,8 @@ const achievementManager=
     data:
     {
         badEnd: false,
-        neutEnd: false,
         goodEnd: false,
+        trueEnd: false,
         egg: false,
     },
 

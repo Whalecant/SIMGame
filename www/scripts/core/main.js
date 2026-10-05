@@ -479,8 +479,8 @@ function completeMiniGame(mgId, success, rewardPartKey)
             const ending = getEndingType();
             const achId = {
                 BAD: 'badEnd',
-                NEUTRAL: 'neutEnd',
                 GOOD: 'goodEnd',
+                TRUE: 'trueEnd',
             }
 
             if (typeof achievementManager !== 'undefined')
@@ -541,7 +541,7 @@ function getEndingType()
 
     const allJournals = window.journalManager && journalManager.allJournalsCollected();
 
-    return allJournals ? 'GOOD' : 'NEUTRAL';
+    return allJournals ? 'TRUE' : 'GOOD';
 }
 
 function openVehicleBlueprint()
@@ -963,7 +963,7 @@ function togglePause()
 
 const cutsceneTyper = 
 {
-    charDelay: 35,
+    charDelay: 20,
     linePause: 700,
     endPause: 1200,
 
@@ -976,11 +976,45 @@ const cutsceneTyper =
     paragraph: null,
     startedAt: 0,
 
+    following: true,
+    expectedTop: 0,
+
+    follow()
+    {
+        if(!this.following)
+        {
+            return;
+        }
+
+        const overlay = document.getElementById('cutscene');
+        overlay.scrollTop = overlay.scrollHeight;
+        this.expectedTop = overlay.scrollTop;
+    },
+
+    onUserScroll(overlay)
+    {
+        if(Math.abs(overlay.scrollTop - this.expectedTop) < 2)
+        {
+            return;
+        }
+
+        const maxTop = overlay.scrollHeight - overlay.clientHeight;
+
+        this.following = maxTop - overlay.scrollTop < 4;
+        this.expectedTop = overlay.scrollTop;
+    },
+
     start(endingType)
     {
-        this.stop();
+        this.following = true;
+        this.expectedTop = 0;
+        document.getElementById('cutscene').scrollTop = 0;
 
-        this.lines = (window.endingText && window.endingText[endingType]) || [];        this.ending = endingType;
+        this.stop();
+        
+
+        this.lines = (window.endingText && window.endingText[endingType]) || [];        
+        this.ending = endingType;
         this.lineIdx = 0;
         this.startedAt = performance.now();
 
@@ -1006,6 +1040,8 @@ const cutsceneTyper =
         this.charIdx = 0;
         this.phase = 'typing';
         this.typeChar();
+
+        this.follow();
     },
 
     typeChar()
@@ -1016,6 +1052,7 @@ const cutsceneTyper =
         {
             this.charIdx++;
             this.paragraph.textContent = line.slice(0, this.charIdx);
+            this.follow();
             this.timer = setTimeout(() => this.typeChar(), this.charDelay);
             return;
         }
@@ -1063,6 +1100,8 @@ const cutsceneTyper =
         title.classList.remove('hidden');
 
         document.getElementById('cutsceneContBtn').classList.remove('hidden');
+
+        this.follow();
     },
 
     stop()
@@ -1094,23 +1133,72 @@ function showCutscene(endingType)
     
 }
 
-document.addEventListener('DOMContentLoaded', () => 
+document.addEventListener('DOMContentLoaded', () =>
 {
     const overlay = document.getElementById('cutscene');
 
-    if(overlay)
+    if(!overlay)
     {
-        overlay.addEventListener('pointerdown', () => cutsceneTyper.skip());
+        return;
     }
-});
 
-document.addEventListener('keydown', (e) =>
-{
-    if(Game.currentState === 'END' && (e.key === ' ' || e.key === 'Enter'))
+    overlay.addEventListener('scroll', () =>
     {
-        cutsceneTyper.skip();
-    }
-})
+        cutsceneTyper.onUserScroll(overlay);
+    });
+
+    let tapStart = null;
+
+    overlay.addEventListener('pointerdown', (e) =>
+    {
+        const onScrollbar = e.clientX > overlay.getBoundingClientRect().left + overlay.clientWidth;
+        tapStart = onScrollbar ? null : { x: e.clientX, y: e.clientY };
+    });
+
+    overlay.addEventListener('pointerup', (e) =>
+    {
+        if(!tapStart)
+        {
+            return;
+        }
+
+        const moved = Math.hypot(e.clientX - tapStart.x, e.clientY - tapStart.y);
+        tapStart = null;
+
+        if(moved < 10)
+        {
+            cutsceneTyper.skip();
+        }
+    });
+
+    document.addEventListener('keydown', (e) =>
+    {
+        if(Game.currentState !== 'END')
+        {
+            return;
+        }
+
+        const overlay = document.getElementById('cutscene');
+
+        if(e.key === ' ' || e.key === 'Enter')
+        {
+            e.preventDefault();
+
+            if(!e.repeat)
+            {
+                cutsceneTyper.skip();
+            }
+        }
+        else if(e.key === 'ArrowDown')
+        {
+            overlay.scrollBy({ top: 80 });
+        }
+        else if(e.key === 'ArrowUp')
+        {
+            overlay.scrollBy({ top: -80 });
+        }
+    });
+});
 
 function returnToHub()
 {
