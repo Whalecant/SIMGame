@@ -164,6 +164,8 @@ const Game =
             window.Player.render(this.ctx);
         }
 
+        document.body.classList.toggle('inLevel', !!Game.inMinigame);
+
         const hideDpad = window.overworld && overworld.hideDpad() || anyOverlayOpen;
         showDpad(!hideDpad);
 
@@ -174,6 +176,30 @@ const Game =
 
 // the set of code below is for global ui functions (less comments will be present below because I actually know what I'm doing now :D)
 // 下面的评论会少一些，因为我现在真的知道自己在做什么了 :D
+function refreshMenuBackground()
+{
+    const menu = document.getElementById('mainMenu');
+
+    if(!menu)
+    {
+        return;
+    }
+
+    let achievements = {};
+
+    try
+    {
+        achievements = JSON.parse(localStorage.getItem('SCCFAchievement') || '{}');
+    }
+    catch(e) {}
+
+    const beaten = ['badEnd', 'goodEnd', 'trueEnd'].some(id => achievements[id] === true);
+
+    menu.classList.toggle('beaten', beaten);
+}
+
+document.addEventListener('DOMContentLoaded', refreshMenuBackground);
+
 function showDpad(visible)
 {
     const dpad = document.getElementById('dpad');

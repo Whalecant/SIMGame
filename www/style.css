@@ -44,6 +44,10 @@ body {
     padding-bottom: 15vh;
 }
 
+#mainMenu.beaten {
+    background: url('assets/bg/StartBG2.png') center/75% no-repeat rgba(243, 236, 216, 0.95);
+}
+
 #mainMenu h1 {
     text-align: right;
     font-size: clamp(1.5rem, 3.7vw, 2.5rem);
@@ -581,7 +585,7 @@ input[type="range"] {
     background: rgba(50, 200, 50, 0.1);
 }
 
-#mapOverlay {
+/* #mapOverlay {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -594,7 +598,7 @@ input[type="range"] {
     z-index: 500;
     pointer-events: auto;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-}
+} */
 
 #actionBtnMbl {
     position: absolute;
@@ -627,14 +631,32 @@ input[type="range"] {
     background: #dac9a8;
 }
 
-#interactBtn {
-    grid-column: 1;
-    grid-row: 1;
-}
-
-#mapBtn {
+#interactBtn
+{
     grid-column: 2;
     grid-row: 2;
+}
+
+#jumpBtn
+{
+    grid-column: 1;
+    grid-row: 1;
+    touch-action: none;
+}
+
+#actionBtnMbl #jumpBtn
+{
+    display: none;
+}
+
+body.inLevel #actionBtnMbl #jumpBtn
+{
+    display: block;
+}
+
+body.inLevel #dpadUp, body.inLevel #dpadDown
+{
+    display: none;
 }
 
 @media(max-height: 500px) {
@@ -896,4 +918,55 @@ input[type="range"] {
     text-align: right;
     font-size: 0.8rem;
     opacity: 0.7;
+}
+
+/* please don't ask why this is down here... i lost track of things by this point, this month long project has drained my soul istfg */
+.dpadBtn, .actionBtn
+{
+    background: rgba(230, 216, 188, 0.35);
+    border-color: rgba(155, 139, 114, 0.6);
+    color: rgba(74, 46, 27, 0.85);
+}
+
+.dpadBtn:active, .actionBtn:active
+{
+    background: rgba(230, 216, 188, 0.7);
+}
+
+.dpadBtn:hover, .actionBtn:hover
+{
+    background: rgba(230, 216, 188, 0.35);
+}
+
+body.inLevel #dpad
+{
+    bottom: 15px;
+    left: 30px;
+    width: 100px;
+    height: 100px;
+}
+
+body.inLevel #actionBtnMbl
+{
+    bottom: 15px;
+    right: 30px;
+    width: 100px;
+    height: 100px;
+}
+
+body.inLevel .dpadBtn, body.inLevel .actionBtn
+{
+    background: rgba(230, 216, 188, 0.35);
+    border-color: rgba(155, 139, 114, 0.7);
+    color: rgba(74, 46, 27, 0.85);
+}
+
+body.inLevel .dpadBtn:active, body.inLevel .actionBtn:active
+{
+    background: rgba(230, 216, 188, 0.7);
+}
+
+body.inLevel .dpadBtn:hover, body.inLevel .actionBtn:hover
+{
+    background: rgba(230, 216, 188, 0.35);
 }

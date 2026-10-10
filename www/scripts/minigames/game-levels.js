@@ -9,7 +9,7 @@ class forestPlatformMinigame extends baseMinigame
         this.spriteLoaded = false;
         this.sprite.onload = () => { this.spriteLoaded = true; };
         this.mapImages = {};
-        for(const imageName of ['background1', 'wall', 'key', 'destination', 'lock', 'door', 'Door 11', 'trap'])
+        for(const imageName of ['background1', 'background2', 'background3', 'wall', 'key', 'destination', 'lock', 'door', 'Door 11', 'trap', 'paper'])
         {
             const image = new Image();
             image.src = `./assets/map/${imageName}.png`;
@@ -20,7 +20,7 @@ class forestPlatformMinigame extends baseMinigame
     init()
     {
         this.hidePlayer = true;
-        this.hideDpad = true;
+        this.hideDpad = false;
         this.worldWidth = this.canvas.width;
         this.worldHeight = this.canvas.height;
         this.wallUnit = 24;
@@ -103,7 +103,7 @@ class forestPlatformMinigame extends baseMinigame
 
     update(deltaTime)
     {
-        if(window.Input && Input.consumePress('q') && this.controlMode === 'machine')
+        if(this.controlMode === 'machine' && window.Input && (Input.consumePress('q') || Input.consumePress('e')))
         {
             this.controlMode = 'player';
             return;
@@ -978,10 +978,27 @@ class forestPlatformMinigame extends baseMinigame
         }
     }
 
+    backgroundName()
+    {
+        const id = (this.levelData && this.levelData.id) || 1;
+
+        if(id >= 9)
+        {
+            return 'background3';
+        }
+
+        if(id >= 5)
+        {
+            return 'background2';
+        }
+
+        return 'background1';
+    }
+
     render()
     {
         const ctx = this.ctx;
-        const background = this.mapImages.background1;
+        const background = this.mapImages[this.backgroundName()] || this.mapImages.background1;
         if(background.complete && background.naturalWidth > 0)
         {
             ctx.drawImage(background, 0, 0, this.worldWidth, this.worldHeight);
@@ -1103,8 +1120,27 @@ class forestPlatformMinigame extends baseMinigame
 
             ctx.save();
             ctx.textAlign = 'center';
-            ctx.font = '20px sans-serif';
-            ctx.fillText('📄', centerX, paper.y + paper.height - 2);
+            const paperImage = this.mapImages.paper;
+
+            if(paperImage && paperImage.complete && paperImage.naturalWidth > 0)
+            {
+                ctx.shadowColor = 'rgba(0, 13, 255, 0.9)';
+                ctx.shadowBlur = 10 + Math.sin(performance.now() / 300) * 4;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
+
+                const size = paper.width * 0.75;
+                this.drawMapImage('paper', { x: centerX - size / 2, y: paper.y + paper.height - size, width: size, height: size });
+
+                ctx.shadowColor = 'transparent';
+                ctx.shadowBlur = 0;
+                ctx.shadowOffsetY = 0;
+            }
+            else
+            {
+                ctx.font = '20px sans-serif';
+                ctx.fillText('📄', centerX, paper.y + paper.height - 2);
+            }
 
             if(this.paperInRange(paper))
             {

@@ -34,9 +34,121 @@
                 <img src="assets/character/firstModelPrototype.png" alt="Character Concept Art" class="galleryImage">
             </div>
 
+            <div class="galleryCard">
+                <div class="galleryLabel" data-i18n="gallerySavePoint">Save Point</div>
+                <img src="assets/map/house.png" alt="Save Point Art" class="galleryImage">
+            </div>
+
             <div class="galleryCard wideCard">
                 <div class="galleryLabel" data-i18n="gallerySpritesheet">Character Spritesheet</div>
                 <img src="assets/character/characterAnimationSpritesheet.png" alt="Character spritesheet" class="galleryImage">
+            </div>
+
+            <div class="galleryCard frameCard" data-pattern="assets/character/mc_{n}.png" data-count="9" data-pad="4" data-fps="8">
+                <div class="galleryLabel" data-i18n="galleryCharacterAnimations">Character Animations</div>
+                <img class="galleryImage" alt="Character animation frames">
+                <div class="frameControls">
+                    <button type="button" class="frameBtn" data-act="prev">◀</button>
+                    <button type="button" class="frameBtn" data-act="play">⏸</button>
+                    <button type="button" class="frameBtn" data-act="next">▶</button>
+                    <span class="frameCount"></span>
+                </div>
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel" data-i18n="galleryOldMan">Old Man</div>
+                <img src="assets/character/oldMan.png" alt="Character Art" class="galleryImage">
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel" data-i18n="galleryLevelBlock">Block</div>
+                <img src="assets/map/block.png" alt="Block Art" class="galleryImage">
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel" data-i18n="galleryLevelBox">Box</div>
+                <img src="assets/map/box.png" alt="Box Art" class="galleryImage">
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel" data-i18n="galleryLevelEnd">End Portal</div>
+                <img src="assets/map/destination.png" alt="End Portal Art" class="galleryImage">
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel" data-i18n="galleryLevelLock">Lock</div>
+                <img src="assets/map/lock.png" alt="Lock Art" class="galleryImage">
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel" data-i18n="galleryLevelKey">Key</div>
+                <img src="assets/map/key.png" alt="Key Art" class="galleryImage">
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel" data-i18n="galleryLevelSpikes">Spikes</div>
+                <img src="assets/map/trap.png" alt="Spike Art" class="galleryImage">
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel" data-i18n="galleryLevelDoor">Door</div>
+                <img src="assets/map/door.png" alt="Door Art" class="galleryImage">
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel" data-i18n="galleryLevelPages">Journal Pages</div>
+                <img src="assets/map/paper.png" alt="Journal Page Art" class="galleryImage">
+            </div>
+            
+            <div class="galleryCard">
+                <div class="galleryLabel" data-i18n="galleryBridge">Bridge</div>
+                <img src="assets/map/bridge.png" alt="Bridge Art" class="galleryImage">
+            </div>
+            
+            <div class="galleryCard">
+                <div class="galleryLabel" data-i18n="galleryOverworld">Overworld</div>
+                <img src="assets/map/island.png" alt="Overworld Land Art" class="galleryImage">
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel" data-i18n="galleryLevelBg1">Level Background Early</div>
+                <img src="assets/map/background1.png" alt="Level Background 1" class="galleryImage">
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel" data-i18n="galleryLevelBg2">Level Background Mid</div>
+                <img src="assets/map/background2.png" alt="Level Background 2" class="galleryImage">
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel" data-i18n="galleryLevelBg3">Level Background End</div>
+                <img src="assets/map/background3.png" alt="Level Background 3" class="galleryImage">
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel" data-i18n="galleryMainMenuBgNormal">Main Menu Background Normal</div>
+                <img src="assets/bg/startBg.png" alt="Background Image" class="galleryImage">
+            </div>
+
+            <div class="galleryCard">
+                <div class="galleryLabel" data-i18n="galleryMainMenuBgExtra">Main Menu Background Extra</div>
+                <img src="assets/bg/StartBG2.png" alt="Background Image" class="galleryImage">
+            </div>
+        
+            <div class="galleryCard viewerCard" data-images="
+                assets/airshipAndGears/catalyticBoiler.png,
+                assets/airshipAndGears/chasisCog.png,
+                assets/airshipAndGears/exhaustValves.png,
+                assets/airshipAndGears/extractedCatalyst.png,
+                assets/airshipAndGears/propellerFan.png">
+                <div class="galleryLabel" data-i18n="galleryUnusedAssets">Unused Assets</div>
+                <img class="galleryImage" alt="">
+                <div class="viewerCaption"></div>
+                <div class="frameControls">
+                    <button type="button" class="frameBtn" data-act="prev">◀</button>
+                    <span class="frameCount"></span>
+                    <button type="button" class="frameBtn" data-act="next">▶</button>
+                </div>
             </div>
         </div>
 
@@ -109,6 +221,110 @@
                     }
                 });
             });
+        });
+
+        document.querySelectorAll('.frameCard').forEach(card =>
+        {
+            let frames = [];
+
+            if(card.dataset.frames)
+            {
+                frames = card.dataset.frames.split(',').map(s => s.trim()).filter(Boolean);
+            }
+            else if(card.dataset.pattern)
+            {
+                const start = parseInt(card.dataset.start ?? '1', 10);
+                const count = parseInt(card.dataset.count, 10) || 0;
+                const pad = parseInt(card.dataset.pad ?? '0', 10);
+                
+                frames = Array.from({ length: count }, (_, i) => card.dataset.pattern.replace('{n}', String(start + i).padStart(pad, '0')));
+            }
+
+            if(frames.length === 0)
+            {
+                return;
+            }
+
+            frames.forEach(src => { new Image().src = src; });   // preload so it doesn't flicker
+
+            const img = card.querySelector('.galleryImage');
+            const counter = card.querySelector('.frameCount');
+            const playBtn = card.querySelector('[data-act="play"]');
+            const fps = parseFloat(card.dataset.fps) || 6;
+
+            let index = 0;
+            let timer = null;
+
+            function show(i)
+            {
+                index = (i + frames.length) % frames.length;
+                img.src = frames[index];
+                counter.textContent = `${index + 1} / ${frames.length}`;
+            }
+
+            function play()
+            {
+                stop();
+                timer = setInterval(() => show(index + 1), 1000 / fps);
+                playBtn.textContent = '⏸';
+            }
+
+            function stop()
+            {
+                clearInterval(timer);
+                timer = null;
+                playBtn.textContent = '▶▶';
+            }
+
+            card.querySelector('[data-act="prev"]').addEventListener('click', () => { stop(); show(index - 1); });
+            card.querySelector('[data-act="next"]').addEventListener('click', () => { stop(); show(index + 1); });
+            playBtn.addEventListener('click', () => { timer ? stop() : play(); });
+
+            show(0);
+            play();
+        });
+
+        document.querySelectorAll('.viewerCard').forEach(card =>
+        {
+            const items = card.dataset.images.split(',').map(s => s.trim()).filter(Boolean).map(entry =>
+            {
+                // optional custom caption: "assets/unused/chasis_cogd.png|Chassis Cog"
+                const [path, customCaption] = entry.split('|').map(s => s.trim());
+                const fileName = path.split('/').pop().replace(/\.[^.]+$/, '');
+                const caption = customCaption || fileName
+                    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')   // propellerFan -> propeller Fan
+                    .replace(/[_-]+/g, ' ')                   // still handles snake_case and kebab-case
+                    .replace(/\b\w/g, c => c.toUpperCase());  // -> Propeller Fan
+
+                return { path, caption };
+            });
+
+            if(items.length === 0)
+            {
+                return;
+            }
+
+            items.forEach(item => { new Image().src = item.path; });   // preload so switching is instant
+
+            const img = card.querySelector('.galleryImage');
+            const captionEl = card.querySelector('.viewerCaption');
+            const counter = card.querySelector('.frameCount');
+
+            let index = 0;
+
+            function show(i)
+            {
+                index = (i + items.length) % items.length;
+                img.src = items[index].path;
+                img.alt = items[index].caption;
+                captionEl.textContent = items[index].caption;
+                counter.textContent = `${index + 1} / ${items.length}`;
+            }
+
+            card.querySelector('[data-act="prev"]').addEventListener('click', () => show(index - 1));
+            card.querySelector('[data-act="next"]').addEventListener('click', () => show(index + 1));
+
+            show(0);
         });
     </script>
 

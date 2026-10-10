@@ -166,9 +166,9 @@ const overworld =
             return false;
         }
 
-        return this.mode === 'room';
+        return this.mode === 'room' || this.mode === 'mg';
     },
-
+    
     doSwap(pos)
     {
         if(this.transAct === 'roomToMg')

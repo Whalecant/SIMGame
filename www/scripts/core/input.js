@@ -25,58 +25,38 @@ const input =
 
     initTouch()
     {
-        const dpadButtons = document.querySelectorAll('.dpadBtn');
+        const buttons = document.querySelectorAll('.dpadBtn, .actionBtn');
 
-        dpadButtons.forEach((btn) =>
+        buttons.forEach((btn) =>
         {
             const key = btn.dataset.key;
+
+            if(!key)
+            {
+                return;
+            }
 
             btn.addEventListener('touchstart', (e) =>
             {
                 e.preventDefault();
+
+                if(!this.keysDown[key])
+                {
+                    this.keysJustPressed[key] = true;
+                }
+
                 this.keysDown[key] = true;
             });
 
-            btn.addEventListener('touchend', (e) =>
+            const release = (e) =>
             {
                 e.preventDefault();
                 this.keysDown[key] = false;
-            });
+            };
 
-            btn.addEventListener('touchcancel', (e) =>
-            {
-                e.preventDefault();
-                this.keysDown[key] = false;
-            });
+            btn.addEventListener('touchend', release);
+            btn.addEventListener('touchcancel', release);
         });
-
-        const interactBtn = document.getElementById('interactBtn');
-        if(interactBtn)
-        {
-            interactBtn.addEventListener('touchstart', (e) =>
-            {
-                e.preventDefault();
-                
-                if(typeof interact === 'function')
-                {
-                    interact();
-                }
-            });
-        }
-
-        const mapBtn = document.getElementById('napBtn');
-        if(mapBtn)
-        {
-            mapBtn.addEventListener('touchstart', (e) =>
-            {
-                e.preventDefault();
-                
-                if(typeof interact === 'function')
-                {
-                    toggleMap();
-                }
-            });
-        }
     },
 
     isDown(key)

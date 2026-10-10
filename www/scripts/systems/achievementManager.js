@@ -94,6 +94,9 @@ const achievementManager=
             }
         }
         );
+
+        if(typeof refreshMenuBackground === 'function') 
+            refreshMenuBackground();
     }
 };
 
